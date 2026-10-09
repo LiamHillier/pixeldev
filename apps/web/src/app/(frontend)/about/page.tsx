@@ -1,12 +1,21 @@
 import type { Metadata } from 'next'
 import { Figure } from '@/components/Figure'
 import { ClosingCta, Eyebrow } from '@/components/ui'
+import { JsonLd } from '@/components/JsonLd'
 import { getAboutPage } from '@/lib/data'
+import { breadcrumbJsonLd, pageMetadata, absoluteUrl, ids } from '@/lib/seo'
 import { cx } from '@/lib/utils'
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getAboutPage()
-  return { title: 'About', description: page.intro ?? undefined }
+  return pageMetadata({
+    path: '/about',
+    seo: page.seo,
+    title: 'About',
+    heading: page.heading,
+    eyebrow: page.eyebrow,
+    description: page.intro,
+  })
 }
 
 export default async function AboutPage() {
@@ -16,6 +25,18 @@ export default async function AboutPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([{ name: 'About', path: '/about' }]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'AboutPage',
+            url: absoluteUrl('/about'),
+            name: page.heading,
+            mainEntity: { '@id': ids.person },
+          },
+        ]}
+      />
       <section className="grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),1fr))] gap-x-20 gap-y-12 items-start pt-16 pb-16 lg:pt-[88px] lg:pb-20">
         <div className="flex flex-col gap-7">
           {page.eyebrow ? <Eyebrow>{page.eyebrow}</Eyebrow> : null}
@@ -23,7 +44,12 @@ export default async function AboutPage() {
           {page.intro ? <p className="text-[20px] leading-[1.55] text-body">{page.intro}</p> : null}
           {page.body ? <p className="text-[18px] leading-[1.6] text-body">{page.body}</p> : null}
         </div>
-        <Figure data={page.photo} frameClassName="aspect-[4/5]" sizes="(min-width: 1024px) 520px, 100vw" priority />
+        <Figure
+          data={page.photo}
+          frameClassName="aspect-[4/5]"
+          sizes="(min-width: 1024px) 520px, 100vw"
+          priority
+        />
       </section>
 
       {page.facts?.length ? (
@@ -42,7 +68,13 @@ export default async function AboutPage() {
           <h2 className="h-section">{page.background?.heading}</h2>
           <div className="flex flex-col">
             {background.map((b, i) => (
-              <div key={b.id ?? i} className={cx('flex flex-col gap-2 py-6 border-t border-rule', i === background.length - 1 && 'border-b')}>
+              <div
+                key={b.id ?? i}
+                className={cx(
+                  'flex flex-col gap-2 py-6 border-t border-rule',
+                  i === background.length - 1 && 'border-b',
+                )}
+              >
                 <h3 className="text-[26px] leading-[1.2]">{b.title}</h3>
                 <p className="text-[16px] text-muted">{b.body}</p>
               </div>
@@ -56,7 +88,13 @@ export default async function AboutPage() {
           <h2 className="h-section">{page.promises?.heading}</h2>
           <ul className="flex flex-col m-0 p-0 list-none">
             {promises.map((p, i) => (
-              <li key={p.id ?? i} className={cx('flex flex-col gap-1.5 py-5 border-t border-rule', i === promises.length - 1 && 'border-b')}>
+              <li
+                key={p.id ?? i}
+                className={cx(
+                  'flex flex-col gap-1.5 py-5 border-t border-rule',
+                  i === promises.length - 1 && 'border-b',
+                )}
+              >
                 <span className="font-semibold text-[18px]">{p.title}</span>
                 <span className="text-[16px] text-muted">{p.body}</span>
               </li>
@@ -67,14 +105,23 @@ export default async function AboutPage() {
 
       {page.solo?.heading ? (
         <section className="flex flex-col gap-5 py-16 lg:py-20 border-t border-ink">
-          <h2 className="font-serif leading-[1.1] tracking-[-0.015em] max-w-[800px]" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)' }}>
+          <h2
+            className="font-serif leading-[1.1] tracking-[-0.015em] max-w-[800px]"
+            style={{ fontSize: 'clamp(30px, 3.4vw, 44px)' }}
+          >
             {page.solo.heading}
           </h2>
-          {page.solo.body ? <p className="text-[18px] leading-[1.65] text-body max-w-[760px]">{page.solo.body}</p> : null}
+          {page.solo.body ? (
+            <p className="text-[18px] leading-[1.65] text-body max-w-[760px]">{page.solo.body}</p>
+          ) : null}
         </section>
       ) : null}
 
-      <ClosingCta heading={page.closing?.heading} body={page.closing?.body} ctaLabel={page.closing?.ctaLabel} />
+      <ClosingCta
+        heading={page.closing?.heading}
+        body={page.closing?.body}
+        ctaLabel={page.closing?.ctaLabel}
+      />
     </>
   )
 }

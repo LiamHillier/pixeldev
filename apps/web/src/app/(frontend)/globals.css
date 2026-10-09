@@ -13,7 +13,7 @@
   --font-sans: var(--font-hanken), system-ui, sans-serif;
   --font-serif: var(--font-newsreader), Georgia, serif;
 
-  --container-site: 1180px;
+  --container-site: 1980px;
 }
 
 @layer base {

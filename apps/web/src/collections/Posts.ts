@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { figureField } from '@/fields/figure'
+import { seoField } from '@/fields/seo'
 import { slugField } from '@/fields/slug'
 
 export const Posts: CollectionConfig = {
@@ -42,5 +43,6 @@ export const Posts: CollectionConfig = {
       fields: [{ name: 'tag', type: 'text', required: true }],
     },
     { name: 'relatedService', type: 'relationship', relationTo: 'services' },
+    seoField,
   ],
 }

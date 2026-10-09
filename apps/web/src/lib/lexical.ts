@@ -26,3 +26,24 @@ export function extractHeadings(state: SerializedEditorState | null | undefined)
 export function headingId(node: AnyNode): string {
   return slugify(textOf(node))
 }
+
+/** Flatten a Lexical document to Markdown-ish text, for llms-full.txt. */
+export function toMarkdown(state: SerializedEditorState | null | undefined): string {
+  if (!state?.root) return ''
+  const block = (node: AnyNode): string => {
+    switch (node.type) {
+      case 'heading':
+        return `${'#'.repeat(Math.min(Number(node.tag?.slice(1)) + 1 || 3, 6))} ${textOf(node)}`
+      case 'list':
+        return (node.children ?? []).map((li) => `- ${textOf(li)}`).join('\n')
+      case 'quote':
+        return `> ${textOf(node)}`
+      default:
+        return textOf(node)
+    }
+  }
+  return (state.root.children as AnyNode[])
+    .map(block)
+    .filter((s) => s.trim())
+    .join('\n\n')
+}

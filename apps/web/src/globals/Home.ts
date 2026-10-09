@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 import { closingField, ctaField, labelValueItems, titledItems } from '@/fields/cta'
 import { figureField } from '@/fields/figure'
+import { seoField } from '@/fields/seo'
 
 export const Home: GlobalConfig = {
   slug: 'home',
@@ -12,6 +13,13 @@ export const Home: GlobalConfig = {
       name: 'hero',
       type: 'group',
       fields: [
+        {
+          name: 'eyebrow',
+          type: 'text',
+          admin: {
+            description: 'Small label above the heading. A good place for what you do and where.',
+          },
+        },
         { name: 'heading', type: 'text', required: true },
         { name: 'intro', type: 'textarea', required: true },
         ctaField('primaryCta', 'Primary button'),
@@ -25,7 +33,11 @@ export const Home: GlobalConfig = {
       type: 'group',
       fields: [
         { name: 'eyebrow', type: 'text', defaultValue: 'What I do' },
-        { name: 'note', type: 'text', defaultValue: 'Most projects use two or three of these together' },
+        {
+          name: 'note',
+          type: 'text',
+          defaultValue: 'Most projects use two or three of these together',
+        },
       ],
     },
     {
@@ -63,5 +75,6 @@ export const Home: GlobalConfig = {
       ],
     },
     closingField,
+    seoField,
   ],
 }

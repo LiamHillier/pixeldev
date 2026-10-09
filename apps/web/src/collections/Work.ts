@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { labelValueItems, statsField } from '@/fields/cta'
 import { figureField } from '@/fields/figure'
+import { seoField } from '@/fields/seo'
 import { slugField } from '@/fields/slug'
 
 export const Work: CollectionConfig = {
@@ -112,5 +113,6 @@ export const Work: CollectionConfig = {
         },
       ],
     },
+    seoField,
   ],
 }

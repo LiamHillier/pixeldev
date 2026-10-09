@@ -34,10 +34,22 @@ packages/                    shared packages go here as the monorepo grows
 - **Services** (`/services/[slug]`): listing copy for the home page and index, plus a full page (hero, figure, pain points, offerings, approach, optional plans, related work, FAQs, closing CTA).
 - **Work** (`/work`, `/work/[slug]`): products, client projects and anonymised projects. Toggle "Publish a case study page" to get a full case study with narrative sections, stats, quote and sidebar.
 - **Posts** (`/journal`, `/journal/[slug]`): drafts and publishing, topics, cover, Lexical body. The article sidebar table of contents is built from the H2/H3 headings.
-- **Enquiries**: contact form submissions. The form is a server action; a honeypot field drops bots. No email is sent yet.
+- **Enquiries**: contact form submissions. The form is a server action; a honeypot field drops bots. Each new enquiry is emailed to `ENQUIRY_NOTIFY_TO` (or the Site settings email) with Reply-To set to the sender.
 - **Media**: uploads with `card` and `wide` sizes. Every image field has a placeholder note that renders in a grey box until an image is uploaded.
 
 Square-bracket placeholders in the seeded copy (`[YEAR]`, `[N]`, `[YOUR ABN]`) are meant to be filled in through the admin.
+
+## Email
+
+Sent through Postmark's API by a small adapter in `src/lib/postmark.ts` (no extra dependencies). Set `POSTMARK_SERVER_TOKEN`, `EMAIL_FROM_ADDRESS` and `EMAIL_FROM_NAME` in `.env`; the from address must be a verified sender signature or on a verified domain in Postmark. With no token set, Payload logs emails to the console instead. This covers enquiry notifications and the admin's password reset emails.
+
+## SEO
+
+- Every page, service, case study and post has an **SEO** group in the admin (title, description, share image, hide from search). Blank fields fall back to the page heading and intro.
+- **Site settings → Business details** feeds the `ProfessionalService` structured data (Melbourne, VIC, areas served). Add a phone number and postcode there.
+- Generated routes: `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt`, `/og?title=` (share cards), `/logo.png`.
+- `robots.txt` blocks everything unless `NODE_ENV=production` and `NEXT_PUBLIC_SERVER_URL` is the live domain, so previews stay out of Google.
+- Melbourne-targeted titles and descriptions live in `src/seed/seo.ts`.
 
 ## Scripts
 

@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 import { closingField, labelValueItems, titledItems } from '@/fields/cta'
 import { figureField } from '@/fields/figure'
+import { seoField } from '@/fields/seo'
 
 const pageHeader = [
   { name: 'eyebrow', type: 'text' },
@@ -34,6 +35,7 @@ export const ServicesPage: GlobalConfig = {
       ],
     },
     closingField,
+    seoField,
   ],
 }
 
@@ -72,6 +74,7 @@ export const WorkPage: GlobalConfig = {
         { name: 'intro', type: 'textarea' },
       ],
     },
+    seoField,
   ],
 }
 
@@ -111,6 +114,7 @@ export const AboutPage: GlobalConfig = {
       ],
     },
     closingField,
+    seoField,
   ],
 }
 
@@ -163,6 +167,7 @@ export const ContactPage: GlobalConfig = {
         { name: 'supportNote', type: 'text' },
       ],
     },
+    seoField,
   ],
 }
 
@@ -171,5 +176,5 @@ export const JournalPage: GlobalConfig = {
   label: 'Journal page',
   admin: { group: 'Pages' },
   access: { read: () => true },
-  fields: [...pageHeader],
+  fields: [...pageHeader, seoField],
 }

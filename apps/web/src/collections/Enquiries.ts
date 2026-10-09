@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { notifyEnquiry } from '@/hooks/notifyEnquiry'
 
 export const Enquiries: CollectionConfig = {
   slug: 'enquiries',
@@ -13,6 +14,7 @@ export const Enquiries: CollectionConfig = {
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
   },
+  hooks: { afterChange: [notifyEnquiry] },
   fields: [
     { name: 'name', type: 'text', required: true },
     { name: 'email', type: 'email', required: true },

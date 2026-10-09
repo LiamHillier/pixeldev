@@ -1,11 +1,20 @@
 import type { Metadata } from 'next'
 import { ClosingCta, PageHeader, ULink } from '@/components/ui'
+import { JsonLd } from '@/components/JsonLd'
 import { getServices, getServicesPage } from '@/lib/data'
+import { breadcrumbJsonLd, pageMetadata, absoluteUrl } from '@/lib/seo'
 import { cx } from '@/lib/utils'
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getServicesPage()
-  return { title: 'Services', description: page.intro ?? undefined }
+  return pageMetadata({
+    path: '/services',
+    seo: page.seo,
+    title: 'Services',
+    heading: page.heading,
+    eyebrow: page.eyebrow,
+    description: page.intro,
+  })
 }
 
 export default async function ServicesIndex() {
@@ -14,6 +23,22 @@ export default async function ServicesIndex() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([{ name: 'Services', path: '/services' }]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: 'Services',
+            itemListElement: services.map((s, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: s.title,
+              url: absoluteUrl(`/services/${s.slug}`),
+            })),
+          },
+        ]}
+      />
       <PageHeader eyebrow={page.eyebrow} heading={page.heading} intro={page.intro} />
 
       <section className="flex flex-col border-t border-ink">
@@ -26,7 +51,10 @@ export default async function ServicesIndex() {
             )}
           >
             <div className="flex flex-col gap-[18px]">
-              <h2 className="font-serif leading-[1.05] tracking-[-0.015em]" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)' }}>
+              <h2
+                className="font-serif leading-[1.05] tracking-[-0.015em]"
+                style={{ fontSize: 'clamp(30px, 3.4vw, 44px)' }}
+              >
                 {s.title}
               </h2>
               <p className="text-[17px] text-body">{s.indexIntro ?? s.summary}</p>
@@ -51,7 +79,9 @@ export default async function ServicesIndex() {
         <section className="flex flex-col gap-10 py-16 lg:py-24">
           <div className="flex flex-col gap-3 max-w-[720px]">
             <h2 className="h-section">{page.engagement?.heading}</h2>
-            {page.engagement?.intro ? <p className="text-[18px] text-body">{page.engagement.intro}</p> : null}
+            {page.engagement?.intro ? (
+              <p className="text-[18px] text-body">{page.engagement.intro}</p>
+            ) : null}
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-10">
             {options.map((o) => (
@@ -65,7 +95,11 @@ export default async function ServicesIndex() {
         </section>
       ) : null}
 
-      <ClosingCta heading={page.closing?.heading} body={page.closing?.body} ctaLabel={page.closing?.ctaLabel} />
+      <ClosingCta
+        heading={page.closing?.heading}
+        body={page.closing?.body}
+        ctaLabel={page.closing?.ctaLabel}
+      />
     </>
   )
 }

@@ -1,6 +1,10 @@
 import { cache } from 'react'
 import { getPayloadClient } from './payload'
+import type { Where } from 'payload'
 import type { Post, Service, Work } from '@/payload-types'
+
+// The local API skips access control, so drafts have to be filtered out explicitly.
+const published: Where = { _status: { equals: 'published' } }
 
 export const getSite = cache(async () => {
   const payload = await getPayloadClient()
@@ -97,6 +101,7 @@ export const getPosts = cache(async (): Promise<Post[]> => {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'posts',
+    where: published,
     sort: '-publishedAt',
     limit: 100,
     depth: 1,
@@ -108,7 +113,7 @@ export const getPost = cache(async (slug: string): Promise<Post | null> => {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'posts',
-    where: { slug: { equals: slug } },
+    where: { and: [published, { slug: { equals: slug } }] },
     limit: 1,
     depth: 2,
   })

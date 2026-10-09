@@ -260,6 +260,24 @@ export interface Service {
     body?: string | null;
     ctaLabel?: string | null;
   };
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -420,6 +438,24 @@ export interface Work {
     };
     moreWork?: (number | Work)[] | null;
   };
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -472,6 +508,24 @@ export interface Post {
       }[]
     | null;
   relatedService?: (number | null) | Service;
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -738,6 +792,14 @@ export interface ServicesSelect<T extends boolean = true> {
         body?: T;
         ctaLabel?: T;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -837,6 +899,14 @@ export interface WorkSelect<T extends boolean = true> {
             };
         moreWork?: T;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -867,6 +937,14 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
       };
   relatedService?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1028,6 +1106,39 @@ export interface Site {
       }[]
     | null;
   headerCtaLabel?: string | null;
+  /**
+   * Used for the structured data Google reads for local search. Leave the street address blank to show only the suburb.
+   */
+  business?: {
+    /**
+     * Include the country code, e.g. +61 400 000 000.
+     */
+    phone?: string | null;
+    streetAddress?: string | null;
+    locality?: string | null;
+    region?: string | null;
+    postcode?: string | null;
+    areaServed?:
+      | {
+          name: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Optional, e.g. $$.
+     */
+    priceRange?: string | null;
+  };
+  seo?: {
+    /**
+     * Used when a page has no description of its own.
+     */
+    defaultDescription?: string | null;
+    /**
+     * The one-paragraph summary at the top of /llms.txt.
+     */
+    llmsSummary?: string | null;
+  };
   products?:
     | {
         label: string;
@@ -1052,6 +1163,10 @@ export interface Site {
 export interface Home {
   id: number;
   hero: {
+    /**
+     * Small label above the heading. A good place for what you do and where.
+     */
+    eyebrow?: string | null;
     heading: string;
     intro: string;
     primaryCta?: {
@@ -1124,6 +1239,24 @@ export interface Home {
     body?: string | null;
     ctaLabel?: string | null;
   };
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1153,6 +1286,24 @@ export interface ServicesPage {
     body?: string | null;
     ctaLabel?: string | null;
   };
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1177,6 +1328,24 @@ export interface WorkPage {
   anonymised?: {
     heading?: string | null;
     intro?: string | null;
+  };
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1235,6 +1404,24 @@ export interface AboutPage {
     body?: string | null;
     ctaLabel?: string | null;
   };
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1280,6 +1467,24 @@ export interface ContactPage {
     supportHeading?: string | null;
     supportNote?: string | null;
   };
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1292,6 +1497,24 @@ export interface JournalPage {
   eyebrow?: string | null;
   heading: string;
   intro?: string | null;
+  /**
+   * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
+   */
+  seo?: {
+    /**
+     * Around 50 to 60 characters. " | Pixeldev" is added automatically on inner pages.
+     */
+    title?: string | null;
+    /**
+     * Around 140 to 160 characters. Mention Melbourne where it reads naturally.
+     */
+    description?: string | null;
+    /**
+     * Social share image, 1200 x 630. A branded card is generated if left blank.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1316,6 +1539,28 @@ export interface SiteSelect<T extends boolean = true> {
         id?: T;
       };
   headerCtaLabel?: T;
+  business?:
+    | T
+    | {
+        phone?: T;
+        streetAddress?: T;
+        locality?: T;
+        region?: T;
+        postcode?: T;
+        areaServed?:
+          | T
+          | {
+              name?: T;
+              id?: T;
+            };
+        priceRange?: T;
+      };
+  seo?:
+    | T
+    | {
+        defaultDescription?: T;
+        llmsSummary?: T;
+      };
   products?:
     | T
     | {
@@ -1342,6 +1587,7 @@ export interface HomeSelect<T extends boolean = true> {
   hero?:
     | T
     | {
+        eyebrow?: T;
         heading?: T;
         intro?: T;
         primaryCta?:
@@ -1422,6 +1668,14 @@ export interface HomeSelect<T extends boolean = true> {
         body?: T;
         ctaLabel?: T;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1455,6 +1709,14 @@ export interface ServicesPageSelect<T extends boolean = true> {
         body?: T;
         ctaLabel?: T;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1485,6 +1747,14 @@ export interface WorkPageSelect<T extends boolean = true> {
     | {
         heading?: T;
         intro?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1550,6 +1820,14 @@ export interface AboutPageSelect<T extends boolean = true> {
         body?: T;
         ctaLabel?: T;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1601,6 +1879,14 @@ export interface ContactPageSelect<T extends boolean = true> {
         supportHeading?: T;
         supportNote?: T;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1613,6 +1899,14 @@ export interface JournalPageSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
   intro?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

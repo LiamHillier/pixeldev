@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { closingField, ctaField, titledItems } from '@/fields/cta'
 import { figureField } from '@/fields/figure'
+import { seoField } from '@/fields/seo'
 import { slugField } from '@/fields/slug'
 
 export const Services: CollectionConfig = {
@@ -38,7 +39,8 @@ export const Services: CollectionConfig = {
               name: 'examples',
               type: 'text',
               admin: {
-                description: 'A short line of concrete examples under the summary on the home page.',
+                description:
+                  'A short line of concrete examples under the summary on the home page.',
               },
             },
             {
@@ -133,6 +135,10 @@ export const Services: CollectionConfig = {
             },
             closingField,
           ],
+        },
+        {
+          label: 'SEO',
+          fields: [seoField],
         },
       ],
     },

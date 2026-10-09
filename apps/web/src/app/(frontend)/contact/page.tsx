@@ -1,11 +1,20 @@
 import type { Metadata } from 'next'
 import { PageHeader, ULink } from '@/components/ui'
+import { JsonLd } from '@/components/JsonLd'
 import { getContactPage, getSite } from '@/lib/data'
+import { breadcrumbJsonLd, pageMetadata, absoluteUrl, ids } from '@/lib/seo'
 import { ContactForm } from './ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getContactPage()
-  return { title: 'Contact', description: page.intro ?? undefined }
+  return pageMetadata({
+    path: '/contact',
+    seo: page.seo,
+    title: 'Contact',
+    heading: page.heading,
+    eyebrow: page.eyebrow,
+    description: page.intro,
+  })
 }
 
 export default async function ContactPage() {
@@ -14,7 +23,24 @@ export default async function ContactPage() {
 
   return (
     <>
-      <PageHeader eyebrow={page.eyebrow} heading={page.heading} intro={page.intro} className="max-w-[820px] lg:pt-[88px] lg:pb-14" />
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([{ name: 'Contact', path: '/contact' }]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'ContactPage',
+            url: absoluteUrl('/contact'),
+            name: page.heading,
+            about: { '@id': ids.business },
+          },
+        ]}
+      />
+      <PageHeader
+        eyebrow={page.eyebrow}
+        heading={page.heading}
+        intro={page.intro}
+        className="max-w-[820px] lg:pt-[88px] lg:pb-14"
+      />
 
       <section className="flex flex-wrap gap-x-20 gap-y-14 pb-24 border-t border-ink">
         <div className="flex-[999_1_520px] min-w-0">
@@ -33,7 +59,10 @@ export default async function ContactPage() {
             <div className="flex flex-col gap-5">
               <p className="text-[13px] text-faint">{page.nextSteps?.heading}</p>
               {steps.map((s, i) => (
-                <div key={s.id ?? i} className="grid grid-cols-[40px_1fr] gap-3 pt-3.5 border-t border-rule">
+                <div
+                  key={s.id ?? i}
+                  className="grid grid-cols-[40px_1fr] gap-3 pt-3.5 border-t border-rule"
+                >
                   <span className="font-serif text-[26px] leading-none text-faint">{i + 1}</span>
                   <p className="text-[15px] text-body">{s.text}</p>
                 </div>
@@ -42,8 +71,16 @@ export default async function ContactPage() {
           ) : null}
           <div className="flex flex-col gap-2.5 text-[15px] pt-5 border-t border-ink">
             <p className="text-[13px] text-faint">{page.aside?.directHeading ?? 'Or directly'}</p>
-            {site.email ? <ULink href={`mailto:${site.email}`} className="text-[15px] self-start">{site.email}</ULink> : null}
-            {site.linkedin ? <ULink href={site.linkedin} className="text-[15px] self-start">LinkedIn</ULink> : null}
+            {site.email ? (
+              <ULink href={`mailto:${site.email}`} className="text-[15px] self-start">
+                {site.email}
+              </ULink>
+            ) : null}
+            {site.linkedin ? (
+              <ULink href={site.linkedin} className="text-[15px] self-start">
+                LinkedIn
+              </ULink>
+            ) : null}
             {page.aside?.directNote ? <p className="text-muted">{page.aside.directNote}</p> : null}
           </div>
           {page.aside?.supportHeading ? (
