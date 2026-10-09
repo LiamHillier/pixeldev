@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f6f3ee;
+  --color-ink: #1b1a17;
+  --color-body: #3f3b34;
+  --color-muted: #5e5a52;
+  --color-faint: #7a7468;
+  --color-rule: #ddd6cb;
+  --color-fill: #e6e0d4;
+  --color-accent: #2f5d50;
+
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+
+  --container-site: 1180px;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-paper text-ink font-sans text-[17px] leading-[1.6];
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-serif font-normal m-0;
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  a {
+    @apply text-inherit no-underline;
+  }
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+  }
+}
+
+@utility h-display {
+  @apply font-serif leading-[0.98] tracking-[-0.015em];
+  font-size: clamp(44px, 6.5vw, 88px);
+}
+@utility h-page {
+  @apply font-serif leading-[1.0] tracking-[-0.015em];
+  font-size: clamp(40px, 5.6vw, 76px);
+}
+@utility h-detail {
+  @apply font-serif leading-[1.02] tracking-[-0.015em];
+  font-size: clamp(36px, 5vw, 68px);
+}
+@utility h-section {
+  @apply font-serif leading-[1.05] tracking-[-0.015em];
+  font-size: clamp(32px, 3.6vw, 48px);
+}
+@utility h-row {
+  @apply font-serif leading-[1.1] tracking-[-0.01em];
+  font-size: clamp(26px, 2.8vw, 36px);
+}
+@utility h-card {
+  @apply font-serif leading-[1.15] tracking-[-0.01em];
+  font-size: clamp(24px, 2.4vw, 30px);
+}
+
+@utility link-u {
+  @apply underline underline-offset-4 decoration-1 hover:text-accent transition-colors;
+}
+
+@utility btn-ink {
+  @apply inline-flex items-center min-h-[52px] px-7 bg-ink text-paper font-medium text-[16px] hover:bg-accent transition-colors;
+}
+
+@utility field-line {
+  @apply w-full min-h-[44px] p-0 bg-transparent border-0 border-b border-ink rounded-none text-ink text-[18px] focus:outline-none focus:border-accent;
+}
+
+@utility row-hover {
+  & h3 {
+    @apply transition-colors;
+  }
+  &:hover h3 {
+    @apply text-accent;
+  }
+}
+
+/* Rich text body (journal articles, case study sections) */
+.prose-pd {
+  @apply text-[19px] leading-[1.7] text-[#2b2925];
+}
+.prose-pd > * + * {
+  margin-top: 24px;
+}
+.prose-pd h2 {
+  @apply leading-[1.15] tracking-[-0.01em] pt-6;
+  font-size: clamp(28px, 3vw, 36px);
+}
+.prose-pd h3 {
+  @apply leading-[1.2] pt-4;
+  font-size: clamp(22px, 2.4vw, 26px);
+}
+.prose-pd a {
+  @apply underline underline-offset-4 decoration-1 hover:text-accent;
+}
+.prose-pd ol,
+.prose-pd ul {
+  @apply m-0 p-0 list-none flex flex-col;
+  counter-reset: pd-list;
+}
+.prose-pd li {
+  @apply grid grid-cols-[48px_1fr] gap-4 py-3.5 border-t border-rule;
+  counter-increment: pd-list;
+}
+.prose-pd li:last-child {
+  @apply border-b border-rule;
+}
+.prose-pd ol li::before {
+  content: counter(pd-list);
+  @apply font-serif text-[26px] leading-[1.2] text-faint;
+}
+.prose-pd ul li::before {
+  content: '';
+  @apply block w-2 h-2 mt-2.5 ml-1 bg-ink;
+}
+.prose-pd blockquote {
+  @apply font-serif italic text-[26px] leading-[1.35] border-l-0 pl-0 py-4 border-t border-b border-ink m-0;
+}
+.prose-pd hr {
+  @apply border-0 border-t border-ink my-8;
+}
+.prose-pd code {
+  @apply font-mono text-[0.9em] bg-fill px-1.5 py-0.5;
+}
+.prose-pd img {
+  @apply w-full h-auto;
+}
+.prose-pd table {
+  @apply min-w-[520px] text-[15px] leading-[1.5] w-full border-collapse;
+}
+.prose-pd td,
+.prose-pd th {
+  @apply py-2.5 pr-6 border-t border-rule align-top text-left;
+}

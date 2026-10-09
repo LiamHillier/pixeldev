@@ -1,0 +1,19 @@
+{
+  "name": "pixeldev-mono",
+  "private": true,
+  "packageManager": "pnpm@11.22.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "seed": "pnpm --filter web seed",
+    "web": "pnpm --filter web"
+  },
+  "devDependencies": {
+    "turbo": "^2.11.7"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

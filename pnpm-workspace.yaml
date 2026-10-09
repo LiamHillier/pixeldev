@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  sharp: true
+  esbuild: true
+  unrs-resolver: true
+  '@libsql/client': true
+  libsql: true
