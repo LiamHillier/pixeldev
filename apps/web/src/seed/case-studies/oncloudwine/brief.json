@@ -1,0 +1,151 @@
+{
+  "slug": "oncloudwine",
+  "title": "OnCloudWine",
+  "kind": "product",
+  "category": "SaaS, wine club management",
+  "summary": "Wine club software for wineries: members, clubs, releases, card payments and shipping in one place. It started as a WordPress plugin and grew into a multi-tenant platform with its own member portal and seven provider integrations.",
+  "externalUrl": "https://oncloudwine.io",
+  "image": {
+    "file": "card.png",
+    "alt": "OnCloudWine release page showing a pending Spring release with its clubs, fulfilment options and product list"
+  },
+  "stats": [
+    {
+      "value": "[N]",
+      "label": "wineries on the platform"
+    },
+    {
+      "value": "7",
+      "label": "payment, shipping and marketing integrations"
+    }
+  ],
+  "caseStudy": {
+    "heading": "Wine club software that started as a WordPress plugin and outgrew it.",
+    "intro": "Wineries run their clubs on a cycle: build a release, let members tweak their selection, charge every card on file, then pack and ship hundreds of orders. Most do it with spreadsheets, a POS and a lot of manual card processing. OnCloudWine does the whole loop, and I have built every version of it.",
+    "meta": [
+      {
+        "label": "Product",
+        "value": "OnCloudWine"
+      },
+      {
+        "label": "Industry",
+        "value": "Wine and hospitality"
+      },
+      {
+        "label": "Services",
+        "value": "Product design, SaaS development, integrations"
+      },
+      {
+        "label": "Stack",
+        "value": "Next.js, TypeScript, PostgreSQL, Prisma, BullMQ, Redis"
+      },
+      {
+        "label": "Timeline",
+        "value": "October 2024 to now"
+      }
+    ],
+    "hero": {
+      "file": "hero.png",
+      "alt": "OnCloudWine home dashboard with member KPIs, a club composition chart and a map of members by Australian state",
+      "caption": "The home dashboard: members, signups, holds and cancellations over the chosen period, with the split across clubs and where members live."
+    },
+    "bigStats": [
+      {
+        "value": "980",
+        "label": "commits in the production platform"
+      },
+      {
+        "value": "22",
+        "label": "background job queues behind syncs, payments and shipping"
+      },
+      {
+        "value": "77",
+        "label": "database models across CRM, releases, payments and fulfilment"
+      }
+    ],
+    "sections": [
+      {
+        "heading": "The problem",
+        "paragraphs": [
+          "A wine club looks simple from the outside: members pay, wine arrives. Behind it, a winery is juggling several club tiers, members who pause or cancel, members who want two more bottles of the Pinot and none of the rosé, cards that have expired since the last release, and a shipping run that has to match exactly what was charged. [One line on how a typical winery handled this before OnCloudWine.]",
+          "The tools wineries already use don't think in releases. A POS knows about customers and orders. A WooCommerce store knows about products. Neither knows that the Autumn release goes to three clubs, that it charges 1,100 cards on one afternoon, and that a member in Tasmania picked up instead of shipping."
+        ]
+      },
+      {
+        "heading": "Version one: a WordPress plugin",
+        "paragraphs": [
+          "The first OnCloudWine, built from October 2024, lived inside wp-admin. A React app on top of WooCommerce, where each club was a WordPress user role, products came from the store catalogue, and a release walked through five steps: create, select products, create orders, process cards, archive. Square handled the cards.",
+          "It worked for one winery on one site. It also showed me the limits quickly: the data model was WordPress's, every winery needed its own install, and the slow parts (charging hundreds of cards, generating packing lists) were running inside PHP requests and WP cron."
+        ],
+        "figure": {
+          "file": "fig-2.png",
+          "alt": "The original OnCloudWine WordPress plugin inside wp-admin, showing a release card with step progress and product stock checks",
+          "caption": "Version one, inside wp-admin. Clubs were WordPress roles and each release card tracked its own five steps and stock."
+        }
+      },
+      {
+        "heading": "What I built next",
+        "paragraphs": [
+          "In mid 2025 I rebuilt it as a standalone multi-tenant platform: a Next.js and TypeScript monorepo with a staff dashboard, a member portal, a public API, a marketing and docs site, and a BullMQ worker on Redis. Every table is scoped to an organisation, and each winery can run the dashboard and portal on its own domain.",
+          "The WordPress plugin didn't go away. I rewrote it as a thin client of the public API, so a winery's WooCommerce site can show members their upcoming release and let them change their selection, while the data lives in one place."
+        ],
+        "steps": [
+          "Contacts CRM with tags, tasks, task automations (birthdays, anniversaries), discounts and saved cards.",
+          "Clubs and memberships with active, on hold and cancelled states, signup locations and goals.",
+          "A release wizard: products and quantities, which items are required or adjustable, target clubs, shipping or pickup.",
+          "Member customisation from the portal, the WooCommerce plugin or by staff, before anything is charged.",
+          "Batch payments through Square or the winery's own Stripe account, with failures turned into follow-up tasks and card update emails.",
+          "Fulfilment: packing lists, FedEx and Shippo labels, VinoShipper for compliant US shipping, tracking, and product swaps with automatic charge or refund of the difference.",
+          "Syncs with Square, WooCommerce and Mailchimp, plus Stripe billing for the wineries themselves."
+        ]
+      },
+      {
+        "heading": "The hard part: charging a thousand cards exactly once",
+        "paragraphs": [
+          "Processing a release is the moment the product earns its keep, and the one place a bug costs real money. Staff walk through a wizard, confirm with a one-time code sent to their email, and a background job charges every eligible member. The database allows exactly one payment row per contact per release, so a retry reuses the row and a completed payment is never charged twice. Every Square charge carries an idempotency key built from the organisation, release, contact, amount and currency, and every Stripe charge carries its own key per contact, so a worker that dies halfway through can be rerun safely.",
+          "The platform fee is the other subtle bit. On Stripe it rides on the charge as an application fee. On Square it can't, so each fee is recorded in a ledger and added to the winery's monthly Stripe invoice. Around that sit encrypted OAuth tokens for every provider, a Square token refresh that runs both on demand and on a 12 hour schedule, and progress reporting so staff can watch a run of [N] payments land."
+        ],
+        "figure": {
+          "file": "fig-1.png",
+          "alt": "Process Payments wizard showing the confirmation step with release details, contact readiness and outstanding issues",
+          "caption": "The last check before charging: who is ready, who has an expired card or missing address, and what gets skipped."
+        }
+      },
+      {
+        "heading": "Where it is now",
+        "paragraphs": [
+          "The platform has been in production since [MONTH YEAR] and now [N] wineries run their clubs on it. [One line from a winery on what changed for their release day.]",
+          "In August 2026 I started moving it onto a newer foundation: Next.js 16, tRPC, Better Auth and Prisma 7, ported one domain at a time with a written migration log. The rebuild adds what the first platform was missing, a proper test suite: 130 unit tests, 238 database tests and 32 Playwright specs so far, plus a rerun of the unit suite in Sydney and Los Angeles time zones. That run alone caught four bugs where a release date shifted by a day."
+        ]
+      }
+    ],
+    "atAGlance": [
+      {
+        "label": "What they had",
+        "value": "Spreadsheets, a POS and manual card runs every release"
+      },
+      {
+        "label": "What they have now",
+        "value": "One platform for members, releases, payments and shipping, with a member portal and a WooCommerce plugin"
+      },
+      {
+        "label": "Still involved?",
+        "value": "Yes. It's my product. I build, run and support it."
+      },
+      {
+        "label": "Built with",
+        "value": "Next.js, TypeScript, PostgreSQL, Prisma, BullMQ, Redis, Square, Stripe Connect, WooCommerce, Mailchimp, FedEx, Shippo, VinoShipper"
+      }
+    ],
+    "asideCta": {
+      "heading": "Got a product that has outgrown its plugin?",
+      "body": "I've taken one from a WordPress plugin to a multi-tenant platform. Tell me where yours is stuck and I'll tell you what I'd do next.",
+      "ctaLabel": "Start a project"
+    }
+  },
+  "notes": "Timeline from git: original WP plugin (~/Projects/oncloudwine) 78 commits, 2024-10-19 to 2025-03-05 (the brief said 2025, git says it started Oct 2024). oncloudwine-next is the production platform: 980 commits, 2025-06-30 to 2026-06-12, deployed from the production branch. onclouwine-wp is the Aug 2025 rewrite of the plugin as a public-API client (7 commits). oncloudwine-v2 is a mid-migration rebuild (43 commits, 2026-08-16 to 2026-08-20; Contacts, Clubs, Products done, Releases in progress, payments not yet ported). Imagery is based on oncloudwine-next because that is what customers use today. Figures 77 models, 22 queues and the integration list come from docs/python-rewrite/00-product-overview.md (uncommitted docs in oncloudwine-next, written Oct 2026 for a possible Python backend rewrite). That doc is not mentioned in the copy; confirm whether the direction is v2 (TypeScript) or the Python rewrite and adjust the last section. Test counts are from v2's MIGRATION.md; oncloudwine-next has no test files, so the copy frames tests as new in v2. 'Seven integrations' = Square, Stripe (platform + Connect counted once), WooCommerce, Mailchimp, FedEx, Shippo, VinoShipper. The card stat label says 'payment, shipping and marketing integrations' but WooCommerce is really store/catalogue sync, so adjust if needed. Placeholders: winery count, production launch month, number of payments in a run, pre-OnCloudWine workflow, customer quote. 'What they had' in atAGlance is a generic description of the market, not a specific customer; check it. All names in screenshots (Ridgeline Estate, clubs, wines, SKUs, member counts) are fictional. Screenshot quirks copied faithfully from the code: the Cancellations KPI shows '-15%' on a green badge (inverse trend), and the Issue Breakdown card uses emoji. URL app.oncloudwine.io comes from the code's fallback host.",
+  "seo": {
+    "title": "OnCloudWine: Wine Club Software Case Study",
+    "description": "How a WordPress plugin for wine clubs grew into a multi-tenant platform for wineries, with releases, card payments and shipping, built in Melbourne."
+  }
+}

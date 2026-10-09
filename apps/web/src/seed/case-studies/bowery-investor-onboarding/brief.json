@@ -1,0 +1,143 @@
+{
+  "slug": "bowery-investor-onboarding",
+  "title": "Investor onboarding for Bowery",
+  "kind": "client",
+  "category": "Internal tool, private credit funds",
+  "summary": "An internal onboarding workspace for a private credit fund manager. Staff upload a signed application, check what the app read off it, work Bowery's 26-item AML/KYC checklist, and the result is filed into their Microsoft 365 investor register.",
+  "externalUrl": null,
+  "image": {
+    "file": "card.png",
+    "alt": "Bowery onboarding case workspace on the Entity & structure stage, with a trust's checklist items, an expanded ABN lookup showing the data behind the check, and the stage rail on the left"
+  },
+  "stats": [
+    {
+      "value": "26",
+      "label": "checklist items worked per case"
+    },
+    {
+      "value": "833",
+      "label": "automated tests"
+    }
+  ],
+  "caseStudy": {
+    "heading": "A staged onboarding workspace that reads the application form, runs the compliance checklist and files the result into the client's own Microsoft 365 register.",
+    "intro": "Bowery runs two private credit funds and onboards wholesale investors by hand: a paper checklist, a shared Excel register and a SharePoint folder per investor. I built them an internal tool that takes a signed application from upload to sign-off, without moving their records out of Microsoft 365. Their staff still make every decision. The app does the reading, filing and bookkeeping around those decisions.",
+    "meta": [
+      {
+        "label": "Client",
+        "value": "Bowery"
+      },
+      {
+        "label": "Industry",
+        "value": "Private credit funds management"
+      },
+      {
+        "label": "Services",
+        "value": "Workflow design, full-stack build, Microsoft 365 and HubSpot integration"
+      },
+      {
+        "label": "Stack",
+        "value": "Next.js 16, tRPC, Prisma and Postgres, Microsoft Graph, Python extraction worker"
+      },
+      {
+        "label": "Timeline",
+        "value": "June to October 2026, 130 commits"
+      }
+    ],
+    "hero": {
+      "file": "hero.png",
+      "alt": "Bowery pipeline board listing ten investor cases with fund, entity type, register entry, a per-stage progress bar, dates and a coloured status with a one-line reason",
+      "caption": "The pipeline. Every row says where the case is stuck and what to do next, so the board doubles as the day's to-do list."
+    },
+    "bigStats": [
+      {
+        "value": "26",
+        "label": "items on Bowery's AML/KYC checklist, each one tracked per case"
+      },
+      {
+        "value": "833",
+        "label": "unit and extraction tests across the app and the PDF worker"
+      },
+      {
+        "value": "31",
+        "label": "sample application forms the extractor is tested against"
+      }
+    ],
+    "sections": [
+      {
+        "heading": "The problem",
+        "paragraphs": [
+          "Bowery onboards investors into two funds with different rules: the Diversified Credit Fund and the Mortgage & Investment Fund. Each application arrives as a signed PDF, sometimes filled in on screen, sometimes printed, handwritten and scanned. Staff retyped it into an Excel Master Workbook, filed the paperwork into a SharePoint folder per investor and ticked through a 26-item paper checklist that changes with the investor type: an individual needs different checks from a trust with a corporate trustee.",
+          "The register is the firm's record of truth, so whatever I built could not replace it. It had to fit around it, and leave every compliance decision with a person. [One line in the client's words about what the old process cost them.]"
+        ]
+      },
+      {
+        "heading": "What I built",
+        "paragraphs": [
+          "A single-tenant Next.js app behind Microsoft sign-in, locked to Bowery's own tenant. A case moves through seven stages: register link, application, verify, general requirements, entity and structure, AML/KYC, then review and completion. The checklist is Bowery's paper one turned into config, so each investor type only sees the items that apply to it, and the rest are folded away as not applicable rather than hidden.",
+          "On Verify, the original PDF sits beside every field the app read from it. Each field carries a confidence score from 0 to 100, anything under 60 is flagged, and nothing goes forward until a person has confirmed or corrected it. Once Verify is confirmed, checklist items the confirmed data already satisfies are pre-ticked with their source shown, and staff can untick any of them."
+        ],
+        "steps": [
+          "Upload the signed application. It lands in a staging folder in Bowery's SharePoint, never on my servers.",
+          "Link the case to a person in the register. The app suggests matches, but a human always makes the choice.",
+          "Confirm the extracted fields against the PDF, then work through the checklist.",
+          "Key in the investor number from Axcess. That writes the register row, and the HubSpot push is a separate, optional step.",
+          "An independent reviewer clears the last items and signs off. Only then does the case lock."
+        ],
+        "figure": {
+          "file": "fig-1.png",
+          "alt": "Verify stage showing the original application PDF on the left and extracted fields on the right, each with a confidence percentage, one medium-confidence date of birth flagged for review",
+          "caption": "Verify. The form on one side, the app's reading of it on the other, with a confidence score on every field."
+        }
+      },
+      {
+        "heading": "The hard part",
+        "paragraphs": [
+          "Reading the forms reliably. Extraction runs in a Python worker built on pymupdf4llm, started fresh for each job in a Docker container with no network and a read-only filesystem, so an untrusted PDF never gets near anything that matters. The worker reads live form widgets, typed text, OCR of scanned pages and the ink inside tick boxes, and scores each field from the evidence it actually found. Those scores are tested against 31 sample forms: fillable, flattened, poorly scanned and rotated.",
+          "Writing to a spreadsheet that people also edit by hand. The Master Workbook stays the source of truth, so every write goes through Microsoft Graph. Columns are looked up by their header on every call, and a renamed or duplicated column stops the write and reports it, rather than writing into the wrong cell. Rows are keyed by a Case Reference column the app adds. Writes are serialised with a Postgres advisory lock. Folder creation is idempotent, and before creating a person's folder the app looks for an existing one, matching the naming conventions staff had used across 695 existing folders.",
+          "Completion is one ordered action. Saving the investor number writes the register row first. A failure leaves the case visibly partial with a retry button, and nothing reaches HubSpot until the register has the row. Personal details are encrypted per record with AES-256-GCM, files are streamed from SharePoint on the viewer's own token, and the audit trail is append-only and never records personal details."
+        ],
+        "figure": {
+          "file": "fig-2.png",
+          "alt": "Review and completion stage with the independent review checks above a numbered sequence: investor created in Axcess, investor number recorded, register row updated and synced, an optional HubSpot push, and sign-off waiting on the reviewer",
+          "caption": "Completion, shown in order. The register row is written when the number is saved. HubSpot is optional, and sign-off waits for the reviewer."
+        }
+      },
+      {
+        "heading": "How it went",
+        "paragraphs": [
+          "I built it over 130 commits between June and October 2026, working from Bowery's own checklist and register rather than a generic CRM template. Every external system has an in-memory fake behind a flag, so the whole flow runs locally with no Microsoft tenant. That is also how the 674 app tests cover the completion sequencing without Postgres or Graph.",
+          "[Outcome once it has been in use: time from application to sign-off, or hours of retyping saved per week.] [One line in the client's words about the review screen or the register staying intact.]"
+        ]
+      }
+    ],
+    "atAGlance": [
+      {
+        "label": "What they had",
+        "value": "A paper checklist, an Excel register retyped by hand and SharePoint folders filed manually"
+      },
+      {
+        "label": "What they have now",
+        "value": "One staged workspace that reads each application, tracks every check and writes the register row and folder itself"
+      },
+      {
+        "label": "Still involved?",
+        "value": "[Yes, ongoing support and the deferred unit certificate stage]"
+      },
+      {
+        "label": "Built with",
+        "value": "Next.js 16, tRPC, Prisma, Postgres, Microsoft Graph, HubSpot, Python"
+      }
+    ],
+    "asideCta": {
+      "heading": "Got a process living in a spreadsheet and a checklist?",
+      "body": "I build internal tools that fit around the systems you already trust, and leave the decisions with your people.",
+      "ctaLabel": "Start a project"
+    }
+  },
+  "notes": "SEED CORRECTION: the existing summary describes an investor-facing flow 'from first contact' with 'follow-ups handled by the system rather than by email'. The code shows an internal, staff-only tool (no public surface, ADR 0001). It starts at a received application, and there is no investor-facing portal or automated follow-up emailing (Resend exists for auth/transactional mail only). The seed's [N days]/[N manual steps] stats were replaced with code-derived numbers. FACTS FROM CODE: 130 commits, 2026-06-16 to 2026-10-05; 674 TS test cases in 61 files plus 159 Python tests = 833; 31 sample PDFs in workers/pdf-extractor/samples/forms; 26 numbered checklist items; 2 funds (DCF, MIF); 7 stages. The certificate stage (issue 07) and MIF Select Investments (issue 31) are deferred out of v1, so the copy says the flow ends at sign-off. HUBSPOT: README/ADR 0005 say HubSpot fires automatically after the workbook write, but the current completion-stage UI treats the HubSpot push as a separate, optional button. I followed the code; please confirm with Bowery. CONFIDENTIALITY: the '695 existing folders' figure comes from a census of Bowery's live register noted in README_ONBOARDING; check they're happy for that to be public. Names Axcess, NAB, Equifax, InfoTrack, HubSpot appear because they are named checklist systems. Check the client is comfortable with that, and with the Bowery name and logo mark shown in screenshots. The domain onboarding.bowery.com.au in the browser bar is invented. Every investor, person, ABN, number and address in the images is fictional. Staff names (Jordan Mercer, Priya Raman) are invented. Is this deployed and in use? The Dokploy containerisation commit suggests so, but I couldn't confirm a go-live date. 'Still involved?' is a placeholder.",
+  "seo": {
+    "title": "Bowery: Investor Onboarding Workflow Case Study",
+    "description": "An internal onboarding workspace for a private credit fund manager: application extraction, AML/KYC checklists and register updates in one flow."
+  }
+}

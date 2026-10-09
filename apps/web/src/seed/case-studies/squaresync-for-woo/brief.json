@@ -1,0 +1,143 @@
+{
+  "slug": "squaresync-for-woo",
+  "title": "Square Sync for Woo",
+  "kind": "product",
+  "category": "Plugin, WooCommerce and Square",
+  "summary": "My WordPress plugin that keeps products, stock, orders and customers in step between WooCommerce and Square, both directions. It comes with its own webhook relay and licensing platform, and has shipped 416 releases.",
+  "externalUrl": "https://squaresyncforwoo.com",
+  "image": {
+    "file": "card.png",
+    "alt": "Square Sync for Woo webhook status screen inside wp-admin, showing 99% delivery success over 14 days and a recent activity table"
+  },
+  "stats": [
+    {
+      "value": "416",
+      "label": "releases shipped"
+    },
+    {
+      "value": "[N]",
+      "label": "paying subscribers"
+    }
+  ],
+  "caseStudy": {
+    "heading": "A WooCommerce and Square sync that has to be right, because it moves real stock and real money.",
+    "intro": "Square Sync for Woo is a plugin I build, sell and support. It keeps a WooCommerce store and a Square point of sale agreeing on products, stock, orders, customers, gift cards and loyalty, in real time and in both directions. Behind it sit two more systems I run: a webhook relay that delivers Square events to every customer site, and the licensing and update platform at squaresyncforwoo.com.",
+    "meta": [
+      {
+        "label": "Product",
+        "value": "Square Sync for Woo"
+      },
+      {
+        "label": "Industry",
+        "value": "Retail and hospitality, WooCommerce stores on Square POS"
+      },
+      {
+        "label": "Services",
+        "value": "Product design, plugin development, infrastructure, support"
+      },
+      {
+        "label": "Stack",
+        "value": "PHP, React, Node.js, Fastify, BullMQ, PostgreSQL, Redis, Next.js"
+      },
+      {
+        "label": "Timeline",
+        "value": "[YEAR] to now, 416 releases"
+      }
+    ],
+    "hero": {
+      "file": "hero.png",
+      "alt": "The Square Sync for Woo dashboard inside wp-admin: webhook health banner, queue and error stats, active sync features, licence and the live sync feed",
+      "caption": "The plugin dashboard: webhook health, queue depth, errors and every active sync rule, with the live sync feed alongside."
+    },
+    "bigStats": [
+      {
+        "value": "416",
+        "label": "versions released, from 1.3.0 to 10.4.21"
+      },
+      {
+        "value": "51",
+        "label": "integration test suites run against a fake Square API"
+      },
+      {
+        "value": "10",
+        "label": "Square webhook event types handled in real time"
+      }
+    ],
+    "sections": [
+      {
+        "heading": "The problem",
+        "paragraphs": [
+          "Plenty of businesses sell in a shop through Square and online through WooCommerce. The two systems each think they own the stock count. Sell the last bag of coffee at the counter and the website will happily sell it again unless something tells it, quickly and correctly.",
+          "The obvious fixes break in boring ways. Square webhooks go missing when a site is slow or a host blocks the request. WP cron only runs when someone visits. Square rate limits bulk work. And every sync that writes back risks an echo: a Woo edit goes to Square, Square fires a webhook, and the change comes straight back as a second update or, worse, a duplicate order."
+        ]
+      },
+      {
+        "heading": "What I built",
+        "paragraphs": [
+          "A WordPress plugin with a React admin app inside wp-admin and a PHP backend built on Action Scheduler queues, plus the services it depends on. Merchants choose which fields each side owns, and the plugin enforces that ownership on every import, export and webhook."
+        ],
+        "steps": [
+          "Two-way product, stock and price sync, with variations, categories, images, modifiers, custom attributes and decimal (yardage) stock.",
+          "Order sync both ways: online orders pushed to Square with payment, POS sales imported into WooCommerce, with order splitting across locations, pickup and delivery.",
+          "A Square payment gateway for card, Apple Pay, Google Pay, Afterpay and Cash App, plus gift cards and Square Loyalty at checkout.",
+          "Customer sync with Square group to WordPress role mapping, and agency permissions so a developer can hand a client a restricted view.",
+          "A sync log that records every event with its direction, the objects involved and a retry button.",
+          "A webhook relay in Node.js (Fastify, BullMQ, PostgreSQL, Redis) that receives Square events once and delivers them to each licensed site.",
+          "The marketing, docs, licensing and update platform: a Next.js and Turborepo monorepo with Stripe billing, a licence API, signed update manifests and tagged releases deployed by GitHub Actions."
+        ],
+        "figure": {
+          "file": "fig-2.png",
+          "alt": "Products screen listing the Square catalogue with variations, stock, categories and Imported, Partial or Not imported status for each item",
+          "caption": "The Square catalogue as the plugin sees it: what is linked, what is partial, and what can be imported or synced from one table."
+        }
+      },
+      {
+        "heading": "The hard part",
+        "paragraphs": [
+          "Most of the work is in the failures that make no noise. A stock push that quietly does nothing, a gift card charged as a $0 payment, a product imported twice by two queue workers at once. Each looks like success in a naive log. I treat every one of those as a test: 51 integration suites run inside a real WordPress install with Square faked at the HTTP layer, so they assert on exactly what would have been sent to Square, not just on what WooCommerce ended up with.",
+          "Some concrete examples. Loop guards and push markers stop an order the site created in Square from being imported back as a second order. A cross-process lock per Square item means parallel workers never create the same product twice. Square's order search is cursor-paginated with no total, so the orders screen keeps pulling pages until a filtered view is genuinely full. And when Square rejects something, the log does not just show the error code: it records a plain-English cause and fix at the moment it happens, written only for errors I have actually diagnosed."
+        ],
+        "figure": {
+          "file": "fig-1.png",
+          "alt": "Sync Activity log with an expanded Square VERSION_MISMATCH error, showing the raw error, a plain-English explanation and fix, and links to the product and Square object",
+          "caption": "A failed sync explained in the merchant's terms, with the cause, the fix, the linked records and a one-click retry."
+        }
+      },
+      {
+        "heading": "Webhooks that actually arrive",
+        "paragraphs": [
+          "Square sends each event once. If a customer's site is down, slow or behind a firewall, that update is gone, and the shop drifts out of sync with nothing to show for it. So the plugin does not take webhooks from Square directly. My relay takes them, verifies the signature, stores them in PostgreSQL and delivers them through BullMQ with a per-site circuit breaker.",
+          "When a site fails three times in a row the circuit opens and retries back off at 1, 5, 15 and 60 minutes. Held events are kept rather than dropped, and replayed oldest first (up to 500 at a time) once the site responds. A fair scheduler stops one busy merchant starving everyone else, and stores running several sites are isolated by callback URL. Inside the plugin, merchants see all of this as one plain verdict, with the controls to test, resume or discard a backlog themselves instead of opening a ticket."
+        ]
+      }
+    ],
+    "atAGlance": [
+      {
+        "label": "What merchants had",
+        "value": "Two systems that disagreed about stock, and manual exports to fix it"
+      },
+      {
+        "label": "What they have now",
+        "value": "Real-time two-way sync with a log that explains every failure"
+      },
+      {
+        "label": "Still involved?",
+        "value": "Yes. I build, ship, host and support it."
+      },
+      {
+        "label": "Built with",
+        "value": "PHP, React, Action Scheduler, Node.js, BullMQ, PostgreSQL, Redis, Next.js, Stripe"
+      }
+    ],
+    "asideCta": {
+      "heading": "Need two systems to agree with each other?",
+      "body": "I have spent years making WooCommerce and Square trust each other. Tell me which systems you are stuck between.",
+      "ctaLabel": "Start a project"
+    }
+  },
+  "notes": "Code-derived facts: 416 changelog entries in readme.txt (1.3.0 to 10.4.21); 51 PHP test files in tests/; 10 Square webhook event types (catalog, inventory, order, refund, customer, discount code); circuit breaker threshold 3 and backoff 1/5/15/60 min with 500-row replay from squaresync-webhook/src/services/circuitBreaker.service.ts. Commit counts are not used as headline numbers because plugin git history was 'recovered' in June 2025 (439 commits since); the relay has 58 commits since Dec 2025 and the platform 284 since Oct 2025. Placeholders to fill: [N] paying subscribers, [YEAR] the plugin started (1.3.0 'Initial public release' has no date). The repo's own docs call the plugin 'SquareWooSync Pro' and the wp-admin menu says 'SWS Pro'; I used 'Square Sync for Woo' throughout as asked. Every store, product, SKU, ID and figure in the screenshots is fictional (Copper Kettle Coffee). Screens were rebuilt from the real components (Dashboard, Webhooks, SyncLogs + LogDetail, Products) with the plugin's Clarity tokens; the error explanation text is copied verbatim from ErrorExplainer.php. The plugin's own UI copy contains em dashes; these appear only inside the screenshots, not in the prose. Worth checking whether naming the payment methods (Afterpay, Cash App) and the relay's architecture publicly is fine with Liam.",
+  "seo": {
+    "title": "Square Sync for Woo: WooCommerce and Square Sync Plugin",
+    "description": "Two-way WooCommerce and Square sync for products, stock, orders and customers, built and supported by a Melbourne developer. 416 releases and counting."
+  }
+}

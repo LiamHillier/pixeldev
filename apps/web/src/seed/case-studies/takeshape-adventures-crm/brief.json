@@ -1,0 +1,140 @@
+{
+  "slug": "takeshape-adventures-crm",
+  "title": "TakeShape Adventures operations dashboard",
+  "kind": "client",
+  "category": "Ops dashboard, WooCommerce, Keap and Meta",
+  "summary": "A staff operations dashboard for an adventure travel company: every departure's manifest and check-in, trip pages edited and published back to WordPress, and the Keap and Meta automations that used to live in third-party glue, all running off one Postgres database.",
+  "externalUrl": null,
+  "image": {
+    "file": "card.png",
+    "alt": "The locations workspace: a list of trip locations sorted by what needs attention, and the Freycinet Peninsula record open with its publish checklist and a prompt to publish edits to WordPress."
+  },
+  "stats": [
+    {
+      "value": "4",
+      "label": "systems kept in sync"
+    },
+    {
+      "value": "[N hrs]",
+      "label": "admin saved per week"
+    }
+  ],
+  "caseStudy": {
+    "heading": "One place to run the trips, with WordPress, Keap and Meta kept in step behind it.",
+    "intro": "TakeShape Adventures sells guided hikes and multi-day trips through a WordPress and WooCommerce site, keeps its contacts in Keap and finds new customers through Meta ads. I built the staff dashboard that sits across all of it: departures and check-in, trip content, orders, and the automations between Keap and Meta.",
+    "meta": [
+      {
+        "label": "Client",
+        "value": "TakeShape Adventures"
+      },
+      {
+        "label": "Industry",
+        "value": "Adventure travel"
+      },
+      {
+        "label": "Services",
+        "value": "Custom software, integrations, WordPress plugin development"
+      },
+      {
+        "label": "Stack",
+        "value": "Next.js 16, tRPC, Prisma, PostgreSQL, BullMQ, Coolify"
+      },
+      {
+        "label": "Timeline",
+        "value": "First version Aug 2025, rebuilt Jul to Sep 2026"
+      }
+    ],
+    "hero": {
+      "file": "hero.png",
+      "alt": "The calendar workspace: upcoming departures grouped by day with capacity bars on the left, and today's sunrise hike open on the right with check-in stats and an attendee manifest, one party expanded to show dietary needs and booking details.",
+      "caption": "The calendar is a check-in workspace: departures on the left, the selected trip's manifest on the right, built to be worked one-handed on a phone at the trailhead."
+    },
+    "bigStats": [
+      {
+        "value": "4",
+        "label": "external systems synced: WooCommerce, Keap, Meta and the member app"
+      },
+      {
+        "value": "41",
+        "label": "data models behind trips, contacts, orders and automations"
+      },
+      {
+        "value": "244",
+        "label": "automated tests covering the sync and parsing logic"
+      }
+    ],
+    "sections": [
+      {
+        "heading": "The problem",
+        "paragraphs": [
+          "The bookings happen in WooCommerce, the contacts live in Keap, the leads arrive from Meta ads, and the trip pages are WordPress taxonomy terms with a lot of custom fields. Each of those tools did its own job. None of them could tell a guide at 5:30 in the morning who was booked on today's walk, who had a dietary flag, and who had already arrived.",
+          "[One or two lines in the client's words about what running a departure looked like before: printed lists, WP admin, phone calls.] The glue between Keap tags and Meta audiences, and between Meta lead forms and Keap contacts, also needed somewhere it could be watched and fixed when it failed."
+        ]
+      },
+      {
+        "heading": "What I built",
+        "paragraphs": [
+          "A Next.js dashboard backed by Postgres that mirrors what it needs from each system and writes back where staff need to edit. A small WordPress plugin I wrote serves the endpoints it reads and writes, and pings the dashboard when an order or a trip changes, so a booking shows up in seconds rather than on the next scheduled pass."
+        ],
+        "steps": [
+          "Departures and check-in: every upcoming trip with capacity, crew and a manifest per booking party. One tap checks a party in, with crew notes, no-shows and a CSV export for the day.",
+          "Locations: the trip pages edited in the dashboard, including highlights, itinerary, packing lists, gallery images and a publish checklist, then published back to the WordPress term.",
+          "Client info forms: each location defines the questions guests answer in the member app after booking, with presets, required fields and due dates counted back from departure.",
+          "Zaps: Keap tags kept in step with Meta custom audiences, and Meta lead form submissions turned into tagged Keap contacts, with every attempt logged and failures surfaced with their reason.",
+          "Orders, contacts, a resource library aimed at locations, trip types or states, and a BullMQ worker that runs the scheduled syncs."
+        ],
+        "figure": {
+          "file": "fig-1.png",
+          "alt": "The Meta lead forms to Keap zap: four stat tiles, an amber alert explaining two failures, and a mapping shown as a Meta trigger panel with three lead forms and a Keap action panel with three tags.",
+          "caption": "Each zap shows its mappings as trigger and action, and every attempt it makes. A rejected field mapping fails on its own and says why, instead of costing the lead."
+        }
+      },
+      {
+        "heading": "The hard part",
+        "paragraphs": [
+          "Syncing four systems that each think they are the source of truth. WooCommerce deletes and recreates order line items on every update, so check-ins are keyed on a stable order and item pair rather than the row, and a re-sync never loses who arrived. Syncs can be triggered by a button, the schedule and the WordPress ping at once, so every one takes a Postgres advisory lock per organisation and kind, and a collision is skipped rather than allowed to fight over the same rows.",
+          "The edges are where the trust is. Meta lead webhooks must be signed or they are rejected, Keap deliveries are authenticated by a secret in the callback URL because Keap does not sign them, and OAuth callbacks re-derive the organisation from the session so a forged state cannot attach tokens to the wrong account. Client info answers arrive from the member app encrypted with AES-256-GCM and stay encrypted at rest; they are decrypted only inside the request that shows them to a staff member. When stock is not managed in WooCommerce, capacity is shown as unknown rather than guessed."
+        ],
+        "figure": {
+          "file": "fig-2.png",
+          "alt": "The Three Capes location on its Client info tab: a Medical and dietary section with a required multiple choice question about dietary requirements, due 14 days before the trip, and its stable field key shown underneath.",
+          "caption": "The client info builder. A question's key is issued once and never changes, because the member app files every answer under it."
+        }
+      },
+      {
+        "heading": "How it went",
+        "paragraphs": [
+          "The first version went in during August 2025 on a starter kit that read the WordPress database directly. In July 2026 I rebuilt it on a stronger base, moved WordPress access behind a REST plugin, and took the chance to fix what the first version got wrong: a PHP serialisation parser that broke on quotes, tags that could leak between organisations, and a capacity number that was invented. [What the team stopped doing once check-in moved into the dashboard.] It runs in production on Coolify, and I'm still adding to it."
+        ]
+      }
+    ],
+    "atAGlance": [
+      {
+        "label": "What they had",
+        "value": "WooCommerce, Keap and Meta ads, each on its own, with automations nobody could see"
+      },
+      {
+        "label": "What they have now",
+        "value": "One dashboard for departures, check-in, trip content and orders, with Keap and Meta kept in step"
+      },
+      {
+        "label": "Still involved?",
+        "value": "Yes. Hosting, support and ongoing features."
+      },
+      {
+        "label": "Built with",
+        "value": "Next.js, tRPC, Prisma, PostgreSQL, BullMQ and Redis, a custom WordPress plugin, Keap and Meta APIs"
+      }
+    ],
+    "asideCta": {
+      "heading": "Running your business across four tools that don't talk?",
+      "body": "Tell me what each one holds and where the work falls through the gaps, and I'll tell you what I'd build.",
+      "ctaLabel": "Start a project"
+    }
+  },
+  "notes": "Rewritten from the code in ~/Projects/tsa-stack/tsadash (v2) and ~/Projects/tsadashboard (v1). Corrections to the old seed: this is not a CRM that replaced a 'generic CRM'. Keap stays as the CRM and the dashboard syncs with it. Bookings come from WooCommerce (pushed by a WordPress mu-plugin), not directly from the mobile app; the member app (tsa-app, Expo + Supabase) only exchanges client info forms and submissions with it. The membership tier claim was dropped (only a members price field is visible here). Code-derived numbers: 41 TSA Prisma models (59 including the SaaS base), 18 org tRPC routers, 244 test cases in 19 files, 12 REST routes in a 2,197-line mu-plugin, 10 BullMQ job types; Liam's commits: 42 in v1 (Aug 2025 to Jul 2026) and 50 in v2 (27 Jul to 9 Sep 2026). Check: (1) the v2 base is a purchased SaaS template (Achromatic licence, Mahmut Jomaa commits) and v1 was a Next 15 starter kit; the copy says 'starter kit' and 'stronger base' without naming them. Decide whether to credit or omit. (2) Production URL is stagingcrm.takeshapeadventures.com.au; screenshots show crm.takeshapeadventures.com.au instead. (3) All names, phone numbers (555 range), emails (example.com), order numbers, trip names, Facebook form names and Keap tag names in the images are fictional; the categories 'Women only' and 'Water' are invented. (4) The CLAUDE.md 'Known gaps' at migration time said no sync had been run against live credentials; later commits (Coolify hosting, Keap phone slots, timezone fixes) indicate it is live, but confirm. (5) Placeholders left: [N hrs] stat, the problem paragraph quote, and what the team stopped doing. No client quote included.",
+  "seo": {
+    "title": "TakeShape Adventures: Operations Dashboard Case Study",
+    "description": "A custom Next.js operations dashboard for an adventure travel company, synced with WooCommerce, Keap, Meta lead forms and the member app."
+  }
+}

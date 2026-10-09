@@ -1,0 +1,148 @@
+{
+  "slug": "vinoshipper-wordpress-plugin",
+  "title": "Vinoshipper for WooCommerce",
+  "kind": "product",
+  "category": "Plugin, WooCommerce and Vinoshipper",
+  "summary": "A WooCommerce plugin that lets US wineries keep their own checkout and payment gateway, while orders to states they aren't licensed for are handed to Vinoshipper for compliance and shipping. Tracking comes back automatically.",
+  "externalUrl": null,
+  "image": {
+    "file": "card.png",
+    "alt": "The Vinoshipper for WooCommerce settings screen in wp-admin, showing US states grouped by region with checkboxes, 39 states selected for Vinoshipper routing."
+  },
+  "stats": [
+    {
+      "value": "51",
+      "label": "US jurisdictions routable per state"
+    },
+    {
+      "value": "6",
+      "label": "Vinoshipper webhook events handled"
+    }
+  ],
+  "caseStudy": {
+    "heading": "Selling wine into every US state from a normal WooCommerce store, without a licence in each one.",
+    "intro": "US wineries can only ship direct to consumers in states where they hold a licence. Vinoshipper covers the rest, but it wants to own the checkout. I built a WooCommerce plugin that keeps the winery's own store and payment gateway, and quietly routes the right orders to Vinoshipper after payment.",
+    "meta": [
+      {
+        "label": "Product",
+        "value": "Vinoshipper for WooCommerce (WordPress plugin)"
+      },
+      {
+        "label": "Industry",
+        "value": "Wine, direct-to-consumer shipping"
+      },
+      {
+        "label": "Services",
+        "value": "Plugin development, API integration"
+      },
+      {
+        "label": "Stack",
+        "value": "PHP 8, WooCommerce, React, Tailwind, shadcn/ui"
+      },
+      {
+        "label": "Timeline",
+        "value": "December 2025 to January 2026"
+      }
+    ],
+    "hero": {
+      "file": "hero.png",
+      "alt": "The Orders tab of the plugin inside wp-admin: a table of WooCommerce orders with their Vinoshipper IDs, status badges such as Shipped, Failed and Compliance Rejected, tracking numbers and Retry buttons.",
+      "caption": "Every order sent to Vinoshipper, with its status, tracking and a one-click retry when something needs fixing."
+    },
+    "bigStats": [
+      {
+        "value": "51",
+        "label": "states and DC that can be switched to Vinoshipper individually"
+      },
+      {
+        "value": "9",
+        "label": "REST endpoints behind the React admin and the webhook"
+      },
+      {
+        "value": "[N]",
+        "label": "wineries running it"
+      }
+    ],
+    "sections": [
+      {
+        "heading": "The problem",
+        "paragraphs": [
+          "In the US, a winery shipping straight to a customer needs a licence for the state the wine is going to. Most small wineries hold a handful. [Vinoshipper](https://vinoshipper.com) holds the licences and handles the compliance for the rest, but its standard setup assumes you sell through its checkout.",
+          "A winery that already runs WooCommerce, with its own payment gateway, wine club and design, doesn't want two checkouts. It wants one store, where an order to a licensed state ships as normal and an order anywhere else goes to Vinoshipper without anyone retyping it. [One line on who asked for this and why.]"
+        ]
+      },
+      {
+        "heading": "What I built",
+        "paragraphs": [
+          "A WooCommerce plugin with a React admin inside wp-admin. Payment happens through whatever gateway the store already uses (Square, Stripe or anything else). Once it clears, the plugin checks the shipping state against the winery's list and, if it matches, submits the order to Vinoshipper's API as already paid, matched to Vinoshipper's catalogue by SKU.",
+          "Vinoshipper then runs its compliance checks and ships. Its webhooks come back to the store: tracking numbers land on the order and in the customer's account, delivered orders are marked complete, and a compliance rejection puts the order on hold and emails the winery."
+        ],
+        "steps": [
+          "State routing: pick any of the 50 states plus DC, grouped by region, and only those orders go to Vinoshipper.",
+          "A Vinoshipper shipping method for checkout that shows live carrier rates and delivery estimates, cached for 15 minutes per address and basket.",
+          "Carrier mapping for the store's other methods (flat rate, free shipping, local pickup) across UPS, FedEx, GLS and self-delivery, with 12 service levels.",
+          "An orders table and an order meta box showing sync status, the Vinoshipper ID, tracking and errors, with retry built into WooCommerce's own order actions.",
+          "A webhook log that keeps every incoming event and its raw payload, so a missing tracking number can be traced in minutes."
+        ],
+        "figure": {
+          "file": "fig-1.png",
+          "alt": "The API tab of the plugin, showing an explanation of how shipping methods work, default carrier and rate code selects, and a table mapping WooCommerce shipping methods such as Flat rate and Local pickup to Vinoshipper carriers and rate codes.",
+          "caption": "Carrier mapping: the store's existing shipping methods each get a Vinoshipper carrier and service level, so nothing changes for the customer at checkout."
+        }
+      },
+      {
+        "heading": "The hard part",
+        "paragraphs": [
+          "Two systems each think they own the order, so the work is in keeping them from disagreeing. WooCommerce can fire both its payment complete and processing hooks for the same order, so submission is guarded twice: a unique key on the WooCommerce order ID in the sync table, and a status check that skips anything already submitted, processing, shipped or delivered. An order goes to Vinoshipper once, however many hooks fire.",
+          "Vinoshipper's webhooks aren't signed, and the event names and payload shapes aren't consistent. The handler accepts eleven event names across six handlers, reads tracking from three different payload shapes, and only ever acts on an order already in its own sync table, so a stray or replayed request can't touch an order it didn't send. Everything is logged with the source IP.",
+          "Outbound calls retry with exponential backoff on rate limits, server errors and dropped connections, but not on validation errors, which go straight to the winery as a readable message (usually a product without a SKU). The API secret is stored encrypted with AES-256 using the site's own salts, not as plain text in the options table."
+        ],
+        "figure": {
+          "file": "fig-2.png",
+          "alt": "The Logs tab of the plugin with an expanded order.shipped webhook event showing the source IP, a Tracking updated successfully message and the JSON payload with UPS tracking details.",
+          "caption": "The webhook log: every event from Vinoshipper, what the plugin did with it, and the raw payload."
+        }
+      },
+      {
+        "heading": "How it went",
+        "paragraphs": [
+          "The customer sees one store. They pick a shipping rate, pay with the store's usual gateway, and get tracking in their account like any other order. The winery sees Vinoshipper orders alongside the rest in WooCommerce, with problems flagged rather than discovered. [What changed for the first winery using it: hours saved, states opened up, orders routed.]",
+          "It's built on the WooCommerce plugin template I use for my own products, with PSR-4 classes, a small dependency container and HPOS-compatible order screens, so it's ready for [the next step: WordPress.org listing, paid licence, more wineries]."
+        ],
+        "figure": {
+          "file": "fig-3.png",
+          "alt": "A checkout page on a fictional winery website, Hollow Creek Cellars, with a North Carolina shipping address and three Wine Shipping options showing UPS rates and estimated delivery dates.",
+          "caption": "At checkout, live Vinoshipper rates sit in the store's own design (shown on a fictional winery)."
+        }
+      }
+    ],
+    "atAGlance": [
+      {
+        "label": "What they had",
+        "value": "Two choices: Vinoshipper's checkout, or not shipping to unlicensed states"
+      },
+      {
+        "label": "What they have now",
+        "value": "One WooCommerce store that routes the right orders to Vinoshipper and syncs tracking back"
+      },
+      {
+        "label": "Still involved?",
+        "value": "[Yes. Maintenance, support and new releases.]"
+      },
+      {
+        "label": "Built with",
+        "value": "PHP, WooCommerce, React, Tailwind CSS, shadcn/ui, Vinoshipper API v3"
+      }
+    ],
+    "asideCta": {
+      "heading": "Need WooCommerce to talk to a platform it doesn't support?",
+      "body": "Tell me which systems need to agree on an order and I'll tell you how I'd connect them.",
+      "ctaLabel": "Start a project"
+    }
+  },
+  "notes": "KIND: set to 'product'. Evidence: the plugin is generic and PixelDev-branded ('PixelDev Vinoshipper for WooCommerce', author PixelDev), everything is configured through settings, there is no winery name anywhere in code, config or commits, it's built on Liam's reusable 'pixeldev-wc-plugin-template' (README is still the template's), and there are distributable zips. BUT there is no licensing/update server code and no WordPress.org assets, and Vinoshipper is a US-only service, so it may well have been built for one US winery client. If so, switch kind to 'client' and fill the client name; if it's not sold publicly, consider softening 'product' wording. TIMELINE: 2 commits, both 3 Dec 2025; substantial uncommitted work dated to 20 Jan 2026 (live-rate shipping method, logger). Timeline is from file dates, check it. FACTS FROM CODE: 51 selectable jurisdictions (50 states + DC); 6 webhook handlers covering 11 event names; 9 REST routes (8 admin + 1 webhook); 4 carriers (UPS, FEDEX, GLS, SELF) and 12 rate codes; 2 custom tables; up to 3 attempts with 1s/2s backoff on 429/5xx/connection errors; 15-minute rate cache; API secret AES-256-CBC. CAVEATS: (1) The webhook endpoint accepts all requests (permission_callback returns true; code comment says Vinoshipper doesn't sign webhooks). CLAUDE.md claims HMAC-SHA256 verification but the code doesn't do it, so the case study does NOT claim signature checks; it describes the sync-table guard instead. Worth adding a shared-secret query param before shipping widely. (2) Leftover template SampleGateway and Blocks classes are still in src/. (3) The plugin's admin menu label is the full 'PixelDev Vinoshipper for WooCommerce' with a generic gear icon, rendered as such in the screenshots. IMAGERY: all data is fictional (Hollow Creek Cellars, user 'Dana', order/tracking numbers, IP 203.0.113.48 from the documentation range). The fig-3 checkout theme is invented; the plugin only supplies the 'Wine Shipping - <rate> - Est. delivery: <date>' rate labels (format taken from VinoshipperShippingMethod.php). Placeholders in square brackets: winery count, who asked for it, outcomes, ongoing involvement, next step.",
+  "seo": {
+    "title": "Vinoshipper for WooCommerce: Plugin Case Study",
+    "description": "A WooCommerce plugin that routes wine orders for unlicensed US states through Vinoshipper, keeping the winery's own checkout and payments."
+  }
+}

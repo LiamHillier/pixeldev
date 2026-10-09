@@ -1,0 +1,148 @@
+{
+  "slug": "flo",
+  "title": "Flo",
+  "kind": "product",
+  "category": "SaaS product, AI agent, Xero and Gmail",
+  "summary": "My own product: flo reads the invoices in your Gmail, codes them against your chart of accounts and files them into Xero, then asks in chat when something needs a human.",
+  "externalUrl": null,
+  "image": {
+    "file": "card.png",
+    "alt": "The invoiceflo chat screen: flo posts an approval card for a new vendor's invoice, the user corrects the account code, and flo files it to Xero and remembers the rule."
+  },
+  "stats": [
+    {
+      "value": "25",
+      "label": "tools the assistant can call"
+    },
+    {
+      "value": "283",
+      "label": "automated tests"
+    }
+  ],
+  "caseStudy": {
+    "heading": "A bookkeeping assistant you talk to, instead of another dashboard you have to check.",
+    "intro": "Small businesses get their bills by email and someone types them into Xero by hand. invoiceflo is my own product that does that part: it watches Gmail, pulls the details out of each invoice with Claude, files the bill in Xero and only interrupts you when it isn't sure. The interface is a chat with an assistant called flo, not a grid of forms.",
+    "meta": [
+      {
+        "label": "Product",
+        "value": "invoiceflo (my own SaaS, private alpha)"
+      },
+      {
+        "label": "Industry",
+        "value": "Small business bookkeeping"
+      },
+      {
+        "label": "Services",
+        "value": "Product design, full-stack build, AI integration, hosting"
+      },
+      {
+        "label": "Stack",
+        "value": "Next.js, Express, Postgres, Redis and BullMQ, Claude Agent SDK"
+      },
+      {
+        "label": "Timeline",
+        "value": "April to July 2026, 48 commits"
+      }
+    ],
+    "hero": {
+      "file": "hero.png",
+      "alt": "The invoiceflo dashboard showing invoices filed this month, items waiting for review, value processed, recent activity and a note from flo.",
+      "caption": "The dashboard: what flo filed, what's waiting on you, and where each bill was coded in Xero."
+    },
+    "bigStats": [
+      {
+        "value": "25",
+        "label": "tools flo can call from chat, from approving a bill to fixing a bad bank match"
+      },
+      {
+        "value": "15",
+        "label": "Postgres tables behind one conversation"
+      },
+      {
+        "value": "283",
+        "label": "Vitest tests across the API, workers and integrations"
+      }
+    ],
+    "sections": [
+      {
+        "heading": "The problem",
+        "paragraphs": [
+          "Most small businesses I talk to have the same Monday job: open the inbox, find the supplier invoices, download the PDFs, type vendor, date, amount and GST into Xero, pick an account code, repeat. Bookkeeping software has had \"bill capture\" for years, but it still asks you to forward emails somewhere and then review every line in yet another screen.",
+          "I wanted to see whether the whole loop could run on its own and only come to you with the exceptions, in plain language, the way a sharp junior bookkeeper would. [One line on where the idea came from, e.g. my own books or a client's.]"
+        ]
+      },
+      {
+        "heading": "What I built",
+        "paragraphs": [
+          "A pnpm monorepo with a Next.js web app (installable as a PWA, with push notifications), an Express API, and a separate worker process running BullMQ queues on Redis. Gmail and Xero connect over OAuth, with Xero tokens stored AES-256-GCM encrypted. Extraction uses Claude Haiku through the Agent SDK; the chat assistant runs on Sonnet with 25 tools it can call against the user's own data.",
+          "Every user-facing string lives in one file and was written to a voice spec: lowercase, short, no grovelling, honest when Xero is down. That sounds cosmetic, but it's the product. People trust an assistant that talks like a colleague."
+        ],
+        "steps": [
+          "Inbox scanning: a daily poll per Gmail account, with chained back-fill jobs for history, reading attachments, linked documents and plain email receipts.",
+          "Extraction and confidence: each field gets a confidence score, GST maths is cross-checked (10%, inclusive or exclusive), and anything under 0.9 goes to the review queue instead of Xero.",
+          "Filing: approved bills are created in Xero with the right account code, and foreign currency bills are converted using daily ECB rates.",
+          "Memory: correct an account code once (\"310 and remember it\") and flo learns the vendor, with per-vendor and master switches for auto-filing.",
+          "Bank checks: flo matches filed bills against Xero's bank feed, proposes payments, spots bills that were paid twice, and chases spends that have no invoice behind them."
+        ],
+        "figure": {
+          "file": "fig-1.png",
+          "alt": "The review queue listing invoices that need a human, with confidence percentages, unassigned account codes and possible duplicate flags.",
+          "caption": "The review queue: anything flo isn't sure about waits here, with its confidence and why."
+        }
+      },
+      {
+        "heading": "The hard part",
+        "paragraphs": [
+          "Accounting software doesn't forgive mistakes quietly, so most of the engineering went into not making them. Xero matches supplier bills by contact and reference number: post a bill with a number that already exists and it *overwrites* the original without complaint, and a voided number can never be reused. Before filing, flo looks up every bill with that number. An active twin means a real duplicate, so it refuses and says why. A voided twin means it refiles under a de-conflicted number and leaves a note on the bill.",
+          "Duplicates are subtler than matching numbers. Suppliers resend corrected invoices, recurring bills look identical month to month, and two numberless receipts both read \"N/A\". The detector gates on Jaro-Winkler vendor similarity first, allows three days of date drift for OCR noise, ignores placeholder invoice numbers, and treats documents from the same email as siblings. When one email carries several PDFs, auto-filing waits until the whole email has been read, so a corrected re-issue later in the thread can't lose the race to Xero.",
+          "Bank matching works the same way: weighted scores on vendor text, amount and date, exact cents for local bills and a 3% tolerance for converted ones, because the bank's rate and fees never match the reference rate exactly. When a match needs a human, flo posts a card in the chat rather than guessing."
+        ],
+        "figure": {
+          "file": "fig-3.png",
+          "alt": "Two phones showing the invoiceflo chat: one chasing a bank spend with no invoice on file, the other offering to fix a bill that was paid twice.",
+          "caption": "On mobile: chasing a spend with no invoice behind it, and fixing a bill that was paid twice."
+        }
+      },
+      {
+        "heading": "Where it's at",
+        "paragraphs": [
+          "invoiceflo is in private alpha on my own infrastructure, deployed with Docker Compose behind Traefik. The core loop works end to end: scan, extract, file, reconcile, chase. [N] businesses are using it, and it has filed [N] invoices so far. [One line on what alpha users said, or what surprised me.]",
+          "Next up is QuickBooks Online and a multi-client view for bookkeepers, both deliberately left out of V1 so the Xero path could be made trustworthy first."
+        ],
+        "figure": {
+          "file": "fig-2.png",
+          "alt": "The flo's memory page listing vendors with learned account codes and auto-file toggles, plus facts flo remembers from chat.",
+          "caption": "flo's memory: learned vendor codings with per-vendor auto-file switches, and facts kept from past conversations."
+        }
+      }
+    ],
+    "atAGlance": [
+      {
+        "label": "What they had",
+        "value": "Invoices in Gmail, typed into Xero by hand"
+      },
+      {
+        "label": "What they have now",
+        "value": "An assistant that files bills itself and asks in chat when it isn't sure"
+      },
+      {
+        "label": "Still involved?",
+        "value": "Yes. It's my product, in private alpha."
+      },
+      {
+        "label": "Built with",
+        "value": "Next.js, Express, Postgres, Redis and BullMQ, Claude Agent SDK, Xero and Gmail APIs, Clerk, web push"
+      }
+    ],
+    "asideCta": {
+      "heading": "Got a job someone does by hand every Monday?",
+      "body": "If the rules can be written down, software can do most of it and ask about the rest. Tell me what it is.",
+      "ctaLabel": "Start a project"
+    }
+  },
+  "notes": "KIND: product. Evidence: flo-brief.md is a product spec (voice, V1/V2 milestones), the repo has its own marketing site with $19/$49/$99 pricing tiers and a bookkeeper per-client plan, privacy/terms/security pages, and the default app URL is invoiceflo.co; prod runs on flo.pixeldev.com.au. No client is named anywhere. NAMING: product is 'invoiceflo', assistant is 'flo' (July 'sprout rebrand' commit); growth/brand-naming/research.md from April still lists Flo as unconfirmed, so check the name is final. EXTERNAL URL left null: metadataBase defaults to https://invoiceflo.co but I couldn't verify it's live; add it if it is. NUMBERS from code: 48 commits (23 Apr 2026 and 16 to 18 Jul 2026, two bursts), 25 agent tools, 15 Postgres tables, 20 test files / 283 test cases, 4 background workers. Placeholders left: user count, invoices filed, origin story, alpha feedback. The April commits reference agent roles (CEO, CTO, Voice Guardian, FLO-xx tickets), which suggests it was built with an AI agent team; I didn't mention that, so decide whether you want it in the story. Image data is fictional (Kettle & Crumb, Dana Whitlock, vendor names); flo-db.dump was not opened. The UI strings in the screenshots keep the app's real em dashes (product copy, not prose). Currency shown as $ and AUD; the app formats with en-US locale.",
+  "seo": {
+    "title": "Flo: AI Invoice Assistant for Xero Case Study",
+    "description": "An AI assistant that reads invoices from Gmail, codes them against your chart of accounts and files them into Xero, asking only when it needs to."
+  }
+}
