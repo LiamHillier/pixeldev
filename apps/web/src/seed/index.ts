@@ -6,9 +6,11 @@
  *
  * Square-bracket placeholders like [YEAR] are intentional: fill them in the admin.
  */
+import { fileURLToPath } from 'node:url'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { h2, ol, p, richText } from './lexical'
+import { upsertMedia } from './media'
 import { seedSeo, siteSeo } from './seo'
 
 const log = (msg: string) => console.log(`[seed] ${msg}`)
@@ -1151,9 +1153,14 @@ async function seedPageGlobals(payload: P) {
         ],
       },
       figure: {
-        placeholder: 'Screenshot: the TakeShape Adventures CRM, event dashboard',
+        image: await upsertMedia(
+          payload,
+          fileURLToPath(new URL('./home-collage.jpg', import.meta.url)),
+          'A wall of product screens from recent projects: sync dashboards, release and payment flows, booking calendars, onboarding checklists and chat.',
+        ),
+        placeholder: 'Collage of product screens from recent work',
         caption:
-          'A custom CRM for an adventure travel company. Built in Next.js, fed by the app their members book through.',
+          'Screens from recent work: Square Sync for Woo, OnCloudWine, TakeShape Adventures, Bowery, KIR, Flo and Vinoshipper for WooCommerce.',
       },
       servicesSection: {
         eyebrow: 'What I do',

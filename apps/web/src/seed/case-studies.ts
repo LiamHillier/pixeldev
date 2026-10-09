@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { p, richText, ul } from './lexical'
+import { upsertMedia } from './media'
 
 const log = (msg: string) => console.log(`[seed:work] ${msg}`)
 const DIR = join(fileURLToPath(new URL('.', import.meta.url)), 'case-studies')
@@ -53,19 +54,8 @@ type Brief = {
 async function run() {
   const payload = await getPayload({ config })
 
-  const upload = async (slug: string, fig: Fig | undefined) => {
-    if (!fig?.file) return undefined
-    const name = `${slug}-${fig.file}`
-    const found = await payload.find({ collection: 'media', where: { filename: { equals: name } }, limit: 1, depth: 0 })
-    const data = await readFile(join(DIR, slug, fig.file))
-    const file = { data, name, mimetype: 'image/png', size: data.length }
-    if (found.docs[0]) {
-      const doc = await payload.update({ collection: 'media', id: found.docs[0].id, data: { alt: fig.alt }, file, overwriteExistingFiles: true })
-      return doc.id
-    }
-    const doc = await payload.create({ collection: 'media', data: { alt: fig.alt }, file })
-    return doc.id
-  }
+  const upload = async (slug: string, fig: Fig | undefined) =>
+    fig?.file ? upsertMedia(payload, join(DIR, slug, fig.file), fig.alt, `${slug}-${fig.file}`) : undefined
   const figure = async (slug: string, fig: Fig | undefined) =>
     fig ? { image: await upload(slug, fig), caption: fig.caption ?? null, placeholder: null } : undefined
 
