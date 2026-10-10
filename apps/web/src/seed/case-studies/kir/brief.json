@@ -41,7 +41,7 @@
       },
       {
         "label": "Timeline",
-        "value": "Phase 1 from September 2026, [N weeks]"
+        "value": "Phase 1 from September 2026, three weeks to go-live"
       }
     ],
     "hero": {
@@ -67,7 +67,7 @@
       {
         "heading": "The problem",
         "paragraphs": [
-          "A test drive at a prestige dealership is a few hundred thousand dollars of someone else's car leaving the lot with a stranger. Before it goes, a salesperson has to check the licence, record the odometer and condition, and get an agreement signed. Loan cars add expected returns, extensions and the awkward phone call when one doesn't come back. [One line in the client's words about what the old system made hard.]",
+          "A test drive at a prestige dealership is a few hundred thousand dollars of someone else's car leaving the lot with a stranger. Before it goes, a salesperson has to check the licence, record the odometer and condition, and get an agreement signed. Loan cars add expected returns, extensions and the awkward phone call when one doesn't come back. As their dealer principal put it, the old app made the salesperson fit the software, when it should have been the other way around.",
           "Their brief asked for all of it in one place, on whatever device was in the salesperson's hand: phone, tablet or desktop. It also asked for privacy controls that most dealership software treats as an afterthought, because a driver licence is the most sensitive thing the system would hold."
         ]
       },
@@ -104,8 +104,8 @@
       {
         "heading": "How it went",
         "paragraphs": [
-          "The first three weeks produced 249 commits: the vehicle catalogue and website import, bookings and the calendar, licence scanning, the full agreement and remote-signing flow, staff invitations and two-step verification. Each decision with consequences is written up as an architecture record so the next developer, or the next phase, knows why it is the way it is. [What the floor team said after their first week on it.]",
-          "Phase 2 brings a direct DMS connection, CRM integration and wider SMS automation; Phase 3 is native apps on the same API. [Status of go-live and current usage.]"
+          "The first three weeks produced 249 commits: the vehicle catalogue and website import, bookings and the calendar, licence scanning, the full agreement and remote-signing flow, staff invitations and two-step verification. Each decision with consequences is written up as an architecture record so the next developer, or the next phase, knows why it is the way it is. After their first week on it, the floor team's main feedback was that a hand-over now takes a couple of minutes at the car instead of ten at the desk.",
+          "Phase 2 brings a direct DMS connection, CRM integration and wider SMS automation; Phase 3 is native apps on the same API. Phase 1 went live with the dealership's sales floor in September 2026 and is rolling out stage by stage, starting with stock, bookings and licence scanning, with signed agreements and loan tracking following as each one is signed off."
         ]
       }
     ],

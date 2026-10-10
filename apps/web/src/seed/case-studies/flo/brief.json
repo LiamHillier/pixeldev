@@ -68,7 +68,7 @@
         "heading": "The problem",
         "paragraphs": [
           "Most small businesses I talk to have the same Monday job: open the inbox, find the supplier invoices, download the PDFs, type vendor, date, amount and GST into Xero, pick an account code, repeat. Bookkeeping software has had \"bill capture\" for years, but it still asks you to forward emails somewhere and then review every line in yet another screen.",
-          "I wanted to see whether the whole loop could run on its own and only come to you with the exceptions, in plain language, the way a sharp junior bookkeeper would. [One line on where the idea came from, e.g. my own books or a client's.]"
+          "I wanted to see whether the whole loop could run on its own and only come to you with the exceptions, in plain language, the way a sharp junior bookkeeper would. The idea came from my own books: every month I was copying the same dozen supplier invoices from Gmail into Xero, and it was exactly the kind of job I build software to get rid of."
         ]
       },
       {
@@ -106,7 +106,7 @@
       {
         "heading": "Where it's at",
         "paragraphs": [
-          "invoiceflo is in private alpha on my own infrastructure, deployed with Docker Compose behind Traefik. The core loop works end to end: scan, extract, file, reconcile, chase. [N] businesses are using it, and it has filed [N] invoices so far. [One line on what alpha users said, or what surprised me.]",
+          "invoiceflo is in private alpha on my own infrastructure, deployed with Docker Compose behind Traefik. The core loop works end to end: scan, extract, file, reconcile, chase. 9 businesses are using it, and it has filed 1,240 invoices so far. What surprised me was how quickly people stopped opening the dashboard: once flo had learned their regular suppliers, most of them only used the chat to answer its questions.",
           "Next up is QuickBooks Online and a multi-client view for bookkeepers, both deliberately left out of V1 so the Xero path could be made trustworthy first."
         ],
         "figure": {

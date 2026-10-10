@@ -3,12 +3,13 @@
  *
  *   pnpm seed              first run, or when the content collections are empty
  *   RESET=1 pnpm seed      wipe services, work, posts, topics and re-seed (globals are always overwritten)
- *
- * Square-bracket placeholders like [YEAR] are intentional: fill them in the admin.
  */
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { articles } from './journal'
 import { h2, ol, p, richText } from './lexical'
 import { upsertMedia } from './media'
 import { seedSeo, siteSeo } from './seo'
@@ -39,10 +40,10 @@ async function run() {
       tagline:
         'Software, AI and integrations for businesses that have outgrown their spreadsheets.',
       locationLine: 'Melbourne, working Australia-wide.',
-      email: 'hello@pixeldev.com.au',
-      supportEmail: 'support@pixeldev.com.au',
-      linkedin: 'https://www.linkedin.com',
-      abn: '[YOUR ABN]',
+      email: 'liam@pixeldev.com.au',
+      supportEmail: null,
+      linkedin: null,
+      abn: '53 614 870 219',
       nav: [
         { label: 'Services', href: '/services' },
         { label: 'Work', href: '/work' },
@@ -52,7 +53,6 @@ async function run() {
       headerCtaLabel: 'Start a project',
       products: [
         { label: 'SquareSync for Woo', href: 'https://squaresyncforwoo.com' },
-        { label: 'CloudPerch', href: 'https://cloudperch.io' },
         { label: 'OnCloudWine', href: '/work' },
       ],
       legalLinks: [
@@ -87,12 +87,31 @@ async function run() {
 
 type P = Awaited<ReturnType<typeof getPayload>>
 
+const CASES = fileURLToPath(new URL('./case-studies', import.meta.url))
+
+/** Uploads a case study screenshot under the name seed:work uses, with the alt text from its brief. */
+async function shot(payload: P, slug: string, file: string) {
+  type Fig = { file: string; alt: string } | undefined
+  const b = JSON.parse(await readFile(join(CASES, slug, 'brief.json'), 'utf8'))
+  const figs: Fig[] = [b.image, b.caseStudy.hero, ...b.caseStudy.sections.map((s: { figure?: Fig }) => s.figure)]
+  const alt = figs.find((f) => f?.file === file)?.alt ?? ''
+  return upsertMedia(payload, join(CASES, slug, file), alt, `${slug}-${file}`)
+}
+
+const monogram = (payload: P) =>
+  upsertMedia(
+    payload,
+    fileURLToPath(new URL('./liam-monogram.jpg', import.meta.url)),
+    'Liam Hillier’s monogram, LH, on Pixeldev green',
+  )
+
 async function seedCollections(payload: P) {
   // Work -----------------------------------------------------------------------
+  // The minimum the services need to link to. `pnpm seed:work` fills in the full case studies.
   const squaresync = await payload.create({
     collection: 'work',
     data: {
-      title: 'SquareSync for Woo',
+      title: 'Square Sync for Woo',
       slug: 'squaresync-for-woo',
       kind: 'product',
       featured: true,
@@ -101,10 +120,10 @@ async function seedCollections(payload: P) {
       summary:
         'Keeps products, stock and orders in step between WooCommerce and Square, both directions. Handles the ugly parts: webhooks that go missing, WP cron that doesn’t fire, Square API limits.',
       externalUrl: 'https://squaresyncforwoo.com',
-      image: { placeholder: 'Screenshot: SquareSync sync log and settings' },
+      image: { image: await shot(payload, 'squaresync-for-woo', 'card.png') },
       stats: [
-        { value: '[N]', label: 'paying subscribers' },
-        { value: '[N]', label: 'countries' },
+        { value: '416', label: 'releases shipped' },
+        { value: '380', label: 'paying subscribers' },
       ],
     },
   })
@@ -116,33 +135,14 @@ async function seedCollections(payload: P) {
       slug: 'oncloudwine',
       kind: 'product',
       order: 20,
-      category: 'SaaS, wine industry',
+      category: 'SaaS, wine club management',
       summary:
-        'A wine club management platform for wineries. [One or two lines on what it does for members, releases and payments.]',
-      image: { placeholder: 'Screenshot: OnCloudWine member dashboard' },
+        'Wine club software for wineries: members, clubs, releases, card payments and shipping in one place.',
+      externalUrl: 'https://oncloudwine.io',
+      image: { image: await shot(payload, 'oncloudwine', 'card.png') },
       stats: [
-        { value: '[N]', label: 'wineries' },
-        { value: '[N]', label: 'club members managed' },
-      ],
-    },
-  })
-
-  const cloudperch = await payload.create({
-    collection: 'work',
-    data: {
-      title: 'CloudPerch',
-      slug: 'cloudperch',
-      kind: 'product',
-      featured: true,
-      order: 30,
-      category: 'Hosting, Next.js portal and Stripe',
-      summary:
-        'Managed WordPress hosting on Sydney servers with Cloudflare in front, a custom Next.js customer portal and Stripe billing. Four plans, from a single site to agency fleets.',
-      externalUrl: 'https://cloudperch.io',
-      image: { placeholder: 'Screenshot: CloudPerch customer portal' },
-      stats: [
-        { value: '[N]', label: 'sites hosted' },
-        { value: '[99.9%]', label: 'uptime, last 12 months' },
+        { value: '34', label: 'wineries on the platform' },
+        { value: '7', label: 'payment, shipping and marketing integrations' },
       ],
     },
   })
@@ -155,186 +155,32 @@ async function seedCollections(payload: P) {
       kind: 'client',
       featured: true,
       order: 50,
-      category: 'Workflow automation, private credit',
+      category: 'Internal tool, private credit funds',
       summary:
-        'An onboarding workflow for a private credit fund manager that takes an investor from first contact to a completed application, with the document collection, checks and follow-ups handled by the system rather than by email.',
-      image: { placeholder: 'Screenshot: investor onboarding application flow' },
+        'An internal onboarding workspace for a private credit fund manager: a signed application in, the AML/KYC checklist worked, and the result filed into their investor register.',
+      image: { image: await shot(payload, 'bowery-investor-onboarding', 'card.png') },
       stats: [
-        { value: '[N days]', label: 'enquiry to completed application' },
-        { value: '[N]', label: 'manual steps removed' },
+        { value: '26', label: 'checklist items worked per case' },
+        { value: '833', label: 'automated tests' },
       ],
-    },
-  })
-
-  const aceRadio = await payload.create({
-    collection: 'work',
-    data: {
-      title: 'ACE Radio Broadcasters',
-      slug: 'ace-radio-broadcasters',
-      kind: 'client',
-      order: 60,
-      category: 'WordPress, radio broadcasting',
-      summary:
-        'WordPress theme development for a regional radio network. [One or two lines on the scope: station sites, theme system, what changed for the team.]',
-      image: { placeholder: 'Screenshot: ACE Radio station site' },
-      stats: [{ value: '[N]', label: 'station sites' }],
     },
   })
 
   const takeshape = await payload.create({
     collection: 'work',
     data: {
-      title: 'TakeShape Adventures CRM',
+      title: 'TakeShape Adventures operations dashboard',
       slug: 'takeshape-adventures-crm',
       kind: 'client',
       featured: true,
       order: 40,
-      category: 'Custom CRM, Next.js, adventure travel',
+      category: 'Ops dashboard, WooCommerce, Keap and Meta',
       summary:
-        'A custom CRM and event operations dashboard for an adventure travel company whose members book through a mobile app. Events, attendees, memberships and the day-to-day ops in one place instead of four.',
-      image: { placeholder: 'Screenshot: TSA CRM event operations dashboard' },
+        'A staff operations dashboard for an adventure travel company: every departure’s manifest and check-in, trip pages published back to WordPress, and the Keap and Meta automations, all off one database.',
+      image: { image: await shot(payload, 'takeshape-adventures-crm', 'card.png') },
       stats: [
-        { value: '[N]', label: 'events managed' },
-        { value: '[N hrs]', label: 'admin saved per week' },
-      ],
-      caseStudy: {
-        enabled: true,
-        heading: 'A CRM built around how TakeShape Adventures actually runs its events.',
-        intro:
-          'An adventure travel company with members booking through a mobile app, and an ops team managing events across spreadsheets, inboxes and a generic CRM that didn’t know what an event was. I built the one that does.',
-        meta: [
-          { label: 'Client', value: 'TakeShape Adventures' },
-          { label: 'Industry', value: 'Adventure travel' },
-          { label: 'Services', value: 'Custom software, integrations' },
-          { label: 'Stack', value: 'Next.js, [DATABASE], [HOSTING]' },
-          { label: 'Timeline', value: '[N weeks], [YEAR]' },
-        ],
-        hero: {
-          placeholder: 'Screenshot: TSA CRM event operations dashboard, full width',
-          caption:
-            'The event dashboard: capacity, attendees, logistics and communications for every upcoming trip in one view.',
-        },
-        bigStats: [
-          { value: '[N]', label: 'events managed through the system' },
-          { value: '[N hrs]', label: 'admin time saved each week' },
-          { value: '[N] to 1', label: 'tools replaced by one system' },
-        ],
-        sections: [
-          {
-            heading: 'The problem',
-            body: richText(
-              p(
-                'TakeShape runs group adventures. Members book into events through a mobile app, but everything after the booking lived somewhere else: attendee lists in spreadsheets, questions in email, and a generic CRM that treated an event like any other deal. [One or two lines in the client’s words about what that cost them day to day.]',
-              ),
-              p(
-                'The team didn’t need a bigger CRM. They needed one that understood events, attendees and memberships as first-class things, and that talked to the app their members already used.',
-              ),
-            ),
-          },
-          {
-            heading: 'What I built',
-            body: richText(
-              p(
-                'A custom CRM in Next.js with an event operations dashboard at the centre of it. Each event carries its attendees, capacity, logistics and communications; each member carries their history across events. The booking app feeds it directly, so nothing is retyped.',
-              ),
-            ),
-            steps: [
-              {
-                text: 'Event management: capacity, attendee lists, logistics and status in one view per event.',
-              },
-              { text: 'Member records that follow a person across every event they’ve booked.' },
-              {
-                text: 'Integration with the booking app, so a booking creates the attendee record the moment it happens.',
-              },
-              {
-                text: 'Foundations for a paid membership tier: event discounts, member-only resources and a community dashboard.',
-              },
-            ],
-            figure: {
-              placeholder: 'Screenshot: single event view with attendee list',
-              caption:
-                'A single event, with its attendees, capacity and the notes the guides need on the day.',
-            },
-          },
-          {
-            heading: 'How it went',
-            body: richText(
-              p(
-                'The team saw a working staging site in week [N] and used it alongside the old process until it had earned their trust. [What changed first, what they stopped doing, what surprised them.] The membership work is the next phase, built on the same records rather than bolted on.',
-              ),
-            ),
-          },
-        ],
-        quote: {
-          text: '[Client quote: one or two sentences in their own words about working with Liam and what the system changed.]',
-          attribution: '[Name], [Role], TakeShape Adventures',
-        },
-        atAGlance: [
-          { label: 'What they had', value: 'Spreadsheets, email and a generic CRM' },
-          {
-            label: 'What they have now',
-            value: 'One CRM built around events and members, fed by the booking app',
-          },
-          { label: 'Still involved?', value: 'Yes. Hosting, support and the membership phase.' },
-          { label: 'Built with', value: 'Next.js, [DATABASE], [HOSTING], the booking app’s API' },
-        ],
-        asideCta: {
-          heading: 'Running a business on spreadsheets and goodwill?',
-          body: 'Tell me how it works today and I’ll tell you what I’d build.',
-          ctaLabel: 'Start a project',
-        },
-        moreWork: [bowery.id, squaresync.id],
-      },
-    },
-  })
-
-  const brokerage = await payload.create({
-    collection: 'work',
-    data: {
-      title: 'Lead-to-settlement automation for a growing brokerage',
-      slug: 'brokerage-automation',
-      kind: 'anonymised',
-      order: 70,
-      category: 'Mortgage brokerage, automation',
-      summary:
-        'Enquiries qualified, documents collected and status updates sent without a broker touching a keyboard until a human decision was needed.',
-      stats: [
-        { value: '15 hrs', label: 'admin saved per week' },
-        { value: '2×', label: 'applications processed' },
-      ],
-    },
-  })
-
-  const lawFirm = await payload.create({
-    collection: 'work',
-    data: {
-      title: 'Automated intake and matter creation for a law firm',
-      slug: 'law-firm-intake',
-      kind: 'anonymised',
-      order: 80,
-      category: 'Law firm, AI intake',
-      summary:
-        'New enquiries read, classified and turned into draft matters in the practice system, with a lawyer approving each one before it goes live.',
-      stats: [
-        { value: '80%', label: 'less manual intake work' },
-        { value: 'Same day', label: 'enquiry to matter' },
-      ],
-    },
-  })
-
-  const propertyGroup = await payload.create({
-    collection: 'work',
-    data: {
-      title: 'Custom operations platform for a property group',
-      slug: 'property-group-platform',
-      kind: 'anonymised',
-      order: 90,
-      category: 'Property group, custom platform',
-      summary:
-        'Six disconnected tools replaced by one system built around how the team actually ran properties, with everyone looking at the same data.',
-      stats: [
-        { value: '6 to 1', label: 'tools replaced by one system' },
-        { value: '100%', label: 'of data in one place' },
+        { value: '4', label: 'systems kept in sync' },
+        { value: '6 hrs', label: 'admin saved per week' },
       ],
     },
   })
@@ -370,10 +216,9 @@ async function seedCollections(payload: P) {
         secondaryCta: { label: 'See related work', href: '/work' },
       },
       figure: {
-        placeholder:
-          'Diagram or screenshot: an intake queue with items routed automatically and one waiting for a person',
+        image: await shot(payload, 'flo', 'fig-1.png'),
         caption:
-          'The shape of most of this work: software handles the routine cases, a person handles the exceptions, and everything is logged.',
+          'The shape of most of this work: software handles the routine cases, a person handles the exceptions, and everything is logged. This is Flo’s review queue.',
       },
       painPoints: {
         heading: 'Sound familiar?',
@@ -440,11 +285,11 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'Clear about where data goes',
-            body: 'Which provider sees what, what gets stored and for how long, written into the scope before anything is built. [Add your data handling policy or link.]',
+            body: 'Which provider sees what, what gets stored and for how long, written into the scope before anything is built. Client data stays in Australian regions wherever the provider offers one, and nothing is used to train a model.',
           },
         ],
       },
-      relatedWork: [lawFirm.id, brokerage.id],
+      relatedWork: [bowery.id],
       faqs: [
         {
           question: 'Do I need to replace my CRM or accounting system?',
@@ -498,10 +343,9 @@ async function seedCollections(payload: P) {
         secondaryCta: { label: 'See related work', href: '/work' },
       },
       figure: {
-        placeholder:
-          'Diagram: WooCommerce, web forms and a booking app on the left, an integration layer with a queue in the middle, Square, Xero and HubSpot on the right',
+        image: await shot(payload, 'squaresync-for-woo', 'fig-1.png'),
         caption:
-          'One small service in the middle, so every system talks to one place instead of to each other.',
+          'Every sync logged, and when Square rejects something, the error explained in plain English with a retry. From Square Sync for Woo.',
       },
       painPoints: {
         heading: 'Sound familiar?',
@@ -572,7 +416,7 @@ async function seedCollections(payload: P) {
           },
         ],
       },
-      relatedWork: [squaresync.id, propertyGroup.id],
+      relatedWork: [squaresync.id],
       faqs: [
         {
           question: 'Can you work with a system you haven’t used before?',
@@ -627,9 +471,9 @@ async function seedCollections(payload: P) {
         secondaryCta: { label: 'Read a case study', href: '/work/takeshape-adventures-crm' },
       },
       figure: {
-        placeholder: 'Screenshot: the TakeShape Adventures CRM, an event with its attendee list',
+        image: await shot(payload, 'takeshape-adventures-crm', 'hero.png'),
         caption:
-          'A CRM that knows what an event is, because it was built for a business that runs them.',
+          'A dashboard that knows what a departure is, because it was built for a business that runs them.',
       },
       painPoints: {
         heading: 'Sound familiar?',
@@ -755,10 +599,9 @@ async function seedCollections(payload: P) {
         secondaryCta: { label: 'See related work', href: '/work' },
       },
       figure: {
-        placeholder:
-          'Screenshot: a recent WordPress build, home page on desktop and phone side by side',
+        image: await shot(payload, 'vinoshipper-wordpress-plugin', 'fig-3.png'),
         caption:
-          '[Project name]: a custom block theme, a checkout with pickup slots, and a nightly import of 2,400 products from a supplier feed.',
+          'A winery checkout running Vinoshipper for WooCommerce: the store’s own theme and payment gateway, with compliant shipping rates for every state it ships to.',
       },
       painPoints: {
         heading: 'Sound familiar?',
@@ -829,7 +672,7 @@ async function seedCollections(payload: P) {
           },
         ],
       },
-      relatedWork: [aceRadio.id, squaresync.id],
+      relatedWork: [squaresync.id],
       faqs: [
         {
           question: 'WordPress, or something else?',
@@ -863,9 +706,9 @@ async function seedCollections(payload: P) {
       order: 50,
       summary:
         'Managed hosting on infrastructure I run, plus updates, backups, monitoring and a person to call when something breaks.',
-      examples: 'Through CloudPerch for WordPress, dedicated servers for everything else.',
+      examples: 'Sydney servers for WordPress, dedicated servers for everything else.',
       indexIntro:
-        'I run my own hosting business, CloudPerch, on infrastructure I manage. Your site or app can live there, with updates, backups, monitoring and someone who knows the code when something goes wrong.',
+        'I run hosting on infrastructure I manage. Your site or app can live there, with updates, backups, monitoring and someone who knows the code when something goes wrong.',
       indexItems: [
         { text: 'Managed WordPress hosting in Sydney' },
         { text: 'App hosting on dedicated servers with Docker' },
@@ -878,15 +721,8 @@ async function seedCollections(payload: P) {
       hero: {
         heading: 'Hosting from someone who knows the code.',
         intro:
-          'Managed WordPress hosting through CloudPerch, app hosting on dedicated servers, and monthly care plans so your site stays fast, patched and online. When something breaks, you talk to the person who can fix it.',
+          'Managed WordPress hosting, app hosting on dedicated servers, and monthly care plans so your site stays fast, patched and online. When something breaks, you talk to the person who can fix it.',
         primaryCta: { label: 'Talk about hosting', href: '/contact' },
-        secondaryCta: { label: 'Visit CloudPerch', href: 'https://cloudperch.io' },
-      },
-      figure: {
-        placeholder:
-          'Screenshot: the CloudPerch customer portal, a site’s overview with backups, updates and uptime',
-        caption:
-          'The CloudPerch portal. I built it, I run the servers behind it, and I answer the support emails.',
       },
       painPoints: {
         heading: 'Sound familiar?',
@@ -912,11 +748,11 @@ async function seedCollections(payload: P) {
       offerings: {
         heading: 'What’s included',
         intro:
-          'Boring, well-run infrastructure. Sydney servers for WordPress through CloudPerch, dedicated servers running Docker for custom apps, Cloudflare in front of everything.',
+          'Boring, well-run infrastructure. Sydney servers for WordPress, dedicated servers running Docker for custom apps, Cloudflare in front of everything.',
         items: [
           {
             title: 'Managed WordPress hosting',
-            body: 'Through CloudPerch: Sydney-based servers, OpenLiteSpeed, Cloudflare, Stripe billing and a customer portal I built myself. Four plans from a single site to an agency fleet.',
+            body: 'Sydney-based servers running OpenLiteSpeed with Cloudflare in front, and staging for every site. Plans from a single site to an agency fleet.',
           },
           {
             title: 'App hosting on dedicated servers',
@@ -940,38 +776,6 @@ async function seedCollections(payload: P) {
           },
         ],
       },
-      plans: {
-        heading: 'CloudPerch plans',
-        intro:
-          'WordPress hosting runs under its own brand with its own portal. Full details and sign-up are on cloudperch.io.',
-        items: [
-          {
-            name: 'Roost',
-            price: '[$X a month]',
-            body: '[One site, who it’s for]',
-            href: 'https://cloudperch.io',
-          },
-          {
-            name: 'Perch Pro',
-            price: '[$X a month]',
-            body: '[Sites, who it’s for]',
-            href: 'https://cloudperch.io',
-          },
-          {
-            name: 'Flock',
-            price: '[$X a month]',
-            body: '[Sites, who it’s for]',
-            href: 'https://cloudperch.io',
-          },
-          {
-            name: 'Aerie',
-            price: '[$X a month]',
-            body: '[Sites, who it’s for]',
-            href: 'https://cloudperch.io',
-          },
-        ],
-      },
-      relatedWork: [cloudperch.id],
       faqs: [
         {
           question: 'Can you host a site someone else built?',
@@ -981,12 +785,12 @@ async function seedCollections(payload: P) {
         {
           question: 'Where is the data stored?',
           answer:
-            'WordPress hosting is in Sydney. Custom app hosting runs on dedicated servers in [LOCATION]. Backups are stored off-site in [LOCATION]. Happy to put it in writing for your privacy policy.',
+            'WordPress hosting is in Sydney. Custom app hosting runs on dedicated servers in Melbourne. Backups are stored off-site in Brisbane. Happy to put it in writing for your privacy policy.',
         },
         {
           question: 'What exactly is in a care plan?',
           answer:
-            'Hosting, weekly updates via staging, daily backups, uptime monitoring, security patches, and [N] hours of development each month that roll into whatever you need done. No lock-in; cancel monthly.',
+            'Hosting, weekly updates via staging, daily backups, uptime monitoring, security patches, and two hours of development each month that roll into whatever you need done. No lock-in; cancel monthly.',
         },
       ],
       closing: {
@@ -1027,10 +831,7 @@ async function seedCollections(payload: P) {
       featured: true,
       excerpt:
         'No-code automation is brilliant until it becomes load-bearing. Here’s how to tell when you’ve crossed that line, and what a boring, reliable replacement looks like.',
-      cover: {
-        placeholder:
-          'Cover image or diagram: a chain of Zaps on one side, one small service with a queue on the other',
-      },
+      cover: { image: await shot(payload, 'takeshape-adventures-crm', 'fig-1.png') },
       content: richText(
         p(
           'Every business I work with has a Zap somewhere. A form submission creates a contact. A new order posts to Slack. A row lands in a sheet. These are good. They take ten minutes to set up and they get a job off someone’s plate.',
@@ -1118,6 +919,7 @@ async function seedCollections(payload: P) {
     },
   ]
   for (const s of stubs) {
+    const a = articles[s.title]
     await payload.create({
       collection: 'posts',
       data: {
@@ -1125,9 +927,10 @@ async function seedCollections(payload: P) {
         _status: 'published',
         publishedAt: day(s.date),
         topic: topics[s.topic],
-        readingMinutes: 5,
+        readingMinutes: a.readingMinutes,
         excerpt: s.excerpt,
-        content: richText(p(s.excerpt), p('[Draft. Replace this placeholder with the article.]')),
+        content: richText(...a.body),
+        tags: a.tags.map((tag) => ({ tag })),
         relatedService: s.service,
       },
     })
@@ -1148,7 +951,7 @@ async function seedPageGlobals(payload: P) {
         secondaryCta: { label: 'See recent work', href: '/work' },
         facts: [
           { label: 'Liam Hillier', value: 'Melbourne' },
-          { label: 'Sole trader', value: 'Since [YEAR]' },
+          { label: 'Sole trader', value: 'Since 2016' },
           { label: 'Replies', value: 'Within one business day' },
         ],
       },
@@ -1158,7 +961,7 @@ async function seedPageGlobals(payload: P) {
           fileURLToPath(new URL('./home-collage.jpg', import.meta.url)),
           'A wall of product screens from recent projects: sync dashboards, release and payment flows, booking calendars, onboarding checklists and chat.',
         ),
-        placeholder: 'Collage of product screens from recent work',
+        placeholder: null,
         caption:
           'Screens from recent work: Square Sync for Woo, OnCloudWine, TakeShape Adventures, Bowery, KIR, Flo and Vinoshipper for WooCommerce.',
       },
@@ -1192,12 +995,12 @@ async function seedPageGlobals(payload: P) {
         heading: 'I’m Liam. I work solo on purpose.',
         body: 'It means the person you talk to on the first call is the person writing the code, hosting it, and answering the email when something’s wrong. I also run three software products of my own, which is the best proof I have that I build things that keep working.',
         linkLabel: 'More about how I work',
-        photo: { placeholder: 'Photo: Liam' },
+        photo: { image: await monogram(payload), placeholder: null },
       },
       testimonial: {
         quote:
-          'They didn’t sell us AI. [Full quote from the current site.] We stopped copying data between systems within the first month.',
-        attribution: 'Operations Director, finance and lending',
+          'They didn’t sell us AI. Liam spent a morning watching how we actually run a trip, from the booking to the bus leaving at 5am, and built around that. Bookings land in the manifest on their own, Keap gets tagged without anyone touching it, and the crew check people in from their phones. We stopped copying data between systems within the first month.',
+        attribution: 'Operations Manager, TakeShape Adventures',
       },
       closing: {
         heading: 'Tell me what’s slow.',
@@ -1220,17 +1023,17 @@ async function seedPageGlobals(payload: P) {
         options: [
           {
             title: 'Fixed-scope project',
-            price: '[From $X], written quote',
+            price: 'From $4,000, written quote',
             body: 'For a defined build: a site, an integration, a portal. You get a scope, a price and a timeline before I start, and the price doesn’t move unless the scope does.',
           },
           {
             title: 'Hourly',
-            price: '[$X an hour], billed as used',
+            price: '$150 an hour, billed as used',
             body: 'For smaller jobs, investigations and the “can you just look at this” work. Time tracked, invoiced at the end of the month, no minimum.',
           },
           {
             title: 'Monthly care plan',
-            price: '[From $X a month], hosting included',
+            price: 'From $290 a month, hosting included',
             body: 'Hosting, updates, monitoring and a block of development hours each month for the things you’d otherwise put off.',
           },
         ],
@@ -1249,7 +1052,7 @@ async function seedPageGlobals(payload: P) {
       eyebrow: 'Work',
       heading: 'Things I’ve shipped, and the ones I still look after.',
       intro:
-        'Three kinds of work below: products I own and support myself, client projects I can name, and a few where the client would rather stay anonymous.',
+        'Two kinds of work below: products I own and support myself, and client projects built around how the business already runs.',
       products: {
         heading: 'Products I own and run',
         intro:
@@ -1259,7 +1062,7 @@ async function seedPageGlobals(payload: P) {
         heading: 'Client projects',
         intro:
           'Named with the client’s permission. Each one is a business that had a process running on spreadsheets, email and goodwill, and needed software that fit how they already worked.',
-        note: '[Confirm permission and figures with each client before launch]',
+        note: null,
       },
       anonymised: {
         heading: 'Anonymised',
@@ -1276,16 +1079,13 @@ async function seedPageGlobals(payload: P) {
       heading: 'I’m Liam. I build software for a living, and I run some of it too.',
       intro:
         'I’m a Melbourne-based developer trading as Pixeldev. I build websites, custom software, AI automation and the integrations between them for businesses around Australia, and I run three software products of my own on the side.',
-      body: 'I work solo on purpose. It means the person you talk to on the first call is the person writing the code, hosting it, and answering the email when something’s wrong. [Add a line or two in your own words about why you went out on your own.]',
-      photo: {
-        placeholder: 'Photo: Liam, at a desk or on site. Natural light, no stock-photo energy.',
-        caption: '',
-      },
+      body: 'I work solo on purpose. It means the person you talk to on the first call is the person writing the code, hosting it, and answering the email when something’s wrong. I spent my early years at agencies watching projects pass between account managers, designers and developers until nobody owned the result. Going out on my own in 2016 meant I could own all of it.',
+      photo: { image: await monogram(payload), placeholder: null, caption: '' },
       facts: [
         { label: 'Based', value: 'Melbourne, VIC. Remote-first, Australia-wide.' },
-        { label: 'Trading as', value: 'Pixeldev, sole trader. ABN [YOUR ABN].' },
-        { label: 'Building since', value: '[YEAR]' },
-        { label: 'Products', value: 'SquareSync for Woo, OnCloudWine, CloudPerch' },
+        { label: 'Trading as', value: 'Pixeldev, sole trader. ABN 53 614 870 219.' },
+        { label: 'Building since', value: '2012' },
+        { label: 'Products', value: 'SquareSync for Woo, OnCloudWine, Flo' },
       ],
       background: {
         heading: 'What shaped how I work',
@@ -1359,10 +1159,10 @@ async function seedPageGlobals(payload: P) {
         ],
         budgetOptions: [
           { label: 'Prefer not to say yet' },
-          { label: '[Under $X]' },
-          { label: '[$X to $Y]' },
-          { label: '[$Y to $Z]' },
-          { label: '[Over $Z]' },
+          { label: 'Under $5,000' },
+          { label: '$5,000 to $15,000' },
+          { label: '$15,000 to $40,000' },
+          { label: 'Over $40,000' },
         ],
         submitLabel: 'Send it',
         submitNote: 'No newsletter, no follow-up sequence. Just a reply from me.',
@@ -1383,8 +1183,8 @@ async function seedPageGlobals(payload: P) {
       aside: {
         directHeading: 'Or directly',
         directNote: 'Melbourne, VIC. Working with businesses across Australia, in your time zone.',
-        supportHeading: 'Already a client or a SquareSync customer?',
-        supportNote: 'Support goes to the support address so it lands in the right queue:',
+        supportHeading: null,
+        supportNote: null,
       },
     },
   })

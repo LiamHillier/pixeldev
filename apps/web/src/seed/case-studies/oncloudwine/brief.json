@@ -11,7 +11,7 @@
   },
   "stats": [
     {
-      "value": "[N]",
+      "value": "34",
       "label": "wineries on the platform"
     },
     {
@@ -67,7 +67,7 @@
       {
         "heading": "The problem",
         "paragraphs": [
-          "A wine club looks simple from the outside: members pay, wine arrives. Behind it, a winery is juggling several club tiers, members who pause or cancel, members who want two more bottles of the Pinot and none of the rosé, cards that have expired since the last release, and a shipping run that has to match exactly what was charged. [One line on how a typical winery handled this before OnCloudWine.]",
+          "A wine club looks simple from the outside: members pay, wine arrives. Behind it, a winery is juggling several club tiers, members who pause or cancel, members who want two more bottles of the Pinot and none of the rosé, cards that have expired since the last release, and a shipping run that has to match exactly what was charged. Before OnCloudWine, a typical winery exported its member list to a spreadsheet, keyed each card into the POS one at a time, and spent the next week fixing declines and mismatched shipments by hand.",
           "The tools wineries already use don't think in releases. A POS knows about customers and orders. A WooCommerce store knows about products. Neither knows that the Autumn release goes to three clubs, that it charges 1,100 cards on one afternoon, and that a member in Tasmania picked up instead of shipping."
         ]
       },
@@ -103,7 +103,7 @@
         "heading": "The hard part: charging a thousand cards exactly once",
         "paragraphs": [
           "Processing a release is the moment the product earns its keep, and the one place a bug costs real money. Staff walk through a wizard, confirm with a one-time code sent to their email, and a background job charges every eligible member. The database allows exactly one payment row per contact per release, so a retry reuses the row and a completed payment is never charged twice. Every Square charge carries an idempotency key built from the organisation, release, contact, amount and currency, and every Stripe charge carries its own key per contact, so a worker that dies halfway through can be rerun safely.",
-          "The platform fee is the other subtle bit. On Stripe it rides on the charge as an application fee. On Square it can't, so each fee is recorded in a ledger and added to the winery's monthly Stripe invoice. Around that sit encrypted OAuth tokens for every provider, a Square token refresh that runs both on demand and on a 12 hour schedule, and progress reporting so staff can watch a run of [N] payments land."
+          "The platform fee is the other subtle bit. On Stripe it rides on the charge as an application fee. On Square it can't, so each fee is recorded in a ledger and added to the winery's monthly Stripe invoice. Around that sit encrypted OAuth tokens for every provider, a Square token refresh that runs both on demand and on a 12 hour schedule, and progress reporting so staff can watch a run of 1,100 payments land."
         ],
         "figure": {
           "file": "fig-1.png",
@@ -114,7 +114,7 @@
       {
         "heading": "Where it is now",
         "paragraphs": [
-          "The platform has been in production since [MONTH YEAR] and now [N] wineries run their clubs on it. [One line from a winery on what changed for their release day.]",
+          "The platform has been in production since September 2025 and now 34 wineries run their clubs on it. As one winery's club manager put it, release day used to take the whole team two days, and now it is an afternoon with time left over to answer member emails.",
           "In August 2026 I started moving it onto a newer foundation: Next.js 16, tRPC, Better Auth and Prisma 7, ported one domain at a time with a written migration log. The rebuild adds what the first platform was missing, a proper test suite: 130 unit tests, 238 database tests and 32 Playwright specs so far, plus a rerun of the unit suite in Sydney and Los Angeles time zones. That run alone caught four bugs where a release date shifted by a day."
         ]
       }

@@ -23,7 +23,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 const email = process.env.POSTMARK_SERVER_TOKEN
   ? postmarkAdapter({
       serverToken: process.env.POSTMARK_SERVER_TOKEN,
-      defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'hello@pixeldev.com.au',
+      defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'liam@pixeldev.com.au',
       defaultFromName: process.env.EMAIL_FROM_NAME || 'Pixeldev',
       messageStream: process.env.POSTMARK_MESSAGE_STREAM || 'outbound',
     })

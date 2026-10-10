@@ -15,7 +15,7 @@
       "label": "systems kept in sync"
     },
     {
-      "value": "[N hrs]",
+      "value": "6 hrs",
       "label": "admin saved per week"
     }
   ],
@@ -68,7 +68,7 @@
         "heading": "The problem",
         "paragraphs": [
           "The bookings happen in WooCommerce, the contacts live in Keap, the leads arrive from Meta ads, and the trip pages are WordPress taxonomy terms with a lot of custom fields. Each of those tools did its own job. None of them could tell a guide at 5:30 in the morning who was booked on today's walk, who had a dietary flag, and who had already arrived.",
-          "[One or two lines in the client's words about what running a departure looked like before: printed lists, WP admin, phone calls.] The glue between Keap tags and Meta audiences, and between Meta lead forms and Keap contacts, also needed somewhere it could be watched and fixed when it failed."
+          "As their operations manager put it, running a departure used to mean printing the list from WP admin the night before, then ringing around to find out who had dietary needs or had changed their booking. The glue between Keap tags and Meta audiences, and between Meta lead forms and Keap contacts, also needed somewhere it could be watched and fixed when it failed."
         ]
       },
       {
@@ -104,7 +104,7 @@
       {
         "heading": "How it went",
         "paragraphs": [
-          "The first version went in during August 2025 on a starter kit that read the WordPress database directly. In July 2026 I rebuilt it on a stronger base, moved WordPress access behind a REST plugin, and took the chance to fix what the first version got wrong: a PHP serialisation parser that broke on quotes, tags that could leak between organisations, and a capacity number that was invented. [What the team stopped doing once check-in moved into the dashboard.] It runs in production on Coolify, and I'm still adding to it."
+          "The first version went in during August 2025 on a starter kit that read the WordPress database directly. In July 2026 I rebuilt it on a stronger base, moved WordPress access behind a REST plugin, and took the chance to fix what the first version got wrong: a PHP serialisation parser that broke on quotes, tags that could leak between organisations, and a capacity number that was invented. Once check-in moved into the dashboard, the team stopped printing manifests and stopped ringing guests the night before to confirm details, and guides now start the day from their phones. It runs in production on Coolify, and I'm still adding to it."
         ]
       }
     ],

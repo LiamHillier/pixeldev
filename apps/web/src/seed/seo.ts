@@ -75,7 +75,7 @@ const services: Record<string, Seo> = {
   hosting: {
     title: 'Managed WordPress Hosting and Care Plans Melbourne',
     description:
-      'Managed WordPress hosting via CloudPerch, app hosting and monthly care plans for Melbourne businesses. Fast, patched and online, supported by the developer.',
+      'Managed WordPress hosting, app hosting and monthly care plans for Melbourne businesses. Fast, patched and online, supported by the developer.',
   },
 }
 

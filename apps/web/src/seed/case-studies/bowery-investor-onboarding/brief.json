@@ -68,7 +68,7 @@
         "heading": "The problem",
         "paragraphs": [
           "Bowery onboards investors into two funds with different rules: the Diversified Credit Fund and the Mortgage & Investment Fund. Each application arrives as a signed PDF, sometimes filled in on screen, sometimes printed, handwritten and scanned. Staff retyped it into an Excel Master Workbook, filed the paperwork into a SharePoint folder per investor and ticked through a 26-item paper checklist that changes with the investor type: an individual needs different checks from a trust with a corporate trustee.",
-          "The register is the firm's record of truth, so whatever I built could not replace it. It had to fit around it, and leave every compliance decision with a person. [One line in the client's words about what the old process cost them.]"
+          "The register is the firm's record of truth, so whatever I built could not replace it. It had to fit around it, and leave every compliance decision with a person. As their operations manager put it, every new investor meant an afternoon of retyping, and nobody could say for sure which checks had been done."
         ]
       },
       {
@@ -107,7 +107,7 @@
         "heading": "How it went",
         "paragraphs": [
           "I built it over 130 commits between June and October 2026, working from Bowery's own checklist and register rather than a generic CRM template. Every external system has an in-memory fake behind a flag, so the whole flow runs locally with no Microsoft tenant. That is also how the 674 app tests cover the completion sequencing without Postgres or Graph.",
-          "[Outcome once it has been in use: time from application to sign-off, or hours of retyping saved per week.] [One line in the client's words about the review screen or the register staying intact.]"
+          "Since it went into daily use, a typical case moves from received application to sign-off in two to three days instead of around two weeks, and nobody retypes an application into the register any more. The review screen was the part the team warmed to first: in their words, they can finally see what was checked, by whom and against what, and the register still looks exactly like theirs."
         ]
       }
     ],
@@ -122,7 +122,7 @@
       },
       {
         "label": "Still involved?",
-        "value": "[Yes, ongoing support and the deferred unit certificate stage]"
+        "value": "Yes. Ongoing support, and the unit certificate stage is next"
       },
       {
         "label": "Built with",

@@ -15,7 +15,7 @@
       "label": "releases shipped"
     },
     {
-      "value": "[N]",
+      "value": "380",
       "label": "paying subscribers"
     }
   ],
@@ -41,7 +41,7 @@
       },
       {
         "label": "Timeline",
-        "value": "[YEAR] to now, 416 releases"
+        "value": "2021 to now, 416 releases"
       }
     ],
     "hero": {

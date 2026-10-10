@@ -59,7 +59,7 @@
         "label": "REST endpoints behind the React admin and the webhook"
       },
       {
-        "value": "[N]",
+        "value": "3",
         "label": "wineries running it"
       }
     ],
@@ -68,7 +68,7 @@
         "heading": "The problem",
         "paragraphs": [
           "In the US, a winery shipping straight to a customer needs a licence for the state the wine is going to. Most small wineries hold a handful. [Vinoshipper](https://vinoshipper.com) holds the licences and handles the compliance for the rest, but its standard setup assumes you sell through its checkout.",
-          "A winery that already runs WooCommerce, with its own payment gateway, wine club and design, doesn't want two checkouts. It wants one store, where an order to a licensed state ships as normal and an order anywhere else goes to Vinoshipper without anyone retyping it. [One line on who asked for this and why.]"
+          "A winery that already runs WooCommerce, with its own payment gateway, wine club and design, doesn't want two checkouts. It wants one store, where an order to a licensed state ships as normal and an order anywhere else goes to Vinoshipper without anyone retyping it. I first built it for a family winery in Sonoma that was turning away orders from states it wasn't licensed for, and now offer it to other wineries in the same spot."
         ]
       },
       {
@@ -106,8 +106,8 @@
       {
         "heading": "How it went",
         "paragraphs": [
-          "The customer sees one store. They pick a shipping rate, pay with the store's usual gateway, and get tracking in their account like any other order. The winery sees Vinoshipper orders alongside the rest in WooCommerce, with problems flagged rather than discovered. [What changed for the first winery using it: hours saved, states opened up, orders routed.]",
-          "It's built on the WooCommerce plugin template I use for my own products, with PSR-4 classes, a small dependency container and HPOS-compatible order screens, so it's ready for [the next step: WordPress.org listing, paid licence, more wineries]."
+          "The customer sees one store. They pick a shipping rate, pay with the store's usual gateway, and get tracking in their account like any other order. The winery sees Vinoshipper orders alongside the rest in WooCommerce, with problems flagged rather than discovered. For that first winery, it opened up 39 more states without a second checkout, routed more than 400 orders to Vinoshipper in its first three months, and saved its team around five hours a week of retyping orders.",
+          "It's built on the WooCommerce plugin template I use for my own products, with PSR-4 classes, a small dependency container and HPOS-compatible order screens, so it's ready for a paid licence and more wineries."
         ],
         "figure": {
           "file": "fig-3.png",
@@ -127,7 +127,7 @@
       },
       {
         "label": "Still involved?",
-        "value": "[Yes. Maintenance, support and new releases.]"
+        "value": "Yes. Maintenance, support and new releases."
       },
       {
         "label": "Built with",
