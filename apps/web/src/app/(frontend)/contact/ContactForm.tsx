@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useActionState } from 'react'
 import { submitEnquiry, type EnquiryState } from './actions'
 
@@ -79,7 +80,14 @@ export function ContactForm({ needOptions, budgetOptions, submitLabel, submitNot
         <button type="submit" disabled={pending} className="btn-ink border-0 rounded-none cursor-pointer disabled:opacity-60">
           {pending ? 'Sending…' : submitLabel}
         </button>
-        {submitNote ? <p className="text-[15px] text-faint">{submitNote}</p> : null}
+        <p className="text-[15px] text-faint">
+          {submitNote ? `${submitNote} ` : null}
+          How I handle your details:{' '}
+          <Link href="/privacy" className="link-u">
+            privacy policy
+          </Link>
+          .
+        </p>
       </div>
       {state.status === 'error' ? (
         <p role="alert" className="text-[15px] text-[#8A2E1F]">

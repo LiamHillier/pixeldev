@@ -33,5 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...posts
       .filter((p) => !p.seo?.noIndex)
       .map((p) => page(`/journal/${p.slug}`, 0.5, p.updatedAt)),
+    page('/privacy', 0.2),
+    page('/terms', 0.2),
   ]
 }

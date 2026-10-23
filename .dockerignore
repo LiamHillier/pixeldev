@@ -1,0 +1,10 @@
+**/node_modules
+**/.next
+**/.turbo
+**/.env
+**/.env*.local
+**/*.tsbuildinfo
+.git
+.claude
+apps/web/media
+apps/web/payload.db-*

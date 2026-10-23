@@ -43,7 +43,7 @@ async function run() {
       email: 'liam@pixeldev.com.au',
       supportEmail: null,
       linkedin: null,
-      abn: '53 614 870 219',
+      abn: '37 173 967 093',
       nav: [
         { label: 'Services', href: '/services' },
         { label: 'Work', href: '/work' },
@@ -56,8 +56,8 @@ async function run() {
         { label: 'OnCloudWine', href: '/work' },
       ],
       legalLinks: [
-        { label: 'Privacy', href: '/' },
-        { label: 'Terms', href: '/' },
+        { label: 'Privacy', href: '/privacy' },
+        { label: 'Terms', href: '/terms' },
       ],
       ...siteSeo,
     },
