@@ -90,7 +90,7 @@ export default async function HomePage() {
         <section className="section-gap flex flex-col gap-10 lg:gap-14">
           <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-4">
             <h2 className="h-section">
-              <TwoTone text={home.servicesSection?.eyebrow || 'What I do'} />
+              <TwoTone text={home.servicesSection?.eyebrow || 'What we do'} />
             </h2>
             {home.servicesSection?.note ? (
               <p className="max-w-[460px] text-[18px] text-muted">{home.servicesSection.note}</p>
@@ -136,7 +136,14 @@ export default async function HomePage() {
             </h2>
             <GoLink href="/work">{home.workSection?.linkLabel ?? 'All work'}</GoLink>
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(480px,100%),1fr))] gap-x-8 gap-y-14">
+          <div
+            className={cx(
+              'grid gap-x-8 gap-y-14',
+              work.length % 3 === 0
+                ? 'grid-cols-[repeat(auto-fit,minmax(min(360px,100%),1fr))]'
+                : 'grid-cols-[repeat(auto-fit,minmax(min(480px,100%),1fr))]',
+            )}
+          >
             {work.map((w) => (
               <WorkCard key={w.id} item={w} />
             ))}
@@ -180,7 +187,7 @@ export default async function HomePage() {
               {home.about.body ? (
                 <p className="text-[18px] leading-[1.6] text-body">{home.about.body}</p>
               ) : null}
-              <GoLink href="/about">{home.about.linkLabel ?? 'More about how I work'}</GoLink>
+              <GoLink href="/about">{home.about.linkLabel ?? 'More about how we work'}</GoLink>
             </div>
           </div>
         </section>

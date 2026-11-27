@@ -21,7 +21,7 @@
   ],
   "caseStudy": {
     "heading": "Wine club software that started as a WordPress plugin and outgrew it.",
-    "intro": "Wineries run their clubs on a cycle: build a release, let members tweak their selection, charge every card on file, then pack and ship hundreds of orders. Most do it with spreadsheets, a POS and a lot of manual card processing. OnCloudWine does the whole loop, and I have built every version of it.",
+    "intro": "Wineries run their clubs on a cycle: build a release, let members tweak their selection, charge every card on file, then pack and ship hundreds of orders. Most do it with spreadsheets, a POS and a lot of manual card processing. OnCloudWine does the whole loop, and we have built every version of it.",
     "meta": [
       {
         "label": "Product",
@@ -75,7 +75,7 @@
         "heading": "Version one: a WordPress plugin",
         "paragraphs": [
           "The first OnCloudWine, built from October 2024, lived inside wp-admin. A React app on top of WooCommerce, where each club was a WordPress user role, products came from the store catalogue, and a release walked through five steps: create, select products, create orders, process cards, archive. Square handled the cards.",
-          "It worked for one winery on one site. It also showed me the limits quickly: the data model was WordPress's, every winery needed its own install, and the slow parts (charging hundreds of cards, generating packing lists) were running inside PHP requests and WP cron."
+          "It worked for one winery on one site. It also showed us the limits quickly: the data model was WordPress's, every winery needed its own install, and the slow parts (charging hundreds of cards, generating packing lists) were running inside PHP requests and WP cron."
         ],
         "figure": {
           "file": "fig-2.png",
@@ -84,10 +84,10 @@
         }
       },
       {
-        "heading": "What I built next",
+        "heading": "What we built next",
         "paragraphs": [
-          "In mid 2025 I rebuilt it as a standalone multi-tenant platform: a Next.js and TypeScript monorepo with a staff dashboard, a member portal, a public API, a marketing and docs site, and a BullMQ worker on Redis. Every table is scoped to an organisation, and each winery can run the dashboard and portal on its own domain.",
-          "The WordPress plugin didn't go away. I rewrote it as a thin client of the public API, so a winery's WooCommerce site can show members their upcoming release and let them change their selection, while the data lives in one place."
+          "In mid 2025 we rebuilt it as a standalone multi-tenant platform: a Next.js and TypeScript monorepo with a staff dashboard, a member portal, a public API, a marketing and docs site, and a BullMQ worker on Redis. Every table is scoped to an organisation, and each winery can run the dashboard and portal on its own domain.",
+          "The WordPress plugin didn't go away. We rewrote it as a thin client of the public API, so a winery's WooCommerce site can show members their upcoming release and let them change their selection, while the data lives in one place."
         ],
         "steps": [
           "Contacts CRM with tags, tasks, task automations (birthdays, anniversaries), discounts and saved cards.",
@@ -115,7 +115,7 @@
         "heading": "Where it is now",
         "paragraphs": [
           "The platform has been in production since September 2025 and now 34 wineries run their clubs on it. As one winery's club manager put it, release day used to take the whole team two days, and now it is an afternoon with time left over to answer member emails.",
-          "In August 2026 I started moving it onto a newer foundation: Next.js 16, tRPC, Better Auth and Prisma 7, ported one domain at a time with a written migration log. The rebuild adds what the first platform was missing, a proper test suite: 130 unit tests, 238 database tests and 32 Playwright specs so far, plus a rerun of the unit suite in Sydney and Los Angeles time zones. That run alone caught four bugs where a release date shifted by a day."
+          "In August 2026 we started moving it onto a newer foundation: Next.js 16, tRPC, Better Auth and Prisma 7, ported one domain at a time with a written migration log. The rebuild adds what the first platform was missing, a proper test suite: 130 unit tests, 238 database tests and 32 Playwright specs so far, plus a rerun of the unit suite in Sydney and Los Angeles time zones. That run alone caught four bugs where a release date shifted by a day."
         ]
       }
     ],
@@ -130,7 +130,7 @@
       },
       {
         "label": "Still involved?",
-        "value": "Yes. It's my product. I build, run and support it."
+        "value": "Yes. It's our product. We build, run and support it."
       },
       {
         "label": "Built with",
@@ -139,7 +139,7 @@
     ],
     "asideCta": {
       "heading": "Got a product that has outgrown its plugin?",
-      "body": "I've taken one from a WordPress plugin to a multi-tenant platform. Tell me where yours is stuck and I'll tell you what I'd do next.",
+      "body": "We've taken one from a WordPress plugin to a multi-tenant platform. Tell us where yours is stuck and we'll tell you what we'd do next.",
       "ctaLabel": "Start a project"
     }
   },

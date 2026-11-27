@@ -21,7 +21,7 @@
   ],
   "caseStudy": {
     "heading": "A WooCommerce and Square sync that has to be right, because it moves real stock and real money.",
-    "intro": "Square Sync for Woo is a plugin I build, sell and support. It keeps a WooCommerce store and a Square point of sale agreeing on products, stock, orders, customers, gift cards and loyalty, in real time and in both directions. Behind it sit two more systems I run: a webhook relay that delivers Square events to every customer site, and the licensing and update platform at squaresyncforwoo.com.",
+    "intro": "Square Sync for Woo is a plugin we build, sell and support. It keeps a WooCommerce store and a Square point of sale agreeing on products, stock, orders, customers, gift cards and loyalty, in real time and in both directions. Behind it sit two more systems we run: a webhook relay that delivers Square events to every customer site, and the licensing and update platform at squaresyncforwoo.com.",
     "meta": [
       {
         "label": "Product",
@@ -72,7 +72,7 @@
         ]
       },
       {
-        "heading": "What I built",
+        "heading": "What we built",
         "paragraphs": [
           "A WordPress plugin with a React admin app inside wp-admin and a PHP backend built on Action Scheduler queues, plus the services it depends on. Merchants choose which fields each side owns, and the plugin enforces that ownership on every import, export and webhook."
         ],
@@ -94,8 +94,8 @@
       {
         "heading": "The hard part",
         "paragraphs": [
-          "Most of the work is in the failures that make no noise. A stock push that quietly does nothing, a gift card charged as a $0 payment, a product imported twice by two queue workers at once. Each looks like success in a naive log. I treat every one of those as a test: 51 integration suites run inside a real WordPress install with Square faked at the HTTP layer, so they assert on exactly what would have been sent to Square, not just on what WooCommerce ended up with.",
-          "Some concrete examples. Loop guards and push markers stop an order the site created in Square from being imported back as a second order. A cross-process lock per Square item means parallel workers never create the same product twice. Square's order search is cursor-paginated with no total, so the orders screen keeps pulling pages until a filtered view is genuinely full. And when Square rejects something, the log does not just show the error code: it records a plain-English cause and fix at the moment it happens, written only for errors I have actually diagnosed."
+          "Most of the work is in the failures that make no noise. A stock push that quietly does nothing, a gift card charged as a $0 payment, a product imported twice by two queue workers at once. Each looks like success in a naive log. We treat every one of those as a test: 51 integration suites run inside a real WordPress install with Square faked at the HTTP layer, so they assert on exactly what would have been sent to Square, not just on what WooCommerce ended up with.",
+          "Some concrete examples. Loop guards and push markers stop an order the site created in Square from being imported back as a second order. A cross-process lock per Square item means parallel workers never create the same product twice. Square's order search is cursor-paginated with no total, so the orders screen keeps pulling pages until a filtered view is genuinely full. And when Square rejects something, the log does not just show the error code: it records a plain-English cause and fix at the moment it happens, written only for errors we have actually diagnosed."
         ],
         "figure": {
           "file": "fig-1.png",
@@ -122,7 +122,7 @@
       },
       {
         "label": "Still involved?",
-        "value": "Yes. I build, ship, host and support it."
+        "value": "Yes. We build, ship, host and support it."
       },
       {
         "label": "Built with",
@@ -131,7 +131,7 @@
     ],
     "asideCta": {
       "heading": "Need two systems to agree with each other?",
-      "body": "I have spent years making WooCommerce and Square trust each other. Tell me which systems you are stuck between.",
+      "body": "We have spent years making WooCommerce and Square trust each other. Tell us which systems you are stuck between.",
       "ctaLabel": "Start a project"
     }
   },

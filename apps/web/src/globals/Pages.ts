@@ -51,7 +51,7 @@ export const WorkPage: GlobalConfig = {
       type: 'group',
       label: 'Products section',
       fields: [
-        { name: 'heading', type: 'text', defaultValue: 'Products I own and run' },
+        { name: 'heading', type: 'text', defaultValue: 'Products we own and run' },
         { name: 'intro', type: 'textarea' },
       ],
     },
@@ -92,7 +92,7 @@ export const AboutPage: GlobalConfig = {
       name: 'background',
       type: 'group',
       fields: [
-        { name: 'heading', type: 'text', defaultValue: 'What shaped how I work' },
+        { name: 'heading', type: 'text', defaultValue: 'What shaped how we work' },
         titledItems('items'),
       ],
     },

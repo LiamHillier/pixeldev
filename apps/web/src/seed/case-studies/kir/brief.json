@@ -21,7 +21,7 @@
   ],
   "caseStudy": {
     "heading": "A test-drive platform where the car cannot leave until the paperwork is right.",
-    "intro": "A prestige used-car dealership in Melbourne was running test drives and loan cars through an off-the-shelf app that didn't fit how their floor actually works. They sent me a detailed brief: licence scanning, electronic agreements, loan tracking and live reporting. I built KIR, a multi-tenant platform with their dealership as the first tenant.",
+    "intro": "A prestige used-car dealership in Melbourne was running test drives and loan cars through an off-the-shelf app that didn't fit how their floor actually works. They sent us a detailed brief: licence scanning, electronic agreements, loan tracking and live reporting. We built KIR, a multi-tenant platform with their dealership as the first tenant.",
     "meta": [
       {
         "label": "Client",
@@ -72,7 +72,7 @@
         ]
       },
       {
-        "heading": "What I built",
+        "heading": "What we built",
         "paragraphs": [
           "KIR is an installable web app for the floor and a FastAPI backend behind it, built so native iOS and Android apps can sit on the same API later. Every screen opens on the day read as a sentence, *9 drives today, 1 loan overdue*, with the numbers beside it."
         ],
@@ -129,11 +129,11 @@
     ],
     "asideCta": {
       "heading": "Paying for software your team works around?",
-      "body": "Send me your brief, or just tell me how a day on the floor goes, and I'll tell you what I'd build.",
+      "body": "Send us your brief, or just tell us how a day on the floor goes, and we'll tell you what we'd build.",
       "ctaLabel": "Start a project"
     }
   },
-  "notes": "KIND: 'client'. docs/BRIEF.md is a client brief received from the dealer principal of Vasli Prestige (a prestige used-car dealership in Melbourne) and PRODUCT.md names them as the client and first tenant. The platform is multi-tenant and could become a product later, but today it is client work. CONFIDENTIALITY: confirm Vasli Prestige is happy to be named; if not, switch kind to 'anonymised' and Client to 'A prestige used-car dealership'. The brief and alt text deliberately never name the client's previous system; it is only described as 'an off-the-shelf test-drive app'. All names, dealership ('Harbourside Prestige'), regos, VINs and stock numbers in the images are fictional. NUMBERS FROM CODE: 249 commits (2026-09-10 to 2026-10-01); 736 backend pytest functions in 71 files plus 828 dashboard/UI test cases (1,564 total, shown as '1,500+' on the card); 97 FastAPI route decorators; 25 Alembic migrations; 9 ADRs; 16 backend modules. CHECK: (1) Phase 1 is not finished: PRODUCT.md says the drive itself (departure/return odometer, fuel, condition photos) was still being linked to agreements, and the in-app bell, real SMS provider and audit log UI were outstanding at that point, so the 'What I built' steps describe the target Phase 1 scope; trim anything not shipped. (2) The SMS sender is a stub in code; 'notifications by email and SMS' assumes a real provider is wired before launch. (3) The 'every hour' import cadence comes from UI copy ('let stock import itself every hour'); confirm the production schedule. (4) Timeline, go-live status and client quote are placeholders. (5) The excess figure in fig-1 ($3,000, 'Driver aged 25 and over') is illustrative, not the client's real table.",
+  "notes": "KIND: 'client'. docs/BRIEF.md is a client brief received from the dealer principal of Vasli Prestige (a prestige used-car dealership in Melbourne) and PRODUCT.md names them as the client and first tenant. The platform is multi-tenant and could become a product later, but today it is client work. CONFIDENTIALITY: confirm Vasli Prestige is happy to be named; if not, switch kind to 'anonymised' and Client to 'A prestige used-car dealership'. The brief and alt text deliberately never name the client's previous system; it is only described as 'an off-the-shelf test-drive app'. All names, dealership ('Harbourside Prestige'), regos, VINs and stock numbers in the images are fictional. NUMBERS FROM CODE: 249 commits (2026-09-10 to 2026-10-01); 736 backend pytest functions in 71 files plus 828 dashboard/UI test cases (1,564 total, shown as '1,500+' on the card); 97 FastAPI route decorators; 25 Alembic migrations; 9 ADRs; 16 backend modules. CHECK: (1) Phase 1 is not finished: PRODUCT.md says the drive itself (departure/return odometer, fuel, condition photos) was still being linked to agreements, and the in-app bell, real SMS provider and audit log UI were outstanding at that point, so the 'What we built' steps describe the target Phase 1 scope; trim anything not shipped. (2) The SMS sender is a stub in code; 'notifications by email and SMS' assumes a real provider is wired before launch. (3) The 'every hour' import cadence comes from UI copy ('let stock import itself every hour'); confirm the production schedule. (4) Timeline, go-live status and client quote are placeholders. (5) The excess figure in fig-1 ($3,000, 'Driver aged 25 and over') is illustrative, not the client's real table.",
   "seo": {
     "title": "KIR: Test Drive and Loan Car Platform Case Study",
     "description": "A mobile-first platform for a Melbourne prestige dealership: test drives, loan cars, licence scanning and signed agreements without paperwork."

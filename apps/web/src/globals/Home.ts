@@ -32,7 +32,7 @@ export const Home: GlobalConfig = {
       name: 'servicesSection',
       type: 'group',
       fields: [
-        { name: 'eyebrow', type: 'text', defaultValue: 'What I do' },
+        { name: 'eyebrow', type: 'text', defaultValue: 'What we do' },
         {
           name: 'note',
           type: 'text',
@@ -62,7 +62,7 @@ export const Home: GlobalConfig = {
       fields: [
         { name: 'heading', type: 'text' },
         { name: 'body', type: 'textarea' },
-        { name: 'linkLabel', type: 'text', defaultValue: 'More about how I work' },
+        { name: 'linkLabel', type: 'text', defaultValue: 'More about how we work' },
         figureField('photo', 'Photo'),
       ],
     },

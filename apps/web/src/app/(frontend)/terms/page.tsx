@@ -23,8 +23,9 @@ export default async function TermsPage() {
       body: (
         <p>
           This website is run by {owner}, trading as {site.name}
-          {site.abn ? ` (ABN ${site.abn})` : ''}, a sole trader based in Melbourne. By using the
-          site, you agree to these terms. If you don’t agree, please don’t use it.
+          {site.abn ? ` (ABN ${site.abn})` : ''}, a sole trader based in Melbourne. When these
+          terms say “we”, “us” or “our”, that’s who they mean. By using the site, you agree to
+          these terms. If you don’t agree, please don’t use it.
         </p>
       ),
     },
@@ -43,7 +44,7 @@ export default async function TermsPage() {
       heading: 'Products',
       body: (
         <p>
-          Products I build and sell, such as SquareSync for Woo, have their own terms on their own
+          Products we build and sell, such as SquareSync for Woo, have their own terms on their own
           sites. Those terms apply when you buy or use the product.
         </p>
       ),
@@ -53,7 +54,7 @@ export default async function TermsPage() {
       body: (
         <>
           <p>
-            I write the articles and case studies to be useful, and I try to keep them accurate.
+            We write the articles and case studies to be useful, and we try to keep them accurate.
             They’re general information, not advice for your particular situation. Software, APIs
             and platforms change, so check before you rely on anything here for a decision that
             matters.
@@ -69,8 +70,8 @@ export default async function TermsPage() {
       heading: 'Copyright',
       body: (
         <p>
-          The writing, design and images on this site belong to me, or to the clients and owners
-          who’ve allowed me to show them. You’re welcome to link to any page and quote short
+          The writing, design and images on this site belong to us, or to the clients and owners
+          who’ve allowed us to show them. You’re welcome to link to any page and quote short
           extracts with a link back. Please ask before copying anything more than that. Trade
           marks and product names belong to their owners.
         </p>
@@ -93,8 +94,8 @@ export default async function TermsPage() {
       heading: 'Links to other sites',
       body: (
         <p>
-          Some pages link to other websites, including client sites and my own products. I don’t
-          control those sites and I’m not responsible for what’s on them.
+          Some pages link to other websites, including client sites and our own products. We
+          don’t control those sites and we’re not responsible for what’s on them.
         </p>
       ),
     },
@@ -103,9 +104,9 @@ export default async function TermsPage() {
       body: (
         <>
           <p>
-            I aim to keep the site available and correct, but I can’t promise it will always be
-            either. To the extent the law allows, I’m not liable for any loss that comes from using
-            the site or relying on its content.
+            We aim to keep the site available and correct, but we can’t promise it will always be
+            either. To the extent the law allows, we’re not liable for any loss that comes from
+            using the site or relying on its content.
           </p>
           <p>
             Nothing in these terms limits rights you have under the Australian Consumer Law that
@@ -118,7 +119,7 @@ export default async function TermsPage() {
       heading: 'Privacy',
       body: (
         <p>
-          How I handle anything you send me is covered in the{' '}
+          How we handle anything you send us is covered in the{' '}
           <Link href="/privacy">privacy policy</Link>.
         </p>
       ),
@@ -136,7 +137,7 @@ export default async function TermsPage() {
       heading: 'Changes',
       body: (
         <p>
-          I may update these terms from time to time. The date at the top shows when they last
+          We may update these terms from time to time. The date at the top shows when they last
           changed. Questions: {mail}.
         </p>
       ),
@@ -149,7 +150,7 @@ export default async function TermsPage() {
       title="Terms of use"
       heading="Terms of use"
       intro={intro}
-      updated="10 October 2026"
+      updated="27 November 2026"
       sections={sections}
     />
   )

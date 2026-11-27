@@ -290,7 +290,7 @@ export function Faqs({
 }) {
   if (!items?.length) return null
   return (
-    <SplitSection heading={<TwoTone text={heading ?? 'Questions I get asked'} />}>
+    <SplitSection heading={<TwoTone text={heading ?? 'Questions we get asked'} />}>
       <div className="flex flex-col">
         {items.map((f, i) => (
           <div

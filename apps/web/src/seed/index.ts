@@ -198,7 +198,7 @@ async function seedCollections(payload: P) {
       examples:
         'Invoices read into Xero. Enquiries sorted before anyone opens them. The Monday report built overnight.',
       indexIntro:
-        'The admin that eats your week, done by software, with a person checking the parts that matter. I start from the process you already have, not from a demo of what AI can do.',
+        'The admin that eats your week, done by software, with a person checking the parts that matter. We start from the process you already have, not from a demo of what AI can do.',
       indexItems: [
         { text: 'Document extraction into your CRM or accounting system' },
         { text: 'Enquiry classification and routing' },
@@ -211,7 +211,7 @@ async function seedCollections(payload: P) {
       hero: {
         heading: 'AI that does the admin, with a person checking the parts that matter.',
         intro:
-          'Document processing, enquiry handling, approvals and reporting, built into the tools you already use. I start from your process, not from a demo of what AI can do.',
+          'Document processing, enquiry handling, approvals and reporting, built into the tools you already use. We start from your process, not from a demo of what AI can do.',
         primaryCta: { label: 'Start a project', href: '/contact' },
         secondaryCta: { label: 'See related work', href: '/work' },
       },
@@ -242,7 +242,7 @@ async function seedCollections(payload: P) {
         ],
       },
       offerings: {
-        heading: 'What I build',
+        heading: 'What we build',
         intro:
           'Each of these plugs into the systems you already run. Nothing here needs you to move to a new platform.',
         items: [
@@ -273,7 +273,7 @@ async function seedCollections(payload: P) {
         ],
       },
       approach: {
-        heading: 'How I approach it',
+        heading: 'How we approach it',
         items: [
           {
             title: 'Human in the loop by default',
@@ -294,12 +294,12 @@ async function seedCollections(payload: P) {
         {
           question: 'Do I need to replace my CRM or accounting system?',
           answer:
-            'No. Almost all of this sits around the systems you already have and writes into them. If a system genuinely needs replacing, I’ll say so, but that’s a separate conversation.',
+            'No. Almost all of this sits around the systems you already have and writes into them. If a system genuinely needs replacing, we’ll say so, but that’s a separate conversation.',
         },
         {
           question: 'What does it cost to run?',
           answer:
-            'Model usage is usually small next to the admin it replaces, but it’s not zero. I estimate the monthly running cost in the scope so there are no surprises on the first bill.',
+            'Model usage is usually small next to the admin it replaces, but it’s not zero. We estimate the monthly running cost in the scope so there are no surprises on the first bill.',
         },
         {
           question: 'What happens when the AI gets it wrong?',
@@ -309,7 +309,7 @@ async function seedCollections(payload: P) {
       ],
       closing: {
         heading: 'Which part of your week should a system be doing?',
-        body: 'Describe the manual process and I’ll tell you what I’d automate first, and what I’d leave alone.',
+        body: 'Describe the manual process and we’ll tell you what we’d automate first, and what we’d leave alone.',
         ctaLabel: 'Start a project',
       },
     },
@@ -325,7 +325,7 @@ async function seedCollections(payload: P) {
         'APIs, webhooks and two-way sync between the systems you already pay for, with the logging and retries a chain of Zaps doesn’t have.',
       examples: 'WooCommerce, Square, Xero, MYOB, HubSpot, Stripe, and whatever comes next.',
       indexIntro:
-        'Your systems already hold the data. The problem is that someone retypes it between them. I connect them properly, with error handling, logs and retries, so it keeps working when you’re not watching.',
+        'Your systems already hold the data. The problem is that someone retypes it between them. We connect them properly, with error handling, logs and retries, so it keeps working when you’re not watching.',
       indexItems: [
         { text: 'WooCommerce to Square, Xero, MYOB and HubSpot' },
         { text: 'Custom API and webhook work' },
@@ -364,18 +364,18 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'A vendor API nobody wants to touch',
-            body: 'Thin docs, odd rate limits, a sandbox that behaves differently to production. I’ve met a few.',
+            body: 'Thin docs, odd rate limits, a sandbox that behaves differently to production. We’ve met a few.',
           },
         ],
       },
       offerings: {
-        heading: 'What I build',
+        heading: 'What we build',
         intro:
-          'Integrations that run as code you own, on your hosting or mine, with a log you can read when something looks off.',
+          'Integrations that run as code you own, on your hosting or ours, with a log you can read when something looks off.',
         items: [
           {
             title: 'WooCommerce and Square sync',
-            body: 'Products, inventory and orders kept in step in both directions. I wrote a plugin that does this for stores worldwide, so the edge cases are familiar.',
+            body: 'Products, inventory and orders kept in step in both directions. We wrote a plugin that does this for stores worldwide, so the edge cases are familiar.',
           },
           {
             title: 'Accounting: Xero and MYOB',
@@ -387,11 +387,11 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'Payments: Stripe and Square',
-            body: 'Subscriptions, invoicing, webhooks and the reconciliation that goes with them. I run my own products on Stripe billing.',
+            body: 'Subscriptions, invoicing, webhooks and the reconciliation that goes with them. We run our own products on Stripe billing.',
           },
           {
             title: 'Replacing no-code chains with code',
-            body: 'When Zapier or Make has become load-bearing, I move it into a small service with proper error handling and a monthly bill that doesn’t scale with tasks.',
+            body: 'When Zapier or Make has become load-bearing, we move it into a small service with proper error handling and a monthly bill that doesn’t scale with tasks.',
           },
           {
             title: 'Legacy bridges and migrations',
@@ -400,7 +400,7 @@ async function seedCollections(payload: P) {
         ],
       },
       approach: {
-        heading: 'How I approach it',
+        heading: 'How we approach it',
         items: [
           {
             title: 'Safe to rerun, always logged',
@@ -412,7 +412,7 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'Done this at scale',
-            body: 'SquareSync runs for WooCommerce stores around the world. I know Square’s API quirks, WordPress cron, and what happens when a webhook arrives twice.',
+            body: 'SquareSync runs for WooCommerce stores around the world. We know Square’s API quirks, WordPress cron, and what happens when a webhook arrives twice.',
           },
         ],
       },
@@ -421,7 +421,7 @@ async function seedCollections(payload: P) {
         {
           question: 'Can you work with a system you haven’t used before?',
           answer:
-            'If it has an API, a database, or even a CSV export, yes. The first step is a short look at the docs so I can tell you what’s possible before you commit to anything.',
+            'If it has an API, a database, or even a CSV export, yes. The first step is a short look at the docs so we can tell you what’s possible before you commit to anything.',
         },
         {
           question: 'Why not just use Zapier?',
@@ -431,12 +431,12 @@ async function seedCollections(payload: P) {
         {
           question: 'Where does it run, and what does it cost monthly?',
           answer:
-            'On your hosting or mine. If it’s mine, a care plan covers the server, monitoring and keeping it working as the APIs on either side change.',
+            'On your hosting or ours. If it’s ours, a care plan covers the server, monitoring and keeping it working as the APIs on either side change.',
         },
       ],
       closing: {
         heading: 'Which two systems should be talking already?',
-        body: 'Name them and I’ll tell you how I’d connect them, what it would cost, and what could go wrong.',
+        body: 'Name them and we’ll tell you how we’d connect them, what it would cost, and what could go wrong.',
         ctaLabel: 'Start a project',
       },
     },
@@ -453,7 +453,7 @@ async function seedCollections(payload: P) {
       examples:
         'The spreadsheet that became the business, replaced by something that knows what an event, a matter or an investor is.',
       indexIntro:
-        'When the off-the-shelf tool makes you work around it, I build the one that fits. Portals, CRMs, dashboards and internal tools in Next.js, designed around how your team actually operates.',
+        'When the off-the-shelf tool makes you work around it, we build the one that fits. Portals, CRMs, dashboards and internal tools in Next.js, designed around how your team actually operates.',
       indexItems: [
         { text: 'Custom CRMs and pipeline tools' },
         { text: 'Client, member and investor portals' },
@@ -497,7 +497,7 @@ async function seedCollections(payload: P) {
         ],
       },
       offerings: {
-        heading: 'What I build',
+        heading: 'What we build',
         intro:
           'Plain, well-structured Next.js applications with a proper database, authentication, and the integrations your business already depends on. You own the code.',
         items: [
@@ -523,12 +523,12 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'SaaS products, from MVP to paying customers',
-            body: 'I’ve taken my own products from idea to subscribers, with billing, support and hosting. I can do it for yours.',
+            body: 'We’ve taken our own products from idea to subscribers, with billing, support and hosting. We can do it for yours.',
           },
         ],
       },
       approach: {
-        heading: 'How I approach it',
+        heading: 'How we approach it',
         items: [
           {
             title: 'Start with the process, not the screens',
@@ -540,7 +540,7 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'Built to be maintained',
-            body: 'Standard Next.js, a normal database, documented, no exotic stack. Another developer can pick it up. So can I, in two years, without archaeology.',
+            body: 'Standard Next.js, a normal database, documented, no exotic stack. Another developer can pick it up. So can we, in two years, without archaeology.',
           },
         ],
       },
@@ -549,7 +549,7 @@ async function seedCollections(payload: P) {
         {
           question: 'Should I build custom or buy something off the shelf?',
           answer:
-            'If a product fits 80% of what you do, buy it and I’ll integrate it. Custom is for when the other 20% is the business. I’ll tell you which one you’re in on the first call, even if the answer is “don’t hire me”.',
+            'If a product fits 80% of what you do, buy it and we’ll integrate it. Custom is for when the other 20% is the business. We’ll tell you which one you’re in on the first call, even if the answer is “don’t hire us”.',
         },
         {
           question: 'Who owns the code?',
@@ -559,12 +559,12 @@ async function seedCollections(payload: P) {
         {
           question: 'What happens after launch?',
           answer:
-            'I host it, monitor it and keep it patched under a care plan, with a block of hours each month for the next improvements. Or hand it to your team with documentation. Your call.',
+            'We host it, monitor it and keep it patched under a care plan, with a block of hours each month for the next improvements. Or hand it to your team with documentation. Your call.',
         },
       ],
       closing: {
         heading: 'What’s the spreadsheet you’re afraid of?',
-        body: 'Show me how the process works today and I’ll tell you what I’d build to replace it, and whether it’s worth it.',
+        body: 'Show us how the process works today and we’ll tell you what we’d build to replace it, and whether it’s worth it.',
         ctaLabel: 'Start a project',
       },
     },
@@ -620,12 +620,12 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'The developer who built it has vanished',
-            body: 'Most of my website work starts with a site someone else built. I’ll tell you honestly whether to fix it or start again.',
+            body: 'Most of our website work starts with a site someone else built. We’ll tell you honestly whether to fix it or start again.',
           },
         ],
       },
       offerings: {
-        heading: 'What I build',
+        heading: 'What we build',
         intro:
           'Fewer plugins, more code you own, and an editing experience that makes sense to the person updating the site on a Tuesday afternoon.',
         items: [
@@ -656,19 +656,19 @@ async function seedCollections(payload: P) {
         ],
       },
       approach: {
-        heading: 'How I approach it',
+        heading: 'How we approach it',
         items: [
           {
             title: 'Lean builds',
-            body: 'Every plugin is a dependency someone else controls. I’d rather write forty lines of code than install one that does a thousand things you don’t need.',
+            body: 'Every plugin is a dependency someone else controls. We’d rather write forty lines of code than install one that does a thousand things you don’t need.',
           },
           {
             title: 'Editors can actually edit',
-            body: 'Custom blocks with the options you need and none you don’t. You shouldn’t need to call me to change a heading.',
+            body: 'Custom blocks with the options you need and none you don’t. You shouldn’t need to call us to change a heading.',
           },
           {
             title: 'Measured, not guessed',
-            body: 'Core Web Vitals on real devices before and after. If I tell you it’s faster, there’s a number behind it.',
+            body: 'Core Web Vitals on real devices before and after. If we tell you it’s faster, there’s a number behind it.',
           },
         ],
       },
@@ -677,22 +677,22 @@ async function seedCollections(payload: P) {
         {
           question: 'WordPress, or something else?',
           answer:
-            'WordPress for content-heavy sites and WooCommerce for most stores; Shopify when its ecosystem fits better; Next.js when it’s really an app with a website attached. I’ll recommend the one that suits, not the one I feel like building.',
+            'WordPress for content-heavy sites and WooCommerce for most stores; Shopify when its ecosystem fits better; Next.js when it’s really an app with a website attached. We’ll recommend the one that suits, not the one we feel like building.',
         },
         {
           question: 'Can you work with our designer?',
           answer:
-            'Yes. Hand me the Figma file and I’ll build it faithfully, including the bits that are hard. If you don’t have a designer, I’ll put together a clean, structured layout and we’ll refine it on staging.',
+            'Yes. Hand us the Figma file and we’ll build it faithfully, including the bits that are hard. If you don’t have a designer, we’ll put together a clean, structured layout and refine it with you on staging.',
         },
         {
           question: 'Can you fix a site someone else built?',
           answer:
-            'That’s most of what comes through the door. I’ll look at it first and tell you plainly whether it’s worth fixing or faster to rebuild, with a price for each.',
+            'That’s most of what comes through the door. We’ll look at it first and tell you plainly whether it’s worth fixing or faster to rebuild, with a price for each.',
         },
       ],
       closing: {
-        heading: 'Send me the URL.',
-        body: 'I’ll have a look at what’s there and come back with what I’d fix, what I’d leave, and what it would cost.',
+        heading: 'Send us the URL.',
+        body: 'We’ll have a look at what’s there and come back with what we’d fix, what we’d leave, and what it would cost.',
         ctaLabel: 'Start a project',
       },
     },
@@ -705,10 +705,10 @@ async function seedCollections(payload: P) {
       slug: 'hosting',
       order: 50,
       summary:
-        'Managed hosting on infrastructure I run, plus updates, backups, monitoring and a person to call when something breaks.',
+        'Managed hosting on infrastructure we run, plus updates, backups, monitoring and a person to call when something breaks.',
       examples: 'Sydney servers for WordPress, dedicated servers for everything else.',
       indexIntro:
-        'I run hosting on infrastructure I manage. Your site or app can live there, with updates, backups, monitoring and someone who knows the code when something goes wrong.',
+        'We run hosting on infrastructure we manage. Your site or app can live there, with updates, backups, monitoring and someone who knows the code when something goes wrong.',
       indexItems: [
         { text: 'Managed WordPress hosting in Sydney' },
         { text: 'App hosting on dedicated servers with Docker' },
@@ -729,7 +729,7 @@ async function seedCollections(payload: P) {
         items: [
           {
             title: 'The host blames the site, the developer blames the host',
-            body: 'And you’re in the middle with a site that’s down. When I host what I built, there’s nobody to pass it to.',
+            body: 'And you’re in the middle with a site that’s down. When we host what we built, there’s nobody to pass it to.',
           },
           {
             title: 'Updates nobody runs',
@@ -756,15 +756,15 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'App hosting on dedicated servers',
-            body: 'Next.js apps, integrations and services deployed with Docker on dedicated hardware I manage. No surprise cloud bills.',
+            body: 'Next.js apps, integrations and services deployed with Docker on dedicated hardware we manage. No surprise cloud bills.',
           },
           {
             title: 'Updates, backups and monitoring',
-            body: 'Weekly updates via staging, daily off-site backups, uptime checks that page me, not you.',
+            body: 'Weekly updates via staging, daily off-site backups, uptime checks that page us, not you.',
           },
           {
             title: 'Cloudflare, DNS and email deliverability',
-            body: 'Domains, DNS, WAF rules and the SPF, DKIM and DMARC records that keep your email out of spam. I’ve moved hundreds of domains; it holds no fear.',
+            body: 'Domains, DNS, WAF rules and the SPF, DKIM and DMARC records that keep your email out of spam. We’ve moved hundreds of domains; it holds no fear.',
           },
           {
             title: 'Monthly care plans with dev hours',
@@ -772,7 +772,7 @@ async function seedCollections(payload: P) {
           },
           {
             title: 'Security clean-ups and incident response',
-            body: 'Compromised site, suspicious redirects, injected scripts. I find the source, clean it, and close the door it came through.',
+            body: 'Compromised site, suspicious redirects, injected scripts. We find the source, clean it, and close the door it came through.',
           },
         ],
       },
@@ -780,7 +780,7 @@ async function seedCollections(payload: P) {
         {
           question: 'Can you host a site someone else built?',
           answer:
-            'Yes, after I’ve had a look at it. I migrate it, run it on staging, and tell you if there’s anything that needs fixing before it goes live on the new server.',
+            'Yes, after we’ve had a look at it. We migrate it, run it on staging, and tell you if there’s anything that needs fixing before it goes live on the new server.',
         },
         {
           question: 'Where is the data stored?',
@@ -795,7 +795,7 @@ async function seedCollections(payload: P) {
       ],
       closing: {
         heading: 'Want someone to just look after it?',
-        body: 'Tell me what you’re running and where. I’ll come back with a plan and a monthly price.',
+        body: 'Tell us what you’re running and where. We’ll come back with a plan and a monthly price.',
         ctaLabel: 'Talk about hosting',
       },
     },
@@ -944,14 +944,14 @@ async function seedPageGlobals(payload: P) {
     data: {
       hero: {
         eyebrow: 'Melbourne software developer',
-        heading: 'I build the software your business runs on.',
+        heading: 'We build the software your business runs on.',
         intro:
-          'Websites, custom software, AI automation and the integrations between them. One engineer from the first conversation to launch, and the same one who picks up the phone afterwards.',
+          'Websites, custom software, AI automation and the integrations between them. One point of contact from the first conversation to launch, and the same one who picks up the phone afterwards.',
         primaryCta: { label: 'Start a project', href: '/contact' },
         secondaryCta: { label: 'See recent work', href: '/work' },
         facts: [
-          { label: 'Liam Hillier', value: 'Melbourne' },
-          { label: 'Sole trader', value: 'Since 2016' },
+          { label: 'Based in', value: 'Melbourne' },
+          { label: 'In business', value: 'Since 2016' },
           { label: 'Replies', value: 'Within one business day' },
         ],
       },
@@ -966,7 +966,7 @@ async function seedPageGlobals(payload: P) {
           'Screens from recent work: Square Sync for Woo, OnCloudWine, TakeShape Adventures, Bowery, KIR, Flo and Vinoshipper for WooCommerce.',
       },
       servicesSection: {
-        eyebrow: 'What I do',
+        eyebrow: 'What we do',
         note: 'Most projects use two or three of these together',
       },
       workSection: { heading: 'Selected work', linkLabel: 'All case studies' },
@@ -975,7 +975,7 @@ async function seedPageGlobals(payload: P) {
         steps: [
           {
             title: 'A call, not a pitch',
-            body: 'Thirty minutes. You tell me what’s slow, manual or broken. I tell you what I’d build and roughly what it costs.',
+            body: 'Thirty minutes. You tell us what’s slow, manual or broken. We tell you what we’d build and roughly what it costs.',
           },
           {
             title: 'Scope and quote',
@@ -987,14 +987,14 @@ async function seedPageGlobals(payload: P) {
           },
           {
             title: 'Launch, then look after it',
-            body: 'Hosting, monitoring, fixes and the next phase when you’re ready. I don’t disappear at launch.',
+            body: 'Hosting, monitoring, fixes and the next phase when you’re ready. We don’t disappear at launch.',
           },
         ],
       },
       about: {
-        heading: 'I’m Liam. I work solo on purpose.',
-        body: 'It means the person you talk to on the first call is the person writing the code, hosting it, and answering the email when something’s wrong. I also run three software products of my own, which is the best proof I have that I build things that keep working.',
-        linkLabel: 'More about how I work',
+        heading: 'Small on purpose, and that’s the point.',
+        body: 'It means the people you talk to on the first call are the people writing the code, hosting it, and answering the email when something’s wrong. We also run three software products of our own, which is the best proof we have that we build things that keep working.',
+        linkLabel: 'More about how we work',
         photo: { image: await monogram(payload), placeholder: null },
       },
       testimonial: {
@@ -1003,8 +1003,8 @@ async function seedPageGlobals(payload: P) {
         attribution: 'Operations Manager, TakeShape Adventures',
       },
       closing: {
-        heading: 'Tell me what’s slow.',
-        body: 'A few lines in your own words is enough. I’ll reply within one business day with what I’d do about it.',
+        heading: 'Tell us what’s slow.',
+        body: 'A few lines in your own words is enough. We’ll reply within one business day with what we’d do about it.',
         ctaLabel: 'Start a project',
       },
     },
@@ -1014,7 +1014,7 @@ async function seedPageGlobals(payload: P) {
     slug: 'services-page',
     data: {
       eyebrow: 'Services',
-      heading: 'Five things I build. Usually two or three at once.',
+      heading: 'Five things we build. Usually two or three at once.',
       intro:
         'A new website that feeds a CRM. A CRM that talks to Xero. An AI step that reads the PDF nobody wants to retype. The services are listed separately below, but most projects cross the lines.',
       engagement: {
@@ -1024,7 +1024,7 @@ async function seedPageGlobals(payload: P) {
           {
             title: 'Fixed-scope project',
             price: 'From $4,000, written quote',
-            body: 'For a defined build: a site, an integration, a portal. You get a scope, a price and a timeline before I start, and the price doesn’t move unless the scope does.',
+            body: 'For a defined build: a site, an integration, a portal. You get a scope, a price and a timeline before we start, and the price doesn’t move unless the scope does.',
           },
           {
             title: 'Hourly',
@@ -1040,7 +1040,7 @@ async function seedPageGlobals(payload: P) {
       },
       closing: {
         heading: 'Not sure which one you need?',
-        body: 'Most people aren’t. Describe the problem in plain words and I’ll tell you what I’d build and roughly what it costs.',
+        body: 'Most people aren’t. Describe the problem in plain words and we’ll tell you what we’d build and roughly what it costs.',
         ctaLabel: 'Describe the problem',
       },
     },
@@ -1050,13 +1050,13 @@ async function seedPageGlobals(payload: P) {
     slug: 'work-page',
     data: {
       eyebrow: 'Work',
-      heading: 'Things I’ve shipped, and the ones I still look after.',
+      heading: 'Things we’ve shipped, and the ones we still look after.',
       intro:
-        'Two kinds of work below: products I own and support myself, and client projects built around how the business already runs.',
+        'Two kinds of work below: products we own and support ourselves, and client projects built around how the business already runs.',
       products: {
-        heading: 'Products I own and run',
+        heading: 'Products we own and run',
         intro:
-          'Real software with paying customers. I build it, host it, and answer the support emails. It’s the best proof I have that I ship things that keep working.',
+          'Real software with paying customers. We build it, host it, and answer the support emails. It’s the best proof we have that we ship things that keep working.',
       },
       clients: {
         heading: 'Client projects',
@@ -1076,10 +1076,10 @@ async function seedPageGlobals(payload: P) {
     slug: 'about-page',
     data: {
       eyebrow: 'About',
-      heading: 'I’m Liam. I build software for a living, and I run some of it too.',
+      heading: 'We build software for a living, and we run some of it too.',
       intro:
-        'I’m a Melbourne-based developer trading as Pixeldev. I build websites, custom software, AI automation and the integrations between them for businesses around Australia, and I run three software products of my own on the side.',
-      body: 'I work solo on purpose. It means the person you talk to on the first call is the person writing the code, hosting it, and answering the email when something’s wrong. I spent my early years at agencies watching projects pass between account managers, designers and developers until nobody owned the result. Going out on my own in 2016 meant I could own all of it.',
+        'Pixeldev is a Melbourne software business founded by Liam Hillier. We build websites, custom software, AI automation and the integrations between them for businesses around Australia, and we run three software products of our own on the side.',
+      body: 'We stay small on purpose. It means the people you talk to on the first call are the people writing the code, hosting it, and answering the email when something’s wrong. Before Pixeldev, Liam spent years at agencies watching projects pass between account managers, designers and developers until nobody owned the result. Starting Pixeldev in 2016 was about owning all of it.',
       photo: { image: await monogram(payload), placeholder: null, caption: '' },
       facts: [
         { label: 'Based', value: 'Melbourne, VIC. Remote-first, Australia-wide.' },
@@ -1088,23 +1088,23 @@ async function seedPageGlobals(payload: P) {
         { label: 'Products', value: 'SquareSync for Woo, OnCloudWine, Flo' },
       ],
       background: {
-        heading: 'What shaped how I work',
+        heading: 'What shaped how we work',
         items: [
           {
             title: 'Years inside WordPress and WooCommerce',
-            body: 'Custom blocks, ACF, checkout extensions, plugin filters, multisite networks, catalogue imports. I know where the bodies are buried, because I’ve dug a few of them up.',
+            body: 'Custom blocks, ACF, checkout extensions, plugin filters, multisite networks, catalogue imports. We know where the bodies are buried, because we’ve dug a few of them up.',
           },
           {
-            title: 'Backend work that taught me structure',
-            body: 'Time spent in .NET with proper architecture, plus Shopify and Next.js, means I bring real software habits to projects that are usually built as a pile of plugins.',
+            title: 'Backend work that taught us structure',
+            body: 'Time spent in .NET with proper architecture, plus Shopify and Next.js, means we bring real software habits to projects that are usually built as a pile of plugins.',
           },
           {
-            title: 'Running my own products',
-            body: 'SquareSync for Woo has paying subscribers around the world, and I answer every support email myself. Nothing teaches you to build carefully like being the one who gets the 6am “it’s broken” message.',
+            title: 'Running our own products',
+            body: 'SquareSync for Woo has paying subscribers around the world, and we answer every support email ourselves. Nothing teaches you to build carefully like being the one who gets the 6am “it’s broken” message.',
           },
           {
-            title: 'Running my own servers',
-            body: 'Dedicated servers, Docker, Cloudflare, DNS for hundreds of domains. I host what I build, so I design it to be hosted well.',
+            title: 'Running our own servers',
+            body: 'Dedicated servers, Docker, Cloudflare, DNS for hundreds of domains. We host what we build, so we design it to be hosted well.',
           },
         ],
       },
@@ -1113,29 +1113,29 @@ async function seedPageGlobals(payload: P) {
         items: [
           {
             title: 'Plain language',
-            body: 'I’ll explain what I’m building and why in words you’d use, not jargon. If I can’t explain it simply, I don’t understand it well enough yet.',
+            body: 'We’ll explain what we’re building and why in words you’d use, not jargon. If we can’t explain it simply, we don’t understand it well enough yet.',
           },
           {
             title: 'A written scope before a dollar changes hands',
-            body: 'What’s being built, what it costs, what’s out of this phase. You’ll know before I start.',
+            body: 'What’s being built, what it costs, what’s out of this phase. You’ll know before we start.',
           },
           {
             title: 'Honest about fit',
-            body: 'If an off-the-shelf tool will do the job, I’ll say so. If I’m not the right person, I’ll say that too.',
+            body: 'If an off-the-shelf tool will do the job, we’ll say so. If we’re not the right fit, we’ll say that too.',
           },
           {
             title: 'Around after launch',
-            body: 'I host, monitor and keep improving what I build. The relationship doesn’t end at the invoice.',
+            body: 'We host, monitor and keep improving what we build. The relationship doesn’t end at the invoice.',
           },
         ],
       },
       solo: {
-        heading: 'I’m one person. That’s the point, and the limit.',
-        body: 'If you need a ten-person team on site next Monday, I’m not it. If you want one engineer who’ll understand your whole business, build the right thing, and still be around in two years, that’s the job I’m set up for. For bigger builds I bring in people I’ve worked with before, and I stay the one you talk to.',
+        heading: 'Small on purpose. That’s the point, and the limit.',
+        body: 'If you need a ten-person team on site next Monday, we’re not it. If you want people who’ll understand your whole business, build the right thing, and still be around in two years, that’s the job we’re set up for. For bigger builds we bring in specialists we’ve worked with before, and we stay the ones you talk to.',
       },
       closing: {
         heading: 'Let’s talk about what you’re running.',
-        body: 'A thirty-minute call, no pitch. You describe the problem, I tell you what I’d do about it.',
+        body: 'A thirty-minute call, no pitch. You describe the problem, we tell you what we’d do about it.',
         ctaLabel: 'Book a call',
       },
     },
@@ -1145,9 +1145,9 @@ async function seedPageGlobals(payload: P) {
     slug: 'contact-page',
     data: {
       eyebrow: 'Contact',
-      heading: 'Tell me what’s slow.',
+      heading: 'Tell us what’s slow.',
       intro:
-        'A few lines in your own words is enough. I’ll reply within one business day with what I’d do about it and whether I’m the right person to do it.',
+        'A few lines in your own words is enough. We’ll reply within one business day with what we’d do about it and whether we’re the right people to do it.',
       form: {
         needOptions: [
           { label: 'Not sure yet, that’s why I’m here' },
@@ -1165,19 +1165,19 @@ async function seedPageGlobals(payload: P) {
           { label: 'Over $40,000' },
         ],
         submitLabel: 'Send it',
-        submitNote: 'No newsletter, no follow-up sequence. Just a reply from me.',
+        submitNote: 'No newsletter, no follow-up sequence. Just a reply from us.',
         successHeading: 'Got it. Thanks.',
         successBody:
-          'I’ll read it properly and reply within one business day, usually with a couple of questions.',
+          'We’ll read it properly and reply within one business day, usually with a couple of questions.',
       },
       nextSteps: {
         heading: 'What happens next',
         items: [
           {
-            text: 'I read it and reply within one business day, usually with a couple of questions.',
+            text: 'We read it and reply within one business day, usually with a couple of questions.',
           },
-          { text: 'A thirty-minute call where you walk me through how it works today. No slides.' },
-          { text: 'A short written scope and quote, or an honest “you don’t need me for this”.' },
+          { text: 'A thirty-minute call where you walk us through how it works today. No slides.' },
+          { text: 'A short written scope and quote, or an honest “you don’t need us for this”.' },
         ],
       },
       aside: {
@@ -1195,7 +1195,7 @@ async function seedPageGlobals(payload: P) {
       eyebrow: 'The Systems Brief',
       heading: 'Notes from building and running software for small businesses.',
       intro:
-        'Practical, specific, occasionally opinionated. The things I end up explaining on calls, written down once.',
+        'Practical, specific, occasionally opinionated. The things we end up explaining on calls, written down once.',
     },
   })
   log('page globals')

@@ -43,6 +43,6 @@ export async function submitEnquiry(_prev: EnquiryState, form: FormData): Promis
     return { status: 'sent' }
   } catch (err) {
     console.error('enquiry failed', err)
-    return { status: 'error', message: 'Something went wrong sending that. Email me directly instead.' }
+    return { status: 'error', message: 'Something went wrong sending that. Email us directly instead.' }
   }
 }

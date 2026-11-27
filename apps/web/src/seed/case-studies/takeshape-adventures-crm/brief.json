@@ -21,7 +21,7 @@
   ],
   "caseStudy": {
     "heading": "One place to run the trips, with WordPress, Keap and Meta kept in step behind it.",
-    "intro": "TakeShape Adventures sells guided hikes and multi-day trips through a WordPress and WooCommerce site, keeps its contacts in Keap and finds new customers through Meta ads. I built the staff dashboard that sits across all of it: departures and check-in, trip content, orders, and the automations between Keap and Meta.",
+    "intro": "TakeShape Adventures sells guided hikes and multi-day trips through a WordPress and WooCommerce site, keeps its contacts in Keap and finds new customers through Meta ads. We built the staff dashboard that sits across all of it: departures and check-in, trip content, orders, and the automations between Keap and Meta.",
     "meta": [
       {
         "label": "Client",
@@ -72,9 +72,9 @@
         ]
       },
       {
-        "heading": "What I built",
+        "heading": "What we built",
         "paragraphs": [
-          "A Next.js dashboard backed by Postgres that mirrors what it needs from each system and writes back where staff need to edit. A small WordPress plugin I wrote serves the endpoints it reads and writes, and pings the dashboard when an order or a trip changes, so a booking shows up in seconds rather than on the next scheduled pass."
+          "A Next.js dashboard backed by Postgres that mirrors what it needs from each system and writes back where staff need to edit. A small WordPress plugin we wrote serves the endpoints it reads and writes, and pings the dashboard when an order or a trip changes, so a booking shows up in seconds rather than on the next scheduled pass."
         ],
         "steps": [
           "Departures and check-in: every upcoming trip with capacity, crew and a manifest per booking party. One tap checks a party in, with crew notes, no-shows and a CSV export for the day.",
@@ -104,7 +104,7 @@
       {
         "heading": "How it went",
         "paragraphs": [
-          "The first version went in during August 2025 on a starter kit that read the WordPress database directly. In July 2026 I rebuilt it on a stronger base, moved WordPress access behind a REST plugin, and took the chance to fix what the first version got wrong: a PHP serialisation parser that broke on quotes, tags that could leak between organisations, and a capacity number that was invented. Once check-in moved into the dashboard, the team stopped printing manifests and stopped ringing guests the night before to confirm details, and guides now start the day from their phones. It runs in production on Coolify, and I'm still adding to it."
+          "The first version went in during August 2025 on a starter kit that read the WordPress database directly. In July 2026 we rebuilt it on a stronger base, moved WordPress access behind a REST plugin, and took the chance to fix what the first version got wrong: a PHP serialisation parser that broke on quotes, tags that could leak between organisations, and a capacity number that was invented. Once check-in moved into the dashboard, the team stopped printing manifests and stopped ringing guests the night before to confirm details, and guides now start the day from their phones. It runs in production on Coolify, and we're still adding to it."
         ]
       }
     ],
@@ -128,7 +128,7 @@
     ],
     "asideCta": {
       "heading": "Running your business across four tools that don't talk?",
-      "body": "Tell me what each one holds and where the work falls through the gaps, and I'll tell you what I'd build.",
+      "body": "Tell us what each one holds and where the work falls through the gaps, and we'll tell you what we'd build.",
       "ctaLabel": "Start a project"
     }
   },

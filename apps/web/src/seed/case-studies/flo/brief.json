@@ -21,11 +21,11 @@
   ],
   "caseStudy": {
     "heading": "A bookkeeping assistant you talk to, instead of another dashboard you have to check.",
-    "intro": "Small businesses get their bills by email and someone types them into Xero by hand. invoiceflo is my own product that does that part: it watches Gmail, pulls the details out of each invoice with Claude, files the bill in Xero and only interrupts you when it isn't sure. The interface is a chat with an assistant called flo, not a grid of forms.",
+    "intro": "Small businesses get their bills by email and someone types them into Xero by hand. invoiceflo is our own product that does that part: it watches Gmail, pulls the details out of each invoice with Claude, files the bill in Xero and only interrupts you when it isn't sure. The interface is a chat with an assistant called flo, not a grid of forms.",
     "meta": [
       {
         "label": "Product",
-        "value": "invoiceflo (my own SaaS, private alpha)"
+        "value": "invoiceflo (our own SaaS, private alpha)"
       },
       {
         "label": "Industry",
@@ -67,12 +67,12 @@
       {
         "heading": "The problem",
         "paragraphs": [
-          "Most small businesses I talk to have the same Monday job: open the inbox, find the supplier invoices, download the PDFs, type vendor, date, amount and GST into Xero, pick an account code, repeat. Bookkeeping software has had \"bill capture\" for years, but it still asks you to forward emails somewhere and then review every line in yet another screen.",
-          "I wanted to see whether the whole loop could run on its own and only come to you with the exceptions, in plain language, the way a sharp junior bookkeeper would. The idea came from my own books: every month I was copying the same dozen supplier invoices from Gmail into Xero, and it was exactly the kind of job I build software to get rid of."
+          "Most small businesses we talk to have the same Monday job: open the inbox, find the supplier invoices, download the PDFs, type vendor, date, amount and GST into Xero, pick an account code, repeat. Bookkeeping software has had \"bill capture\" for years, but it still asks you to forward emails somewhere and then review every line in yet another screen.",
+          "We wanted to see whether the whole loop could run on its own and only come to you with the exceptions, in plain language, the way a sharp junior bookkeeper would. The idea came from our own books: every month we were copying the same dozen supplier invoices from Gmail into Xero, and it was exactly the kind of job we build software to get rid of."
         ]
       },
       {
-        "heading": "What I built",
+        "heading": "What we built",
         "paragraphs": [
           "A pnpm monorepo with a Next.js web app (installable as a PWA, with push notifications), an Express API, and a separate worker process running BullMQ queues on Redis. Gmail and Xero connect over OAuth, with Xero tokens stored AES-256-GCM encrypted. Extraction uses Claude Haiku through the Agent SDK; the chat assistant runs on Sonnet with 25 tools it can call against the user's own data.",
           "Every user-facing string lives in one file and was written to a voice spec: lowercase, short, no grovelling, honest when Xero is down. That sounds cosmetic, but it's the product. People trust an assistant that talks like a colleague."
@@ -106,7 +106,7 @@
       {
         "heading": "Where it's at",
         "paragraphs": [
-          "invoiceflo is in private alpha on my own infrastructure, deployed with Docker Compose behind Traefik. The core loop works end to end: scan, extract, file, reconcile, chase. 9 businesses are using it, and it has filed 1,240 invoices so far. What surprised me was how quickly people stopped opening the dashboard: once flo had learned their regular suppliers, most of them only used the chat to answer its questions.",
+          "invoiceflo is in private alpha on our own infrastructure, deployed with Docker Compose behind Traefik. The core loop works end to end: scan, extract, file, reconcile, chase. 9 businesses are using it, and it has filed 1,240 invoices so far. What surprised us was how quickly people stopped opening the dashboard: once flo had learned their regular suppliers, most of them only used the chat to answer its questions.",
           "Next up is QuickBooks Online and a multi-client view for bookkeepers, both deliberately left out of V1 so the Xero path could be made trustworthy first."
         ],
         "figure": {
@@ -127,7 +127,7 @@
       },
       {
         "label": "Still involved?",
-        "value": "Yes. It's my product, in private alpha."
+        "value": "Yes. It's our product, in private alpha."
       },
       {
         "label": "Built with",
@@ -136,7 +136,7 @@
     ],
     "asideCta": {
       "heading": "Got a job someone does by hand every Monday?",
-      "body": "If the rules can be written down, software can do most of it and ask about the rest. Tell me what it is.",
+      "body": "If the rules can be written down, software can do most of it and ask about the rest. Tell us what it is.",
       "ctaLabel": "Start a project"
     }
   },

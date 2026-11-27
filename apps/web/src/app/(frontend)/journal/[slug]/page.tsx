@@ -127,7 +127,7 @@ export default async function ArticlePage({ params }: Params) {
               <p className="text-muted">
                 {site.tagline}{' '}
                 <Link href="/about" className="link-u text-ink">
-                  More about {site.ownerName?.split(' ')[0] ?? 'me'}
+                  More about {site.ownerName?.split(' ')[0] ?? 'the author'}
                 </Link>
                 .
               </p>

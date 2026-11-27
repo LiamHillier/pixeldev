@@ -4,7 +4,7 @@ type P = Awaited<ReturnType<typeof getPayload>>
 type Seo = { title: string; description: string }
 
 const description =
-  'Melbourne software developer building custom software, CRMs, AI automation, Xero and MYOB integrations and WooCommerce sites. One engineer, start to finish.'
+  'Melbourne software developer building custom software, CRMs, AI automation, Xero and MYOB integrations and WooCommerce sites. One point of contact, start to finish.'
 
 export const siteSeo = {
   business: {
@@ -15,7 +15,7 @@ export const siteSeo = {
   seo: {
     defaultDescription: description,
     llmsSummary:
-      'Pixeldev is the Melbourne-based software practice of Liam Hillier: websites, custom software and CRMs, AI automation, systems integrations and managed hosting for small and mid-sized Australian businesses. One engineer handles each project from the first call through launch and ongoing support.',
+      'Pixeldev is the Melbourne-based software practice of Liam Hillier: websites, custom software and CRMs, AI automation, systems integrations and managed hosting for small and mid-sized Australian businesses. Each project has one point of contact from the first call through launch and ongoing support.',
   },
 }
 
@@ -32,7 +32,7 @@ const globals: Record<string, Seo> = {
   'work-page': {
     title: 'Work and Case Studies: Melbourne Software Projects',
     description:
-      'Custom CRMs, integrations, AI automation and WooCommerce builds for businesses in Melbourne and across Australia, plus the software products I run myself.',
+      'Custom CRMs, integrations, AI automation and WooCommerce builds for businesses in Melbourne and across Australia, plus the software products we run ourselves.',
   },
   'about-page': {
     title: 'About Liam Hillier, Melbourne Software Developer',
@@ -42,7 +42,7 @@ const globals: Record<string, Seo> = {
   'contact-page': {
     title: 'Contact a Melbourne Software Developer',
     description:
-      'Tell me what’s slow, manual or broken. Melbourne-based, working Australia-wide, and I reply within one business day with what I’d build and what it costs.',
+      'Tell us what’s slow, manual or broken. Melbourne-based, working Australia-wide, and we reply within one business day with what we’d build and what it costs.',
   },
   'journal-page': {
     title: 'Journal: Software, AI and Integration Guides',

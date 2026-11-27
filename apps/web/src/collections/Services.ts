@@ -83,9 +83,9 @@ export const Services: CollectionConfig = {
             {
               name: 'offerings',
               type: 'group',
-              label: 'What I build',
+              label: 'What we build',
               fields: [
-                { name: 'heading', type: 'text', defaultValue: 'What I build' },
+                { name: 'heading', type: 'text', defaultValue: 'What we build' },
                 { name: 'intro', type: 'textarea' },
                 titledItems('items'),
               ],
@@ -93,9 +93,9 @@ export const Services: CollectionConfig = {
             {
               name: 'approach',
               type: 'group',
-              label: 'How I approach it',
+              label: 'How we approach it',
               fields: [
-                { name: 'heading', type: 'text', defaultValue: 'How I approach it' },
+                { name: 'heading', type: 'text', defaultValue: 'How we approach it' },
                 titledItems('items'),
               ],
             },
@@ -127,7 +127,7 @@ export const Services: CollectionConfig = {
             {
               name: 'faqs',
               type: 'array',
-              label: 'Questions I get asked',
+              label: 'Questions we get asked',
               fields: [
                 { name: 'question', type: 'text', required: true },
                 { name: 'answer', type: 'textarea', required: true },

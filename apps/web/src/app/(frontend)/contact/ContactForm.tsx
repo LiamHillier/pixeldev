@@ -75,7 +75,7 @@ export function ContactForm({
         {budgetOptions.length ? (
           <div className="flex flex-col gap-2">
             <label htmlFor="budget" className={labelCls}>
-              Rough budget (optional, helps me scope)
+              Rough budget (optional, helps us scope)
             </label>
             <select id="budget" name="budget" className="field px-3">
               {budgetOptions.map((o) => (
@@ -99,7 +99,7 @@ export function ContactForm({
         </button>
         <p className="flex-[1_1_260px] text-[15px] text-muted">
           {submitNote ? `${submitNote} ` : null}
-          How I handle your details:{' '}
+          How we handle your details:{' '}
           <Link href="/privacy" className="link-u text-ink">
             privacy policy
           </Link>

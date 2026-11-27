@@ -160,7 +160,7 @@ export default async function ServicePage({ params }: Params) {
 
       {service.offerings?.items?.length ? (
         <SplitSection
-          heading={<TwoTone text={service.offerings.heading ?? 'What I build'} />}
+          heading={<TwoTone text={service.offerings.heading ?? 'What we build'} />}
           intro={service.offerings.intro}
         >
           <RuledList items={service.offerings.items} />
@@ -170,7 +170,7 @@ export default async function ServicePage({ params }: Params) {
       {approach.length ? (
         <section className="section-gap flex flex-col gap-12 lg:gap-16">
           <h2 className="h-section">
-            <TwoTone text={service.approach?.heading ?? 'How I approach it'} />
+            <TwoTone text={service.approach?.heading ?? 'How we approach it'} />
           </h2>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-x-10 gap-y-12">
             {approach.map((a, i) => (

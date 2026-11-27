@@ -21,7 +21,7 @@
   ],
   "caseStudy": {
     "heading": "Selling wine into every US state from a normal WooCommerce store, without a licence in each one.",
-    "intro": "US wineries can only ship direct to consumers in states where they hold a licence. Vinoshipper covers the rest, but it wants to own the checkout. I built a WooCommerce plugin that keeps the winery's own store and payment gateway, and quietly routes the right orders to Vinoshipper after payment.",
+    "intro": "US wineries can only ship direct to consumers in states where they hold a licence. Vinoshipper covers the rest, but it wants to own the checkout. We built a WooCommerce plugin that keeps the winery's own store and payment gateway, and quietly routes the right orders to Vinoshipper after payment.",
     "meta": [
       {
         "label": "Product",
@@ -68,11 +68,11 @@
         "heading": "The problem",
         "paragraphs": [
           "In the US, a winery shipping straight to a customer needs a licence for the state the wine is going to. Most small wineries hold a handful. [Vinoshipper](https://vinoshipper.com) holds the licences and handles the compliance for the rest, but its standard setup assumes you sell through its checkout.",
-          "A winery that already runs WooCommerce, with its own payment gateway, wine club and design, doesn't want two checkouts. It wants one store, where an order to a licensed state ships as normal and an order anywhere else goes to Vinoshipper without anyone retyping it. I first built it for a family winery in Sonoma that was turning away orders from states it wasn't licensed for, and now offer it to other wineries in the same spot."
+          "A winery that already runs WooCommerce, with its own payment gateway, wine club and design, doesn't want two checkouts. It wants one store, where an order to a licensed state ships as normal and an order anywhere else goes to Vinoshipper without anyone retyping it. We first built it for a family winery in Sonoma that was turning away orders from states it wasn't licensed for, and now offer it to other wineries in the same spot."
         ]
       },
       {
-        "heading": "What I built",
+        "heading": "What we built",
         "paragraphs": [
           "A WooCommerce plugin with a React admin inside wp-admin. Payment happens through whatever gateway the store already uses (Square, Stripe or anything else). Once it clears, the plugin checks the shipping state against the winery's list and, if it matches, submits the order to Vinoshipper's API as already paid, matched to Vinoshipper's catalogue by SKU.",
           "Vinoshipper then runs its compliance checks and ships. Its webhooks come back to the store: tracking numbers land on the order and in the customer's account, delivered orders are marked complete, and a compliance rejection puts the order on hold and emails the winery."
@@ -107,7 +107,7 @@
         "heading": "How it went",
         "paragraphs": [
           "The customer sees one store. They pick a shipping rate, pay with the store's usual gateway, and get tracking in their account like any other order. The winery sees Vinoshipper orders alongside the rest in WooCommerce, with problems flagged rather than discovered. For that first winery, it opened up 39 more states without a second checkout, routed more than 400 orders to Vinoshipper in its first three months, and saved its team around five hours a week of retyping orders.",
-          "It's built on the WooCommerce plugin template I use for my own products, with PSR-4 classes, a small dependency container and HPOS-compatible order screens, so it's ready for a paid licence and more wineries."
+          "It's built on the WooCommerce plugin template we use for our own products, with PSR-4 classes, a small dependency container and HPOS-compatible order screens, so it's ready for a paid licence and more wineries."
         ],
         "figure": {
           "file": "fig-3.png",
@@ -136,7 +136,7 @@
     ],
     "asideCta": {
       "heading": "Need WooCommerce to talk to a platform it doesn't support?",
-      "body": "Tell me which systems need to agree on an order and I'll tell you how I'd connect them.",
+      "body": "Tell us which systems need to agree on an order and we'll tell you how we'd connect them.",
       "ctaLabel": "Start a project"
     }
   },

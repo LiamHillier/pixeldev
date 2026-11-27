@@ -23,7 +23,7 @@ export const Work: CollectionConfig = {
       required: true,
       defaultValue: 'client',
       options: [
-        { label: 'Product I run', value: 'product' },
+        { label: 'Product we run', value: 'product' },
         { label: 'Client project', value: 'client' },
         { label: 'Anonymised', value: 'anonymised' },
       ],

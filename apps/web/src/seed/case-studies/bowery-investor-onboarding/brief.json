@@ -21,7 +21,7 @@
   ],
   "caseStudy": {
     "heading": "A staged onboarding workspace that reads the application form, runs the compliance checklist and files the result into the client's own Microsoft 365 register.",
-    "intro": "Bowery runs two private credit funds and onboards wholesale investors by hand: a paper checklist, a shared Excel register and a SharePoint folder per investor. I built them an internal tool that takes a signed application from upload to sign-off, without moving their records out of Microsoft 365. Their staff still make every decision. The app does the reading, filing and bookkeeping around those decisions.",
+    "intro": "Bowery runs two private credit funds and onboards wholesale investors by hand: a paper checklist, a shared Excel register and a SharePoint folder per investor. We built them an internal tool that takes a signed application from upload to sign-off, without moving their records out of Microsoft 365. Their staff still make every decision. The app does the reading, filing and bookkeeping around those decisions.",
     "meta": [
       {
         "label": "Client",
@@ -68,17 +68,17 @@
         "heading": "The problem",
         "paragraphs": [
           "Bowery onboards investors into two funds with different rules: the Diversified Credit Fund and the Mortgage & Investment Fund. Each application arrives as a signed PDF, sometimes filled in on screen, sometimes printed, handwritten and scanned. Staff retyped it into an Excel Master Workbook, filed the paperwork into a SharePoint folder per investor and ticked through a 26-item paper checklist that changes with the investor type: an individual needs different checks from a trust with a corporate trustee.",
-          "The register is the firm's record of truth, so whatever I built could not replace it. It had to fit around it, and leave every compliance decision with a person. As their operations manager put it, every new investor meant an afternoon of retyping, and nobody could say for sure which checks had been done."
+          "The register is the firm's record of truth, so whatever we built could not replace it. It had to fit around it, and leave every compliance decision with a person. As their operations manager put it, every new investor meant an afternoon of retyping, and nobody could say for sure which checks had been done."
         ]
       },
       {
-        "heading": "What I built",
+        "heading": "What we built",
         "paragraphs": [
           "A single-tenant Next.js app behind Microsoft sign-in, locked to Bowery's own tenant. A case moves through seven stages: register link, application, verify, general requirements, entity and structure, AML/KYC, then review and completion. The checklist is Bowery's paper one turned into config, so each investor type only sees the items that apply to it, and the rest are folded away as not applicable rather than hidden.",
           "On Verify, the original PDF sits beside every field the app read from it. Each field carries a confidence score from 0 to 100, anything under 60 is flagged, and nothing goes forward until a person has confirmed or corrected it. Once Verify is confirmed, checklist items the confirmed data already satisfies are pre-ticked with their source shown, and staff can untick any of them."
         ],
         "steps": [
-          "Upload the signed application. It lands in a staging folder in Bowery's SharePoint, never on my servers.",
+          "Upload the signed application. It lands in a staging folder in Bowery's SharePoint, never on our servers.",
           "Link the case to a person in the register. The app suggests matches, but a human always makes the choice.",
           "Confirm the extracted fields against the PDF, then work through the checklist.",
           "Key in the investor number from Axcess. That writes the register row, and the HubSpot push is a separate, optional step.",
@@ -106,7 +106,7 @@
       {
         "heading": "How it went",
         "paragraphs": [
-          "I built it over 130 commits between June and October 2026, working from Bowery's own checklist and register rather than a generic CRM template. Every external system has an in-memory fake behind a flag, so the whole flow runs locally with no Microsoft tenant. That is also how the 674 app tests cover the completion sequencing without Postgres or Graph.",
+          "We built it over 130 commits between June and October 2026, working from Bowery's own checklist and register rather than a generic CRM template. Every external system has an in-memory fake behind a flag, so the whole flow runs locally with no Microsoft tenant. That is also how the 674 app tests cover the completion sequencing without Postgres or Graph.",
           "Since it went into daily use, a typical case moves from received application to sign-off in two to three days instead of around two weeks, and nobody retypes an application into the register any more. The review screen was the part the team warmed to first: in their words, they can finally see what was checked, by whom and against what, and the register still looks exactly like theirs."
         ]
       }
@@ -131,7 +131,7 @@
     ],
     "asideCta": {
       "heading": "Got a process living in a spreadsheet and a checklist?",
-      "body": "I build internal tools that fit around the systems you already trust, and leave the decisions with your people.",
+      "body": "We build internal tools that fit around the systems you already trust, and leave the decisions with your people.",
       "ctaLabel": "Start a project"
     }
   },
