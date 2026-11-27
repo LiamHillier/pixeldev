@@ -53,7 +53,7 @@ const caseRows = [
 export const homeCopy = {
   hero: {
     eyebrow: null,
-    heading: '*Your business is growing.* Your systems should make it {img} easier to run, not harder.',
+    heading: '*Your business is growing.* Your systems should make it easier to run, not harder.',
     intro:
       'We help growing Australian businesses make AI, automation and software work together, so you spend less time managing processes and more time leading your team and doing the work you’re actually good at.',
     primaryCta: { label: 'Talk about your business', href: '/contact' },
