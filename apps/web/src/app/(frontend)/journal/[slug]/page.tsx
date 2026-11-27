@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Figure, ImageBox } from '@/components/Figure'
+import { ImageBox } from '@/components/Figure'
 import { JsonLd } from '@/components/JsonLd'
 import { RichText } from '@/components/RichText'
-import { Crumb, TwoTone } from '@/components/ui'
-import { getAboutPage, getPost, getPosts, getSite } from '@/lib/data'
+import { Crumb, Marquee, TwoTone } from '@/components/ui'
+import { PostVisual, hasDrawnVisual } from '@/components/journal/PostVisual'
+import { getAboutPage, getJournalPage, getPost, getPosts, getSite } from '@/lib/data'
 import { extractHeadings } from '@/lib/lexical'
 import { absoluteUrl, breadcrumbJsonLd, ids, pageMetadata } from '@/lib/seo'
 import { doc, formatDate, media, topicName } from '@/lib/utils'
@@ -34,16 +35,20 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   })
 }
 
+const cardTitle = 'text-[24px] lg:text-[26px] leading-[1.12] tracking-[-0.03em]'
+
 export default async function ArticlePage({ params }: Params) {
   const { slug } = await params
-  const [post, posts, site, about] = await Promise.all([
+  const [post, posts, site, about, page] = await Promise.all([
     getPost(slug),
     getPosts(),
     getSite(),
     getAboutPage(),
+    getJournalPage(),
   ])
   if (!post) notFound()
 
+  const labels = page.article
   const headings = extractHeadings(post.content)
   const service = doc<Service>(post.relatedService)
   const idx = posts.findIndex((p) => p.id === post.id)
@@ -52,9 +57,14 @@ export default async function ArticlePage({ params }: Params) {
   const topic = topicName(post)
   const path = `/journal/${post.slug}`
   const cover = media(post.cover?.image)
+  const showVisual = hasDrawnVisual(post) || Boolean(cover)
+  const photo = media(about.photo?.image)
+  const firstName = site.ownerName?.split(' ')[0]
+  const authorLink = labels?.authorLinkLabel || (firstName ? `More about ${firstName}` : 'More about us')
+  const marquee = (page.marquee?.items ?? []).map((m) => m.name).filter(Boolean)
 
   return (
-    <>
+    <div className="reads">
       <JsonLd
         data={[
           breadcrumbJsonLd([
@@ -83,10 +93,11 @@ export default async function ArticlePage({ params }: Params) {
           },
         ]}
       />
-      <section className="flex flex-col gap-8 lg:gap-10 pt-14">
+
+      <section className="hero-in flex flex-col gap-8 lg:gap-10 pt-10 lg:pt-14">
         <Crumb parent="Journal" parentHref="/journal" current={topic ?? 'Article'} />
         <h1 className="h-detail max-w-[1240px]">
-          <TwoTone text={post.title} />
+          <TwoTone text={post.title} auto pill="toggle" />
         </h1>
         <p className="lead max-w-[780px]">{post.excerpt}</p>
         <p className="text-[16px] text-muted">
@@ -101,33 +112,40 @@ export default async function ArticlePage({ params }: Params) {
         </p>
       </section>
 
-      {post.cover?.image || post.cover?.placeholder ? (
-        <Figure
-          data={post.cover}
-          frameClassName="aspect-[16/6.4] min-h-[220px] bg-tint-blue"
-          className="pt-12"
-          priority
-        />
+      {showVisual ? (
+        <figure className="hero-fig m-0 flex flex-col gap-4 pt-12">
+          <PostVisual
+            post={post}
+            tint="blue"
+            className="min-h-[260px] md:aspect-[16/6.4]"
+            sizes="(min-width: 1408px) 1344px, 100vw"
+            priority
+          />
+          {!hasDrawnVisual(post) && post.cover?.caption ? (
+            <figcaption className="text-[15px] text-muted">{post.cover.caption}</figcaption>
+          ) : null}
+        </figure>
       ) : null}
 
       <section className="flex flex-wrap items-start gap-x-24 gap-y-16 pt-16 lg:pt-[88px]">
-        <article className="flex-[999_1_560px] min-w-0 max-w-[760px]">
-          <RichText data={post.content} />
+        <article className="rv flex-[999_1_560px] min-w-0 max-w-[760px] flex flex-col">
+          <RichText data={post.content} variant="article" />
 
-          <div className="flex flex-wrap items-start gap-x-7 gap-y-5 mt-12 pt-8 border-t border-ink text-[16px] leading-[1.55]">
-            <ImageBox
-              img={media(about.photo?.image)}
-              frameClassName="w-24 aspect-square shrink-0"
-              sizes="96px"
-            />
+          <div className="wipe flex flex-wrap items-start gap-x-7 gap-y-5 mt-16 pt-8 border-t border-ink text-[16px] leading-[1.55]">
+            {photo ? (
+              <ImageBox img={photo} frameClassName="w-24 aspect-square shrink-0" sizes="96px" />
+            ) : null}
             <div className="flex-[1_1_320px] min-w-0 flex flex-col gap-2">
-              <p className="font-display font-medium text-[26px] leading-[1.12] tracking-[-0.03em]">
+              <p className="font-display font-medium text-[26px] leading-[1.12] tracking-[-0.03em] text-ink">
                 {site.ownerName}
               </p>
               <p className="text-muted">
-                {site.tagline}{' '}
-                <Link href="/about" className="link-u text-ink">
-                  More about {site.ownerName?.split(' ')[0] ?? 'the author'}
+                {labels?.authorBio || site.tagline}{' '}
+                <Link
+                  href="/about"
+                  className="text-accent underline underline-offset-4 decoration-1 hover:text-ink"
+                >
+                  {authorLink}
                 </Link>
                 .
               </p>
@@ -135,18 +153,18 @@ export default async function ArticlePage({ params }: Params) {
           </div>
         </article>
 
-        <aside className="flex-[1_1_260px] min-w-0 flex flex-col gap-10 lg:sticky lg:top-8">
+        <aside className="rv flex-[1_1_260px] min-w-0 flex flex-col gap-10">
           {headings.length ? (
             <nav
-              aria-label="In this article"
-              className="flex flex-col pt-5 border-t border-ink text-[16px]"
+              aria-label={labels?.tocLabel || 'In this article'}
+              className="wipe flex flex-col gap-0.5 pt-5 border-t border-ink text-[16px]"
             >
-              <p className="pb-2 text-[15px] text-muted">In this article</p>
+              <p className="pb-2 text-[15px] text-muted">{labels?.tocLabel || 'In this article'}</p>
               {headings.map((h) => (
                 <a
                   key={h.id}
                   href={`#${h.id}`}
-                  className="inline-flex items-center min-h-[44px] hover:text-accent transition-colors"
+                  className="inline-flex items-center min-h-[44px] hover:text-accent"
                 >
                   {h.text}
                 </a>
@@ -156,20 +174,17 @@ export default async function ArticlePage({ params }: Params) {
           {service ? (
             <Link
               href={`/services/${service.slug}`}
-              className="row-hover flex flex-col gap-2.5 p-6 rounded-xl bg-fill"
+              className="case flex flex-col gap-2.5 p-6 rounded-xl bg-fill"
             >
-              <p className="text-[15px] text-muted">Related service</p>
-              <h3 className="text-[26px] leading-[1.12]">{service.title}</h3>
+              <p className="text-[15px] text-muted">{labels?.relatedServiceLabel || 'Related service'}</p>
+              <h3 className={cardTitle}>{service.title}</h3>
               <p className="text-[16px] text-muted">{service.summary}</p>
             </Link>
           ) : null}
           {post.tags?.length ? (
             <div className="flex flex-wrap gap-2 text-[14px] text-body">
               {post.tags.map((t) => (
-                <span
-                  key={t.id ?? t.tag}
-                  className="px-3 py-1.5 rounded-full border border-line"
-                >
+                <span key={t.id ?? t.tag} className="px-3 py-1.5 rounded-full border border-line">
                   {t.tag}
                 </span>
               ))}
@@ -179,35 +194,33 @@ export default async function ArticlePage({ params }: Params) {
       </section>
 
       {prev || next ? (
-        <section className="grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),1fr))] gap-8 pt-28 lg:pt-[136px] pb-24 lg:pb-[136px]">
+        <section className="stagger grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),1fr))] gap-8 pt-28 lg:pt-[136px] pb-[60px]">
           {prev ? (
             <Link
               href={`/journal/${prev.slug}`}
-              className="row-hover flex flex-col gap-3 pt-[22px] border-t-2 border-ink"
+              className="case case-arrow rule2 wipe flex flex-col gap-3 pt-[22px] pr-8"
             >
-              <p className="text-[15px] text-muted">Previous</p>
-              <h3 className="max-w-[560px] text-[24px] lg:text-[26px] leading-[1.12]">
-                {prev.title}
-              </h3>
+              <p className="text-[15px] text-muted">{labels?.previousLabel || 'Previous'}</p>
+              <h3 className={`max-w-[560px] ${cardTitle}`}>{prev.title}</h3>
             </Link>
           ) : (
-            <div />
+            <div aria-hidden="true" />
           )}
           {next ? (
             <Link
               href={`/journal/${next.slug}`}
-              className="row-hover flex flex-col gap-3 pt-[22px] border-t-2 border-ink md:items-end md:text-right"
+              className="case rule2 wipe flex flex-col gap-3 pt-[22px] md:items-end md:text-right"
             >
-              <p className="text-[15px] text-muted">Next</p>
-              <h3 className="max-w-[560px] text-[24px] lg:text-[26px] leading-[1.12]">
-                {next.title}
-              </h3>
+              <p className="text-[15px] text-muted">{labels?.nextLabel || 'Next'}</p>
+              <h3 className={`max-w-[560px] ${cardTitle}`}>{next.title}</h3>
             </Link>
           ) : null}
         </section>
       ) : (
         <div className="pb-24 lg:pb-[136px]" />
       )}
-    </>
+
+      <Marquee items={marquee} label={page.marquee?.label ?? 'Businesses we’ve built for'} />
+    </div>
   )
 }

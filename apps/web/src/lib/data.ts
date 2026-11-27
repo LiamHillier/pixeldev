@@ -125,3 +125,45 @@ export const getTopics = cache(async () => {
   const { docs } = await payload.find({ collection: 'topics', limit: 50, sort: 'name' })
   return docs
 })
+
+/**
+ * Names of direct clients, from Work entries of kind "client" (never anonymised ones). Uses the
+ * case study's "Client" meta value when the title contains it ("Investor onboarding for Bowery"
+ * gives "Bowery"), otherwise the title itself (so a descriptive meta value is never shown).
+ */
+export const getClientNames = cache(async (): Promise<string[]> => {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'work',
+    where: { kind: { equals: 'client' } },
+    sort: 'order',
+    limit: 50,
+    depth: 0,
+  })
+  const names = docs.map((w) => {
+    const client = w.caseStudy?.meta
+      ?.find((m) => m.label.trim().toLowerCase() === 'client')
+      ?.value?.trim()
+    return client && w.title.toLowerCase().includes(client.toLowerCase()) ? client : w.title
+  })
+  return [...new Set(names.filter(Boolean))]
+})
+
+/** The home global with its case-study rows populated far enough to reach their images. */
+export const getHomePage = cache(async () => {
+  const payload = await getPayloadClient()
+  return payload.findGlobal({ slug: 'home', depth: 2 })
+})
+
+/** Direct client projects (not our products, not anonymised work), for the home page name strip. */
+export const getClientWork = cache(async (): Promise<Work[]> => {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'work',
+    where: { kind: { equals: 'client' } },
+    sort: 'order',
+    limit: 50,
+    depth: 0,
+  })
+  return docs
+})

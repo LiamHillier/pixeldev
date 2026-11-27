@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
-import { PageHeader, ULink } from '@/components/ui'
+import { ContactAside } from '@/components/contact/ContactAside'
+import { OptionCards, type OptionCard } from '@/components/contact/OptionCards'
+import { Eyebrow, Marquee, TwoTone, plainHeading } from '@/components/ui'
 import { JsonLd } from '@/components/JsonLd'
-import { getContactPage, getSite } from '@/lib/data'
+import { getClientNames, getContactPage, getSite } from '@/lib/data'
 import { breadcrumbJsonLd, pageMetadata, absoluteUrl, ids } from '@/lib/seo'
-import { cx } from '@/lib/utils'
 import { ContactForm } from './ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,15 +13,42 @@ export async function generateMetadata(): Promise<Metadata> {
     path: '/contact',
     seo: page.seo,
     title: 'Contact',
-    heading: page.heading,
+    heading: plainHeading(page.heading),
     eyebrow: page.eyebrow,
     description: page.intro,
   })
 }
 
 export default async function ContactPage() {
-  const [page, site] = await Promise.all([getContactPage(), getSite()])
-  const steps = page.nextSteps?.items ?? []
+  const [page, site, clients] = await Promise.all([getContactPage(), getSite(), getClientNames()])
+  const steps = (page.nextSteps?.items ?? []).map((s) => s.text).filter(Boolean)
+  const phone = site.business?.phone?.trim() || null
+  const opts = page.options
+  const bookingUrl = opts?.booking?.bookingUrl?.trim()
+
+  const cards: OptionCard[] = []
+  if (bookingUrl) {
+    cards.push({
+      title: opts?.booking?.title || 'Book a 30-minute call',
+      body: opts?.booking?.body,
+      href: bookingUrl,
+      tint: 'teal',
+    })
+  }
+  if (phone) {
+    cards.push({
+      title: `${opts?.call?.title || 'Call'} ${phone}`,
+      body: opts?.call?.body,
+      href: `tel:${phone.replace(/[^\d+]/g, '')}`,
+      tint: 'blue',
+    })
+  }
+  cards.push({
+    title: opts?.message?.title || 'Send a message below',
+    body: opts?.message?.body,
+    href: '#form',
+    tint: 'lilac',
+  })
 
   return (
     <>
@@ -31,15 +59,27 @@ export default async function ContactPage() {
             '@context': 'https://schema.org',
             '@type': 'ContactPage',
             url: absoluteUrl('/contact'),
-            name: page.heading,
+            name: plainHeading(page.heading),
             about: { '@id': ids.business },
           },
         ]}
       />
-      <PageHeader eyebrow={page.eyebrow} heading={page.heading} intro={page.intro} />
 
-      <section className="flex flex-wrap items-start gap-x-24 gap-y-16 pt-16 lg:pt-24 pb-24 lg:pb-[136px]">
-        <div className="flex-[999_1_540px] min-w-0 max-w-[780px]">
+      <section className="hero-in flex flex-col gap-8 lg:gap-12 pt-14 lg:pt-[72px]">
+        {page.eyebrow ? <Eyebrow>{page.eyebrow}</Eyebrow> : null}
+        <h1 className="h-page max-w-[1200px]">
+          <TwoTone text={page.heading} />
+        </h1>
+        {page.intro ? <p className="lead max-w-[700px]">{page.intro}</p> : null}
+      </section>
+
+      <OptionCards cards={cards} />
+
+      <section
+        id="form"
+        className="flex flex-wrap items-start gap-x-24 gap-y-16 pt-24 lg:pt-28 pb-[60px]"
+      >
+        <div className="rv flex-[999_1_540px] min-w-0 max-w-[780px]">
           <ContactForm
             needOptions={(page.form?.needOptions ?? []).map((o) => o.label)}
             budgetOptions={(page.form?.budgetOptions ?? []).map((o) => o.label)}
@@ -50,63 +90,21 @@ export default async function ContactPage() {
           />
         </div>
 
-        <aside className="flex-[1_1_300px] min-w-0 flex flex-col gap-12">
-          {steps.length ? (
-            <div className="flex flex-col">
-              <p className="pb-4 text-[15px] text-muted">{page.nextSteps?.heading}</p>
-              {steps.map((s, i) => (
-                <div
-                  key={s.id ?? i}
-                  className={cx(
-                    'flex gap-5 py-[18px] border-t',
-                    i === 0 ? 'border-ink' : 'border-rule',
-                    i === steps.length - 1 && 'border-b border-b-rule',
-                  )}
-                >
-                  <span
-                    className={cx(
-                      'shrink-0 w-6 font-display font-medium text-[24px] leading-[1.1]',
-                      i === steps.length - 1 ? 'text-ink' : 'text-grey',
-                    )}
-                  >
-                    {i + 1}
-                  </span>
-                  <p className="text-[16px] text-body">{s.text}</p>
-                </div>
-              ))}
-            </div>
-          ) : null}
-          <div className="flex flex-col gap-1 text-[16px]">
-            <p className="pb-2 text-[15px] text-muted">{page.aside?.directHeading ?? 'Or directly'}</p>
-            {site.email ? (
-              <ULink href={`mailto:${site.email}`} className="self-start text-[16px]">
-                {site.email}
-              </ULink>
-            ) : null}
-            {site.linkedin ? (
-              <ULink href={site.linkedin} className="self-start text-[16px]">
-                LinkedIn
-              </ULink>
-            ) : null}
-            {page.aside?.directNote ? (
-              <p className="pt-2 text-muted">{page.aside.directNote}</p>
-            ) : null}
-          </div>
-          {page.aside?.supportHeading ? (
-            <div className="flex flex-col gap-2 p-6 rounded-xl bg-fill text-[16px]">
-              <p className="font-medium">{page.aside.supportHeading}</p>
-              <p className="text-muted">
-                {page.aside.supportNote}{' '}
-                {site.supportEmail ? (
-                  <a href={`mailto:${site.supportEmail}`} className="link-u text-ink">
-                    {site.supportEmail}
-                  </a>
-                ) : null}
-              </p>
-            </div>
-          ) : null}
-        </aside>
+        <ContactAside
+          stepsHeading={page.nextSteps?.heading}
+          steps={steps}
+          directHeading={page.aside?.directHeading}
+          email={site.email}
+          phone={phone}
+          linkedin={site.linkedin}
+          directNote={page.aside?.directNote}
+          supportHeading={page.aside?.supportHeading}
+          supportNote={page.aside?.supportNote}
+          supportEmail={site.supportEmail || site.email}
+        />
       </section>
+
+      <Marquee items={clients} label="Businesses we’ve built for" />
     </>
   )
 }

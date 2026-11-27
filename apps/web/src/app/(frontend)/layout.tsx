@@ -46,12 +46,14 @@ export default async function FrontendLayout({ children }: { children: ReactNode
   return (
     <html lang="en-AU" className={`${funnelDisplay.variable} ${funnelSans.variable}`}>
       <body className="overflow-x-clip">
-        <JsonLd data={businessJsonLd(site)} />
-        <Container>
-          <Header name={site.name} nav={nav} ctaLabel={site.headerCtaLabel ?? "Let's talk"} />
-          <main>{children}</main>
-        </Container>
-        <Footer site={site} services={services} />
+        <JsonLd data={businessJsonLd(site, services)} />
+        <div className="pxm">
+          <Container>
+            <Header name={site.name} nav={nav} ctaLabel={site.headerCtaLabel ?? "Let's talk"} />
+            <main>{children}</main>
+          </Container>
+          <Footer site={site} services={services} />
+        </div>
       </body>
     </html>
   )

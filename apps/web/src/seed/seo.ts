@@ -4,7 +4,7 @@ type P = Awaited<ReturnType<typeof getPayload>>
 type Seo = { title: string; description: string }
 
 const description =
-  'Melbourne software developer building custom software, CRMs, AI automation, Xero and MYOB integrations and WooCommerce sites. One point of contact, start to finish.'
+  'Melbourne software developers building custom software, CRMs, AI automation, Xero and MYOB integrations and WooCommerce sites for businesses across Australia.'
 
 export const siteSeo = {
   business: {
@@ -15,7 +15,7 @@ export const siteSeo = {
   seo: {
     defaultDescription: description,
     llmsSummary:
-      'Pixeldev is the Melbourne-based software practice of Liam Hillier: websites, custom software and CRMs, AI automation, systems integrations and managed hosting for small and mid-sized Australian businesses. Each project has one point of contact from the first call through launch and ongoing support.',
+      'Pixeldev is a Melbourne software development business founded by Liam Hillier. We build websites, custom software and CRMs, AI automation, systems integrations and managed hosting for small and mid-sized Australian businesses. Each project has one point of contact from the first call through launch and ongoing support.',
   },
 }
 

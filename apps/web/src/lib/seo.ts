@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getSite } from './data'
 import { media } from './utils'
+import { plainHeading } from '@/components/ui'
 import type { Media, Site } from '@/payload-types'
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000').replace(
@@ -50,7 +51,9 @@ type PageMeta = {
   absoluteTitle?: boolean
 }
 
-export async function pageMetadata(p: PageMeta): Promise<Metadata> {
+export async function pageMetadata(input: PageMeta): Promise<Metadata> {
+  // Headings can carry two-tone markup (*grey*, ~ink~, {pill}); metadata wants plain text.
+  const p = { ...input, title: plainHeading(input.title), heading: plainHeading(input.heading) || null }
   const site = await getSite()
   const title = p.seo?.title || p.title
   const description = clip(
@@ -122,11 +125,43 @@ function profileUrls(site: Site): string[] {
   })
 }
 
-export function businessJsonLd(site: Site) {
+/**
+ * Known Australian places, typed and tied to Wikidata so search engines and AI assistants resolve
+ * "Melbourne" to Melbourne, Victoria, not Melbourne, Florida.
+ */
+const knownPlaces: Record<string, { type: string; wikidata: string }> = {
+  melbourne: { type: 'City', wikidata: 'Q3141' },
+  victoria: { type: 'State', wikidata: 'Q36687' },
+  australia: { type: 'Country', wikidata: 'Q408' },
+}
+
+export function placeJsonLd(name: string) {
+  const known = knownPlaces[name.trim().toLowerCase()]
+  return known
+    ? { '@type': known.type, name, sameAs: `https://www.wikidata.org/wiki/${known.wikidata}` }
+    : { '@type': 'Place', name }
+}
+
+export function areasServed(site: Site): string[] {
+  const areas = site.business?.areaServed
+  return areas?.length ? areas.map((a) => a.name) : ['Melbourne', 'Victoria', 'Australia']
+}
+
+/** A standing FAQ for the question every visitor outside Melbourne has. */
+export function locationFaq(site: Site): { question: string; answer: string } {
+  const city = site.business?.locality || 'Melbourne'
+  return {
+    question: `Do you only work with ${city} businesses?`,
+    answer: `No. We're based in ${city} and work with businesses across Victoria and the rest of Australia. Calls and screen shares cover most of a project, and every enquiry gets a reply within one business day.`,
+  }
+}
+
+type ServiceRef = { title: string; slug?: string | null; summary?: string | null }
+
+export function businessJsonLd(site: Site, services: ServiceRef[] = []) {
   const b = site.business
-  const areas = b?.areaServed?.length
-    ? b.areaServed.map((a) => a.name)
-    : ['Melbourne', 'Victoria', 'Australia']
+  const areas = areasServed(site)
+  const abn = site.abn?.replace(/\s+/g, '')
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -134,13 +169,27 @@ export function businessJsonLd(site: Site) {
         '@type': 'ProfessionalService',
         '@id': ids.business,
         name: site.name,
+        legalName: site.ownerName ? `${site.ownerName} trading as ${site.name}` : undefined,
         url: siteUrl,
         description: site.seo?.defaultDescription || site.tagline,
+        slogan: site.tagline ?? undefined,
         email: site.email ?? undefined,
         telephone: b?.phone || undefined,
         priceRange: b?.priceRange || undefined,
+        currenciesAccepted: 'AUD',
         image: absoluteUrl('/og'),
         logo: absoluteUrl('/logo.png'),
+        ...(abn
+          ? {
+              taxID: abn,
+              identifier: {
+                '@type': 'PropertyValue',
+                propertyID: 'ABN',
+                value: abn,
+                url: `https://abr.business.gov.au/ABN/View?abn=${abn}`,
+              },
+            }
+          : {}),
         address: {
           '@type': 'PostalAddress',
           streetAddress: b?.streetAddress || undefined,
@@ -149,9 +198,36 @@ export function businessJsonLd(site: Site) {
           postalCode: b?.postcode || undefined,
           addressCountry: 'AU',
         },
-        areaServed: areas.map((name) => ({ '@type': 'Place', name })),
+        areaServed: areas.map(placeJsonLd),
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'sales',
+          email: site.email ?? undefined,
+          telephone: b?.phone || undefined,
+          url: absoluteUrl('/contact'),
+          areaServed: 'AU',
+          availableLanguage: 'English',
+        },
         founder: { '@id': ids.person },
         sameAs: profileUrls(site),
+        ...(services.length
+          ? {
+              hasOfferCatalog: {
+                '@type': 'OfferCatalog',
+                name: 'Services',
+                itemListElement: services.filter((s) => s.slug).map((s) => ({
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@id': absoluteUrl(`/services/${s.slug}#service`),
+                    '@type': 'Service',
+                    name: s.title,
+                    description: s.summary ?? undefined,
+                    url: absoluteUrl(`/services/${s.slug}`),
+                  },
+                })),
+              },
+            }
+          : {}),
         knowsAbout: [
           'Custom software development',
           'CRM development',
@@ -168,10 +244,10 @@ export function businessJsonLd(site: Site) {
         '@type': 'Person',
         '@id': ids.person,
         name: site.ownerName,
-        jobTitle: 'Software developer',
+        jobTitle: 'Founder and software developer',
         worksFor: { '@id': ids.business },
         url: absoluteUrl('/about'),
-        homeLocation: { '@type': 'Place', name: 'Melbourne, Victoria, Australia' },
+        homeLocation: placeJsonLd(b?.locality || 'Melbourne'),
         sameAs: profileUrls(site),
       },
       {
@@ -181,6 +257,7 @@ export function businessJsonLd(site: Site) {
         name: site.name,
         inLanguage: 'en-AU',
         publisher: { '@id': ids.business },
+        about: { '@id': ids.business },
       },
     ],
   }

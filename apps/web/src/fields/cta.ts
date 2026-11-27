@@ -54,3 +54,18 @@ export const closingField: Field = {
     { name: 'ctaLabel', type: 'text', defaultValue: 'Start a project' },
   ],
 }
+
+/** Eyebrow, heading and intro: the hero fields every page global starts with. */
+export const pageHeader = [
+  { name: 'eyebrow', type: 'text' },
+  {
+    name: 'heading',
+    type: 'text',
+    required: true,
+    admin: {
+      description:
+        'Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.',
+    },
+  },
+  { name: 'intro', type: 'textarea' },
+] as const

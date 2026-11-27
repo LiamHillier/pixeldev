@@ -167,9 +167,12 @@ export interface Service {
    */
   examples?: string | null;
   /**
-   * Paragraph on the services index page.
+   * Paragraph beside the title on the services index page.
    */
   indexIntro?: string | null;
+  /**
+   * The short ruled list on the right of the services index row.
+   */
   indexItems?:
     | {
         text: string;
@@ -178,6 +181,9 @@ export interface Service {
     | null;
   indexLinkLabel?: string | null;
   hero: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph. Example: "Hosting from someone {live} *who knows the code.*"
+     */
     heading: string;
     intro: string;
     primaryCta?: {
@@ -195,6 +201,33 @@ export interface Service {
       href?: string | null;
     };
   };
+  /**
+   * A small animated diagram under the hero: inputs on the left, a dark box in the middle, results on the right. When it has inputs it replaces the figure below.
+   */
+  diagram?: {
+    /**
+     * Left column. Their lights pulse in turn.
+     */
+    inputs?:
+      | {
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    hubTitle?: string | null;
+    hubNote?: string | null;
+    /**
+     * Right column.
+     */
+    outputs?:
+      | {
+          label: string;
+          waiting?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    caption?: string | null;
+  };
   figure?: {
     image?: (number | null) | Media;
     /**
@@ -203,7 +236,13 @@ export interface Service {
     placeholder?: string | null;
     caption?: string | null;
   };
+  /**
+   * The grey band of short statements.
+   */
   painPoints?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     items?:
       | {
@@ -213,7 +252,13 @@ export interface Service {
         }[]
       | null;
   };
+  /**
+   * Heading and intro on the left, a numbered ruled list on the right.
+   */
   offerings?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     intro?: string | null;
     items?:
@@ -224,7 +269,13 @@ export interface Service {
         }[]
       | null;
   };
+  /**
+   * Three steps under large outlined numerals.
+   */
   approach?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     items?:
       | {
@@ -234,20 +285,43 @@ export interface Service {
         }[]
       | null;
   };
+  /**
+   * Grey plan cards, e.g. the CloudPerch plans on Hosting.
+   */
   plans?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     intro?: string | null;
     items?:
       | {
           name: string;
+          /**
+           * Leave blank to hide.
+           */
           price?: string | null;
+          /**
+           * Who it is for.
+           */
           body?: string | null;
           href?: string | null;
           id?: string | null;
         }[]
       | null;
   };
+  /**
+   * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+   */
+  relatedHeading?: string | null;
   relatedWork?: (number | Work)[] | null;
+  /**
+   * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+   */
+  faqsHeading?: string | null;
+  /**
+   * The "Do you only work with Melbourne businesses?" question is added automatically after these.
+   */
   faqs?:
     | {
         question: string;
@@ -255,6 +329,9 @@ export interface Service {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Dark closing panel. Heading: Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph. Usual form: "~Lead~ *grey tail*".
+   */
   closing?: {
     heading?: string | null;
     body?: string | null;
@@ -718,6 +795,26 @@ export interface ServicesSelect<T extends boolean = true> {
               href?: T;
             };
       };
+  diagram?:
+    | T
+    | {
+        inputs?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
+        hubTitle?: T;
+        hubNote?: T;
+        outputs?:
+          | T
+          | {
+              label?: T;
+              waiting?: T;
+              id?: T;
+            };
+        caption?: T;
+      };
   figure?:
     | T
     | {
@@ -777,7 +874,9 @@ export interface ServicesSelect<T extends boolean = true> {
               id?: T;
             };
       };
+  relatedHeading?: T;
   relatedWork?: T;
+  faqsHeading?: T;
   faqs?:
     | T
     | {
@@ -1164,9 +1263,12 @@ export interface Home {
   id: number;
   hero: {
     /**
-     * Small label above the heading. A good place for what you do and where.
+     * Optional small label above the heading.
      */
     eyebrow?: string | null;
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading: string;
     intro: string;
     primaryCta?: {
@@ -1183,13 +1285,6 @@ export interface Home {
        */
       href?: string | null;
     };
-    facts?:
-      | {
-          label: string;
-          value: string;
-          id?: string | null;
-        }[]
-      | null;
   };
   figure?: {
     image?: (number | null) | Media;
@@ -1199,16 +1294,105 @@ export interface Home {
     placeholder?: string | null;
     caption?: string | null;
   };
-  servicesSection?: {
-    eyebrow?: string | null;
-    note?: string | null;
+  /**
+   * If set, the browser frame shows this project's case study hero image instead of the image above. The caption above still applies.
+   */
+  figureWork?: (number | null) | Work;
+  /**
+   * The names come from Work: every project whose kind is "Client project", in Work order.
+   */
+  marquee?: {
+    /**
+     * Second caption line beside the lead figure, introducing the strip.
+     */
+    intro?: string | null;
+    /**
+     * Read out by screen readers for the strip.
+     */
+    label?: string | null;
   };
+  familiar?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
+    heading?: string | null;
+    statements?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Closing line under the statements. Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
+    closing?: string | null;
+  };
+  approach?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
+    heading?: string | null;
+    intro?: string | null;
+    steps?:
+      | {
+          title: string;
+          body: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Lead-in for the sentence that links every service page.
+     */
+    toolsLead?: string | null;
+  };
+  stats?:
+    | {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   workSection?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     linkLabel?: string | null;
+    /**
+     * Each row shows the project’s card image and links to its case study. Leave "What changed" empty to hide it.
+     */
+    cases?:
+      | {
+          work: number | Work;
+          /**
+           * Short name for the row. Defaults to the project title.
+           */
+          title?: string | null;
+          struggle?: string | null;
+          built?: string | null;
+          changed?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  testimonial?: {
+    quote?: string | null;
+    attribution?: string | null;
+    /**
+     * Headline result in the box with the teal rule.
+     */
+    result?: string | null;
+    /**
+     * Small line under the result.
+     */
+    resultNote?: string | null;
   };
   process?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
+    note?: string | null;
     steps?:
       | {
           title: string;
@@ -1218,7 +1402,13 @@ export interface Home {
       | null;
   };
   about?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
+    /**
+     * Leave a blank line between paragraphs.
+     */
     body?: string | null;
     linkLabel?: string | null;
     photo?: {
@@ -1230,14 +1420,24 @@ export interface Home {
       caption?: string | null;
     };
   };
-  testimonial?: {
-    quote?: string | null;
-    attribution?: string | null;
-  };
   closing?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     body?: string | null;
     ctaLabel?: string | null;
+    secondaryCta?: {
+      label?: string | null;
+      /**
+       * Internal path (/contact) or full URL.
+       */
+      href?: string | null;
+    };
+    /**
+     * Shown before the phone number from Site settings. Hidden when no phone number is set.
+     */
+    phoneLabel?: string | null;
   };
   /**
    * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
@@ -1261,26 +1461,43 @@ export interface Home {
   createdAt?: string | null;
 }
 /**
+ * The services index. The five service rows come from the Services collection (title, index intro, index bullet list and link label).
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services-page".
  */
 export interface ServicesPage {
   id: number;
   eyebrow?: string | null;
+  /**
+   * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+   */
   heading: string;
   intro?: string | null;
+  /**
+   * The grey band of engagement options under the service rows.
+   */
   engagement?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     intro?: string | null;
     options?:
       | {
           title: string;
+          /**
+           * Optional. Shown under the title when set.
+           */
           price?: string | null;
           body: string;
           id?: string | null;
         }[]
       | null;
   };
+  /**
+   * Dark closing panel. Heading: Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph. Usual form: "~Lead~ *grey tail*".
+   */
   closing?: {
     heading?: string | null;
     body?: string | null;
@@ -1314,20 +1531,85 @@ export interface ServicesPage {
 export interface WorkPage {
   id: number;
   eyebrow?: string | null;
+  /**
+   * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+   */
   heading: string;
   intro?: string | null;
   products?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     intro?: string | null;
+    /**
+     * Jump link under the page intro.
+     */
+    navLabel?: string | null;
   };
   clients?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     intro?: string | null;
+    /**
+     * Small print under the intro.
+     */
     note?: string | null;
+    /**
+     * Jump link under the page intro.
+     */
+    navLabel?: string | null;
   };
   anonymised?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     intro?: string | null;
+    /**
+     * Jump link under the page intro.
+     */
+    navLabel?: string | null;
+  };
+  labels?: {
+    readCaseStudy?: string | null;
+    comingSoon?: string | null;
+  };
+  closing?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
+    heading?: string | null;
+    body?: string | null;
+    ctaLabel?: string | null;
+  };
+  /**
+   * Shared labels on every case study page.
+   */
+  caseStudy?: {
+    atAGlanceLabel?: string | null;
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
+    moreHeading?: string | null;
+    moreLinkLabel?: string | null;
+  };
+  marquee?: {
+    /**
+     * Read out by screen readers for the strip.
+     */
+    label?: string | null;
+    /**
+     * Only name direct clients and our own products.
+     */
+    items?:
+      | {
+          name: string;
+          id?: string | null;
+        }[]
+      | null;
   };
   /**
    * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
@@ -1357,8 +1639,14 @@ export interface WorkPage {
 export interface AboutPage {
   id: number;
   eyebrow?: string | null;
+  /**
+   * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+   */
   heading: string;
   intro?: string | null;
+  /**
+   * Second paragraph under the intro, beside the photo.
+   */
   body?: string | null;
   photo?: {
     image?: (number | null) | Media;
@@ -1368,6 +1656,13 @@ export interface AboutPage {
     placeholder?: string | null;
     caption?: string | null;
   };
+  stats?:
+    | {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   facts?:
     | {
         label: string;
@@ -1375,7 +1670,16 @@ export interface AboutPage {
         id?: string | null;
       }[]
     | null;
+  /**
+   * The names come from Work entries marked "Client project", so only direct clients are listed.
+   */
+  clients?: {
+    label?: string | null;
+  };
   background?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     items?:
       | {
@@ -1386,6 +1690,9 @@ export interface AboutPage {
       | null;
   };
   promises?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     items?:
       | {
@@ -1396,6 +1703,9 @@ export interface AboutPage {
       | null;
   };
   solo?: {
+    /**
+     * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+     */
     heading?: string | null;
     body?: string | null;
   };
@@ -1432,8 +1742,35 @@ export interface AboutPage {
 export interface ContactPage {
   id: number;
   eyebrow?: string | null;
+  /**
+   * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+   */
   heading: string;
   intro?: string | null;
+  /**
+   * The tinted cards under the heading. The booking card shows only when a booking link is set, and the call card only when Site settings has a phone number.
+   */
+  options?: {
+    booking?: {
+      title?: string | null;
+      body?: string | null;
+      /**
+       * Full URL of the booking page. Leave blank to hide the card.
+       */
+      bookingUrl?: string | null;
+    };
+    call?: {
+      /**
+       * Shown before the phone number from Site settings.
+       */
+      title?: string | null;
+      body?: string | null;
+    };
+    message?: {
+      title?: string | null;
+      body?: string | null;
+    };
+  };
   form?: {
     needOptions?:
       | {
@@ -1465,6 +1802,9 @@ export interface ContactPage {
     directHeading?: string | null;
     directNote?: string | null;
     supportHeading?: string | null;
+    /**
+     * Write {email} where the support address goes (Site settings support email, else the main email). Leave the heading blank to hide the note.
+     */
     supportNote?: string | null;
   };
   /**
@@ -1495,8 +1835,46 @@ export interface ContactPage {
 export interface JournalPage {
   id: number;
   eyebrow?: string | null;
+  /**
+   * Two tones: wrap the grey part in *stars*. ~Tildes~ ink in on scroll. {toggle}, {sync}, {live} or {img} add a pill glyph.
+   */
   heading: string;
   intro?: string | null;
+  index?: {
+    topicsLabel?: string | null;
+    featuredLabel?: string | null;
+    readLabel?: string | null;
+    emptyLabel?: string | null;
+  };
+  /**
+   * Shared labels and the author box on every article.
+   */
+  article?: {
+    tocLabel?: string | null;
+    relatedServiceLabel?: string | null;
+    previousLabel?: string | null;
+    nextLabel?: string | null;
+    /**
+     * Third person, about the founder. The name above it comes from Site settings (owner name), the photo from the About page.
+     */
+    authorBio?: string | null;
+    authorLinkLabel?: string | null;
+  };
+  marquee?: {
+    /**
+     * Read out by screen readers for the strip.
+     */
+    label?: string | null;
+    /**
+     * Only name direct clients and our own products.
+     */
+    items?:
+      | {
+          name: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   /**
    * How this page appears in Google and when shared. Leave blank to use the page heading and intro.
    */
@@ -1602,13 +1980,6 @@ export interface HomeSelect<T extends boolean = true> {
               label?: T;
               href?: T;
             };
-        facts?:
-          | T
-          | {
-              label?: T;
-              value?: T;
-              id?: T;
-            };
       };
   figure?:
     | T
@@ -1617,22 +1988,75 @@ export interface HomeSelect<T extends boolean = true> {
         placeholder?: T;
         caption?: T;
       };
-  servicesSection?:
+  figureWork?: T;
+  marquee?:
     | T
     | {
-        eyebrow?: T;
-        note?: T;
+        intro?: T;
+        label?: T;
+      };
+  familiar?:
+    | T
+    | {
+        heading?: T;
+        statements?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        closing?: T;
+      };
+  approach?:
+    | T
+    | {
+        heading?: T;
+        intro?: T;
+        steps?:
+          | T
+          | {
+              title?: T;
+              body?: T;
+              id?: T;
+            };
+        toolsLead?: T;
+      };
+  stats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
       };
   workSection?:
     | T
     | {
         heading?: T;
         linkLabel?: T;
+        cases?:
+          | T
+          | {
+              work?: T;
+              title?: T;
+              struggle?: T;
+              built?: T;
+              changed?: T;
+              id?: T;
+            };
+      };
+  testimonial?:
+    | T
+    | {
+        quote?: T;
+        attribution?: T;
+        result?: T;
+        resultNote?: T;
       };
   process?:
     | T
     | {
         heading?: T;
+        note?: T;
         steps?:
           | T
           | {
@@ -1655,18 +2079,19 @@ export interface HomeSelect<T extends boolean = true> {
               caption?: T;
             };
       };
-  testimonial?:
-    | T
-    | {
-        quote?: T;
-        attribution?: T;
-      };
   closing?:
     | T
     | {
         heading?: T;
         body?: T;
         ctaLabel?: T;
+        secondaryCta?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+            };
+        phoneLabel?: T;
       };
   seo?:
     | T
@@ -1734,6 +2159,7 @@ export interface WorkPageSelect<T extends boolean = true> {
     | {
         heading?: T;
         intro?: T;
+        navLabel?: T;
       };
   clients?:
     | T
@@ -1741,12 +2167,45 @@ export interface WorkPageSelect<T extends boolean = true> {
         heading?: T;
         intro?: T;
         note?: T;
+        navLabel?: T;
       };
   anonymised?:
     | T
     | {
         heading?: T;
         intro?: T;
+        navLabel?: T;
+      };
+  labels?:
+    | T
+    | {
+        readCaseStudy?: T;
+        comingSoon?: T;
+      };
+  closing?:
+    | T
+    | {
+        heading?: T;
+        body?: T;
+        ctaLabel?: T;
+      };
+  caseStudy?:
+    | T
+    | {
+        atAGlanceLabel?: T;
+        moreHeading?: T;
+        moreLinkLabel?: T;
+      };
+  marquee?:
+    | T
+    | {
+        label?: T;
+        items?:
+          | T
+          | {
+              name?: T;
+              id?: T;
+            };
       };
   seo?:
     | T
@@ -1776,12 +2235,24 @@ export interface AboutPageSelect<T extends boolean = true> {
         placeholder?: T;
         caption?: T;
       };
+  stats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
   facts?:
     | T
     | {
         label?: T;
         value?: T;
         id?: T;
+      };
+  clients?:
+    | T
+    | {
+        label?: T;
       };
   background?:
     | T
@@ -1840,6 +2311,29 @@ export interface ContactPageSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
   intro?: T;
+  options?:
+    | T
+    | {
+        booking?:
+          | T
+          | {
+              title?: T;
+              body?: T;
+              bookingUrl?: T;
+            };
+        call?:
+          | T
+          | {
+              title?: T;
+              body?: T;
+            };
+        message?:
+          | T
+          | {
+              title?: T;
+              body?: T;
+            };
+      };
   form?:
     | T
     | {
@@ -1899,6 +2393,35 @@ export interface JournalPageSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
   intro?: T;
+  index?:
+    | T
+    | {
+        topicsLabel?: T;
+        featuredLabel?: T;
+        readLabel?: T;
+        emptyLabel?: T;
+      };
+  article?:
+    | T
+    | {
+        tocLabel?: T;
+        relatedServiceLabel?: T;
+        previousLabel?: T;
+        nextLabel?: T;
+        authorBio?: T;
+        authorLinkLabel?: T;
+      };
+  marquee?:
+    | T
+    | {
+        label?: T;
+        items?:
+          | T
+          | {
+              name?: T;
+              id?: T;
+            };
+      };
   seo?:
     | T
     | {

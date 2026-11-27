@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
+import { ClientNames } from '@/components/about/ClientNames'
 import { Figure } from '@/components/Figure'
-import { ClosingCta, Eyebrow, RuledList, SplitSection, TwoTone } from '@/components/ui'
+import { ClosingCta, Eyebrow, Marquee, SmartLink, StatBand, TwoTone, plainHeading } from '@/components/ui'
 import { JsonLd } from '@/components/JsonLd'
-import { getAboutPage } from '@/lib/data'
+import { getAboutPage, getClientNames, getContactPage, getSite } from '@/lib/data'
 import { breadcrumbJsonLd, pageMetadata, absoluteUrl, ids } from '@/lib/seo'
-import { cx } from '@/lib/utils'
+import { cx, media } from '@/lib/utils'
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getAboutPage()
@@ -12,16 +13,24 @@ export async function generateMetadata(): Promise<Metadata> {
     path: '/about',
     seo: page.seo,
     title: 'About',
-    heading: page.heading,
+    heading: plainHeading(page.heading),
     eyebrow: page.eyebrow,
     description: page.intro,
   })
 }
 
 export default async function AboutPage() {
-  const page = await getAboutPage()
+  const [page, site, contact, clients] = await Promise.all([
+    getAboutPage(),
+    getSite(),
+    getContactPage(),
+    getClientNames(),
+  ])
   const background = page.background?.items ?? []
   const promises = page.promises?.items ?? []
+  const hasPhoto = Boolean(media(page.photo?.image)?.url)
+  const phone = site.business?.phone?.trim()
+  const bookingUrl = contact.options?.booking?.bookingUrl?.trim()
 
   return (
     <>
@@ -32,12 +41,13 @@ export default async function AboutPage() {
             '@context': 'https://schema.org',
             '@type': 'AboutPage',
             url: absoluteUrl('/about'),
-            name: page.heading,
+            name: plainHeading(page.heading),
             mainEntity: { '@id': ids.person },
           },
         ]}
       />
-      <section className="flex flex-wrap items-end gap-x-24 gap-y-12 pt-14 lg:pt-[72px]">
+
+      <section className="hero-in flex flex-wrap items-end gap-x-[88px] gap-y-12 pt-14 lg:pt-[72px]">
         <div className="flex-[2_1_520px] min-w-0 flex flex-col gap-8 lg:gap-10">
           {page.eyebrow ? <Eyebrow>{page.eyebrow}</Eyebrow> : null}
           <h1 className="h-page">
@@ -49,69 +59,78 @@ export default async function AboutPage() {
           ) : null}
         </div>
         <Figure
-          data={page.photo}
-          frameClassName="aspect-[4/5]"
+          data={{ ...page.photo, placeholder: null }}
+          frameClassName={cx('aspect-[4/5]', !hasPhoto && 'ph')}
           className="flex-[1_1_340px] max-w-[480px]"
           sizes="(min-width: 1024px) 480px, 100vw"
           priority
         />
       </section>
 
-      {page.facts?.length ? (
-        <section className="pt-20 lg:pt-28">
-          <dl className="m-0 grid grid-cols-[repeat(auto-fit,minmax(min(240px,100%),1fr))] gap-x-8 gap-y-8 py-12 lg:py-14 border-t border-b border-rule">
-            {page.facts.map((f) => (
-              <div key={f.id ?? f.label} className="flex flex-col gap-2">
-                <dt className="text-[15px] text-muted">{f.label}</dt>
-                <dd className="m-0 font-display font-medium text-[24px] lg:text-[28px] leading-[1.15] tracking-[-0.03em]">
-                  {f.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-      ) : null}
+      <StatBand stats={page.stats} />
+
+      <ClientNames label={page.clients?.label} names={clients} />
 
       {background.length ? (
-        <SplitSection heading={<TwoTone text={page.background?.heading} />}>
-          <div className="flex flex-col">
+        <section className="flex flex-wrap items-start gap-x-24 gap-y-10 pt-24 lg:pt-[110px]">
+          <h2 className="rv h-section flex-[1_1_380px] min-w-0">
+            <TwoTone text={page.background?.heading} />
+          </h2>
+          <div className="rv flex-[1.4_1_480px] min-w-0 flex flex-col">
             {background.map((b, i) => (
               <div
                 key={b.id ?? i}
                 className={cx(
                   'flex flex-col gap-2.5 py-[26px] border-t',
-                  i === 0 ? 'border-ink' : 'border-rule',
+                  i === 0 ? 'wipe border-ink' : 'border-rule',
                   i === background.length - 1 && 'border-b border-b-rule',
                 )}
               >
-                <h3 className="text-[24px] lg:text-[26px] leading-[1.12]">{b.title}</h3>
+                <h3 className="text-[24px] lg:text-[26px] leading-[1.12] tracking-[-0.03em]">
+                  {b.title}
+                </h3>
                 <p className="text-[16px] text-muted">{b.body}</p>
               </div>
             ))}
           </div>
-        </SplitSection>
+        </section>
       ) : null}
 
       {promises.length ? (
-        <section className="section-gap">
-          <div className="flex flex-wrap items-start gap-x-24 gap-y-10 p-6 sm:p-10 lg:p-16 rounded-xl bg-fill">
+        <section className="pt-24 lg:pt-[110px]">
+          <div
+            className="rv flex flex-wrap items-start gap-x-24 gap-y-10 rounded-xl bg-fill"
+            style={{ padding: 'clamp(28px, 4.4vw, 64px)' }}
+          >
             <h2 className="h-section flex-[1_1_340px] min-w-0">
               <TwoTone text={page.promises?.heading} />
             </h2>
-            <div className="flex-[1.4_1_460px] min-w-0 [&_li:last-child]:border-b-0 [&_li:last-child]:pb-0">
-              <RuledList items={promises} />
-            </div>
+            <ul className="ruled rv-li flex-[1.4_1_460px] min-w-0 flex flex-col">
+              {promises.map((p, i) => (
+                <li
+                  key={p.id ?? i}
+                  className={cx(
+                    'flex flex-col gap-1.5 pr-12 border-t',
+                    i === 0 ? 'border-ink' : 'border-line',
+                    i === promises.length - 1 ? 'pt-[22px]' : 'py-[22px]',
+                  )}
+                >
+                  <span className="text-[19px] font-medium tracking-[-0.02em]">{p.title}</span>
+                  <span className="text-[16px] text-muted">{p.body}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       ) : null}
 
       {page.solo?.heading ? (
         <section className="section-gap flex flex-wrap items-start gap-x-24 gap-y-8">
-          <h2 className="h-section flex-[1_1_380px] min-w-0">
+          <h2 className="rv h-section flex-[1_1_380px] min-w-0">
             <TwoTone text={page.solo.heading} />
           </h2>
           {page.solo.body ? (
-            <p className="flex-[1.4_1_480px] min-w-0 max-w-[760px] text-[19px] leading-[1.6] text-body">
+            <p className="rv flex-[1.4_1_480px] min-w-0 max-w-[760px] text-[18px] lg:text-[19px] leading-[1.6] text-body">
               {page.solo.body}
             </p>
           ) : null}
@@ -122,7 +141,26 @@ export default async function AboutPage() {
         heading={page.closing?.heading}
         body={page.closing?.body}
         ctaLabel={page.closing?.ctaLabel}
+        secondary={
+          <>
+            {bookingUrl ? (
+              <SmartLink href={bookingUrl} className="u inline-flex items-center min-h-[44px] text-[17px]">
+                {contact.options?.booking?.title || 'Book a 30-minute call'}
+              </SmartLink>
+            ) : null}
+            {phone ? (
+              <a
+                href={`tel:${phone.replace(/[^\d+]/g, '')}`}
+                className="u inline-flex items-center min-h-[44px] text-[17px]"
+              >
+                Or call {phone}
+              </a>
+            ) : null}
+          </>
+        }
       />
+
+      <Marquee items={clients} label="Businesses we’ve built for" />
     </>
   )
 }

@@ -43,8 +43,7 @@ export function Footer({ site, services }: { site: Site; services: Service[] }) 
         </div>
         <div className="flex flex-wrap justify-between gap-x-6 gap-y-3 pt-6 border-t border-rule text-[14px] text-muted">
           <p>
-            © {year} {site.name}.{site.ownerName ? ` ${site.ownerName}, sole trader.` : ''}
-            {site.abn ? ` ABN ${site.abn}.` : ''}
+            © {year} {site.name}.{site.abn ? ` ABN ${site.abn}.` : ''} Melbourne, Australia.
           </p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             {site.legalLinks?.map((l) => (

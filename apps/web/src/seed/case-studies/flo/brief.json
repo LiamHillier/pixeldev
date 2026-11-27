@@ -3,7 +3,7 @@
   "title": "Flo",
   "kind": "product",
   "category": "SaaS product, AI agent, Xero and Gmail",
-  "summary": "My own product: flo reads the invoices in your Gmail, codes them against your chart of accounts and files them into Xero, then asks in chat when something needs a human.",
+  "summary": "Our own product: flo reads the invoices in your Gmail, codes them against your chart of accounts and files them into Xero, then asks in chat when something needs a human.",
   "externalUrl": null,
   "image": {
     "file": "card.png",

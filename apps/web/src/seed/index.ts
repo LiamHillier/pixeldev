@@ -12,6 +12,7 @@ import config from '@payload-config'
 import { articles } from './journal'
 import { h2, ol, p, richText } from './lexical'
 import { upsertMedia } from './media'
+import { applyCopy } from './copy'
 import { seedSeo, siteSeo } from './seo'
 
 const log = (msg: string) => console.log(`[seed] ${msg}`)
@@ -37,9 +38,6 @@ async function run() {
     data: {
       name: 'Pixeldev',
       ownerName: 'Liam Hillier',
-      tagline:
-        'Software, AI and integrations for businesses that have outgrown their spreadsheets.',
-      locationLine: 'Melbourne, working Australia-wide.',
       email: 'liam@pixeldev.com.au',
       supportEmail: null,
       linkedin: null,
@@ -49,11 +47,6 @@ async function run() {
         { label: 'Work', href: '/work' },
         { label: 'Journal', href: '/journal' },
         { label: 'About', href: '/about' },
-      ],
-      headerCtaLabel: 'Start a project',
-      products: [
-        { label: 'SquareSync for Woo', href: 'https://squaresyncforwoo.com' },
-        { label: 'OnCloudWine', href: '/work' },
       ],
       legalLinks: [
         { label: 'Privacy', href: '/privacy' },
@@ -939,22 +932,12 @@ async function seedCollections(payload: P) {
 }
 
 async function seedPageGlobals(payload: P) {
+  // Copy lives in ./copy (shared with `pnpm sync:copy`). Uploads are set here, for a fresh database.
+  await applyCopy(payload, log)
+  const photo = { image: await monogram(payload), placeholder: null }
   await payload.updateGlobal({
     slug: 'home',
     data: {
-      hero: {
-        eyebrow: 'Melbourne software developer',
-        heading: 'We build the software your business runs on.',
-        intro:
-          'Websites, custom software, AI automation and the integrations between them. One point of contact from the first conversation to launch, and the same one who picks up the phone afterwards.',
-        primaryCta: { label: 'Start a project', href: '/contact' },
-        secondaryCta: { label: 'See recent work', href: '/work' },
-        facts: [
-          { label: 'Based in', value: 'Melbourne' },
-          { label: 'In business', value: 'Since 2016' },
-          { label: 'Replies', value: 'Within one business day' },
-        ],
-      },
       figure: {
         image: await upsertMedia(
           payload,
@@ -962,242 +945,11 @@ async function seedPageGlobals(payload: P) {
           'A wall of product screens from recent projects: sync dashboards, release and payment flows, booking calendars, onboarding checklists and chat.',
         ),
         placeholder: null,
-        caption:
-          'Screens from recent work: Square Sync for Woo, OnCloudWine, TakeShape Adventures, Bowery, KIR, Flo and Vinoshipper for WooCommerce.',
       },
-      servicesSection: {
-        eyebrow: 'What we do',
-        note: 'Most projects use two or three of these together',
-      },
-      workSection: { heading: 'Selected work', linkLabel: 'All case studies' },
-      process: {
-        heading: 'How a project runs',
-        steps: [
-          {
-            title: 'A call, not a pitch',
-            body: 'Thirty minutes. You tell us what’s slow, manual or broken. We tell you what we’d build and roughly what it costs.',
-          },
-          {
-            title: 'Scope and quote',
-            body: 'A short written plan: what gets built, what it costs, and what’s left for a later phase.',
-          },
-          {
-            title: 'Build in the open',
-            body: 'A staging link early, so you see it working as it grows instead of waiting for a big reveal.',
-          },
-          {
-            title: 'Launch, then look after it',
-            body: 'Hosting, monitoring, fixes and the next phase when you’re ready. We don’t disappear at launch.',
-          },
-        ],
-      },
-      about: {
-        heading: 'Small on purpose, and that’s the point.',
-        body: 'It means the people you talk to on the first call are the people writing the code, hosting it, and answering the email when something’s wrong. We also run three software products of our own, which is the best proof we have that we build things that keep working.',
-        linkLabel: 'More about how we work',
-        photo: { image: await monogram(payload), placeholder: null },
-      },
-      testimonial: {
-        quote:
-          'They didn’t sell us AI. Liam spent a morning watching how we actually run a trip, from the booking to the bus leaving at 5am, and built around that. Bookings land in the manifest on their own, Keap gets tagged without anyone touching it, and the crew check people in from their phones. We stopped copying data between systems within the first month.',
-        attribution: 'Operations Manager, TakeShape Adventures',
-      },
-      closing: {
-        heading: 'Tell us what’s slow.',
-        body: 'A few lines in your own words is enough. We’ll reply within one business day with what we’d do about it.',
-        ctaLabel: 'Start a project',
-      },
+      about: { photo },
     },
   })
-
-  await payload.updateGlobal({
-    slug: 'services-page',
-    data: {
-      eyebrow: 'Services',
-      heading: 'Five things we build. Usually two or three at once.',
-      intro:
-        'A new website that feeds a CRM. A CRM that talks to Xero. An AI step that reads the PDF nobody wants to retype. The services are listed separately below, but most projects cross the lines.',
-      engagement: {
-        heading: 'Ways to work together',
-        intro: 'Pick the shape that fits the job.',
-        options: [
-          {
-            title: 'Fixed-scope project',
-            price: 'From $4,000, written quote',
-            body: 'For a defined build: a site, an integration, a portal. You get a scope, a price and a timeline before we start, and the price doesn’t move unless the scope does.',
-          },
-          {
-            title: 'Hourly',
-            price: '$150 an hour, billed as used',
-            body: 'For smaller jobs, investigations and the “can you just look at this” work. Time tracked, invoiced at the end of the month, no minimum.',
-          },
-          {
-            title: 'Monthly care plan',
-            price: 'From $290 a month, hosting included',
-            body: 'Hosting, updates, monitoring and a block of development hours each month for the things you’d otherwise put off.',
-          },
-        ],
-      },
-      closing: {
-        heading: 'Not sure which one you need?',
-        body: 'Most people aren’t. Describe the problem in plain words and we’ll tell you what we’d build and roughly what it costs.',
-        ctaLabel: 'Describe the problem',
-      },
-    },
-  })
-
-  await payload.updateGlobal({
-    slug: 'work-page',
-    data: {
-      eyebrow: 'Work',
-      heading: 'Things we’ve shipped, and the ones we still look after.',
-      intro:
-        'Two kinds of work below: products we own and support ourselves, and client projects built around how the business already runs.',
-      products: {
-        heading: 'Products we own and run',
-        intro:
-          'Real software with paying customers. We build it, host it, and answer the support emails. It’s the best proof we have that we ship things that keep working.',
-      },
-      clients: {
-        heading: 'Client projects',
-        intro:
-          'Named with the client’s permission. Each one is a business that had a process running on spreadsheets, email and goodwill, and needed software that fit how they already worked.',
-        note: null,
-      },
-      anonymised: {
-        heading: 'Anonymised',
-        intro:
-          'Some clients would rather their competitors didn’t know what they’ve automated. Fair enough. The numbers are theirs; the names aren’t.',
-      },
-    },
-  })
-
-  await payload.updateGlobal({
-    slug: 'about-page',
-    data: {
-      eyebrow: 'About',
-      heading: 'We build software for a living, and we run some of it too.',
-      intro:
-        'Pixeldev is a Melbourne software business founded by Liam Hillier. We build websites, custom software, AI automation and the integrations between them for businesses around Australia, and we run three software products of our own on the side.',
-      body: 'We stay small on purpose. It means the people you talk to on the first call are the people writing the code, hosting it, and answering the email when something’s wrong. Before Pixeldev, Liam spent years at agencies watching projects pass between account managers, designers and developers until nobody owned the result. Starting Pixeldev in 2016 was about owning all of it.',
-      photo: { image: await monogram(payload), placeholder: null, caption: '' },
-      facts: [
-        { label: 'Based', value: 'Melbourne, VIC. Remote-first, Australia-wide.' },
-        { label: 'Trading as', value: 'Pixeldev, sole trader. ABN 53 614 870 219.' },
-        { label: 'Building since', value: '2012' },
-        { label: 'Products', value: 'SquareSync for Woo, OnCloudWine, Flo' },
-      ],
-      background: {
-        heading: 'What shaped how we work',
-        items: [
-          {
-            title: 'Years inside WordPress and WooCommerce',
-            body: 'Custom blocks, ACF, checkout extensions, plugin filters, multisite networks, catalogue imports. We know where the bodies are buried, because we’ve dug a few of them up.',
-          },
-          {
-            title: 'Backend work that taught us structure',
-            body: 'Time spent in .NET with proper architecture, plus Shopify and Next.js, means we bring real software habits to projects that are usually built as a pile of plugins.',
-          },
-          {
-            title: 'Running our own products',
-            body: 'SquareSync for Woo has paying subscribers around the world, and we answer every support email ourselves. Nothing teaches you to build carefully like being the one who gets the 6am “it’s broken” message.',
-          },
-          {
-            title: 'Running our own servers',
-            body: 'Dedicated servers, Docker, Cloudflare, DNS for hundreds of domains. We host what we build, so we design it to be hosted well.',
-          },
-        ],
-      },
-      promises: {
-        heading: 'A few things you can count on',
-        items: [
-          {
-            title: 'Plain language',
-            body: 'We’ll explain what we’re building and why in words you’d use, not jargon. If we can’t explain it simply, we don’t understand it well enough yet.',
-          },
-          {
-            title: 'A written scope before a dollar changes hands',
-            body: 'What’s being built, what it costs, what’s out of this phase. You’ll know before we start.',
-          },
-          {
-            title: 'Honest about fit',
-            body: 'If an off-the-shelf tool will do the job, we’ll say so. If we’re not the right fit, we’ll say that too.',
-          },
-          {
-            title: 'Around after launch',
-            body: 'We host, monitor and keep improving what we build. The relationship doesn’t end at the invoice.',
-          },
-        ],
-      },
-      solo: {
-        heading: 'Small on purpose. That’s the point, and the limit.',
-        body: 'If you need a ten-person team on site next Monday, we’re not it. If you want people who’ll understand your whole business, build the right thing, and still be around in two years, that’s the job we’re set up for. For bigger builds we bring in specialists we’ve worked with before, and we stay the ones you talk to.',
-      },
-      closing: {
-        heading: 'Let’s talk about what you’re running.',
-        body: 'A thirty-minute call, no pitch. You describe the problem, we tell you what we’d do about it.',
-        ctaLabel: 'Book a call',
-      },
-    },
-  })
-
-  await payload.updateGlobal({
-    slug: 'contact-page',
-    data: {
-      eyebrow: 'Contact',
-      heading: 'Tell us what’s slow.',
-      intro:
-        'A few lines in your own words is enough. We’ll reply within one business day with what we’d do about it and whether we’re the right people to do it.',
-      form: {
-        needOptions: [
-          { label: 'Not sure yet, that’s why I’m here' },
-          { label: 'AI and automation' },
-          { label: 'Connecting two or more systems' },
-          { label: 'Custom software or a CRM' },
-          { label: 'A website or WooCommerce store' },
-          { label: 'Hosting or looking after an existing site' },
-        ],
-        budgetOptions: [
-          { label: 'Prefer not to say yet' },
-          { label: 'Under $5,000' },
-          { label: '$5,000 to $15,000' },
-          { label: '$15,000 to $40,000' },
-          { label: 'Over $40,000' },
-        ],
-        submitLabel: 'Send it',
-        submitNote: 'No newsletter, no follow-up sequence. Just a reply from us.',
-        successHeading: 'Got it. Thanks.',
-        successBody:
-          'We’ll read it properly and reply within one business day, usually with a couple of questions.',
-      },
-      nextSteps: {
-        heading: 'What happens next',
-        items: [
-          {
-            text: 'We read it and reply within one business day, usually with a couple of questions.',
-          },
-          { text: 'A thirty-minute call where you walk us through how it works today. No slides.' },
-          { text: 'A short written scope and quote, or an honest “you don’t need us for this”.' },
-        ],
-      },
-      aside: {
-        directHeading: 'Or directly',
-        directNote: 'Melbourne, VIC. Working with businesses across Australia, in your time zone.',
-        supportHeading: null,
-        supportNote: null,
-      },
-    },
-  })
-
-  await payload.updateGlobal({
-    slug: 'journal-page',
-    data: {
-      eyebrow: 'The Systems Brief',
-      heading: 'Notes from building and running software for small businesses.',
-      intro:
-        'Practical, specific, occasionally opinionated. The things we end up explaining on calls, written down once.',
-    },
-  })
+  await payload.updateGlobal({ slug: 'about-page', data: { photo: { ...photo, caption: '' } } })
   log('page globals')
 }
 

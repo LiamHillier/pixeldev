@@ -2,22 +2,27 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Figure, type Tint } from '@/components/Figure'
 import { JsonLd } from '@/components/JsonLd'
+import { DiagramFigure } from '@/components/services/SystemDiagram'
 import {
-  Button,
-  ClosingCta,
-  Crumb,
-  Faqs,
-  NumberedCard,
-  RuledList,
-  SmartLink,
-  SplitSection,
-  TwoTone,
-  ULink,
-} from '@/components/ui'
-import { RelatedWork } from '@/components/WorkCard'
+  ApproachSteps,
+  HeroActions,
+  OfferingsSplit,
+  PlanCards,
+  RelatedCases,
+  SoundFamiliar,
+} from '@/components/services/sections'
+import { ClosingCta, Crumb, Faqs, TwoTone, plainHeading } from '@/components/ui'
 import { getService, getServices, getSite } from '@/lib/data'
-import { absoluteUrl, breadcrumbJsonLd, ids, pageMetadata } from '@/lib/seo'
-import { cx, docs } from '@/lib/utils'
+import {
+  absoluteUrl,
+  areasServed,
+  breadcrumbJsonLd,
+  ids,
+  locationFaq,
+  pageMetadata,
+  placeJsonLd,
+} from '@/lib/seo'
+import { docs } from '@/lib/utils'
 import type { Work } from '@/payload-types'
 
 type Params = { params: Promise<{ slug: string }> }
@@ -36,8 +41,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return pageMetadata({
     path: `/services/${service.slug}`,
     seo: service.seo,
-    title: `${service.title} in Melbourne`,
-    heading: service.hero.heading,
+    title: `${plainHeading(service.title)} in Melbourne`,
+    heading: plainHeading(service.hero.heading),
     eyebrow: service.title,
     description: service.hero.intro,
   })
@@ -49,15 +54,19 @@ export default async function ServicePage({ params }: Params) {
   if (!service) notFound()
 
   const related = docs<Work>(service.relatedWork)
-  const plans = service.plans?.items ?? []
-  const approach = service.approach?.items ?? []
   const index = Math.max(0, services.findIndex((s) => s.id === service.id))
+  const tint = tints[index % tints.length]
+  const hasDiagram = Boolean(service.diagram?.inputs?.length)
+  const hasFigure = Boolean(service.figure?.image)
 
   const path = `/services/${service.slug}`
-  const areas = site.business?.areaServed?.length
-    ? site.business.areaServed.map((a) => a.name)
-    : ['Melbourne', 'Victoria', 'Australia']
-  const faqs = service.faqs ?? []
+  const areas = areasServed(site)
+  const where = locationFaq(site)
+  const faqs = [
+    ...(service.faqs ?? []),
+    // Every service page answers "do you work outside Melbourne?", unless an editor already has.
+    ...(service.faqs?.some((f) => /only work with|outside melbourne/i.test(f.question)) ? [] : [where]),
+  ]
 
   return (
     <>
@@ -76,12 +85,12 @@ export default async function ServicePage({ params }: Params) {
             description: service.hero.intro,
             url: absoluteUrl(path),
             provider: { '@id': ids.business },
-            areaServed: areas.map((name) => ({ '@type': 'Place', name })),
+            areaServed: areas.map(placeJsonLd),
             ...(service.offerings?.items?.length
               ? {
                   hasOfferCatalog: {
                     '@type': 'OfferCatalog',
-                    name: service.offerings.heading ?? service.title,
+                    name: plainHeading(service.offerings.heading) || service.title,
                     itemListElement: service.offerings.items.map((o) => ({
                       '@type': 'Offer',
                       itemOffered: { '@type': 'Service', name: o.title, description: o.body },
@@ -90,144 +99,60 @@ export default async function ServicePage({ params }: Params) {
                 }
               : {}),
           },
-          ...(faqs.length
-            ? [
-                {
-                  '@context': 'https://schema.org',
-                  '@type': 'FAQPage',
-                  mainEntity: faqs.map((q) => ({
-                    '@type': 'Question',
-                    name: q.question,
-                    acceptedAnswer: { '@type': 'Answer', text: q.answer },
-                  })),
-                },
-              ]
-            : []),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: faqs.map((q) => ({
+              '@type': 'Question',
+              name: q.question,
+              acceptedAnswer: { '@type': 'Answer', text: q.answer },
+            })),
+          },
         ]}
       />
-      <section className="flex flex-col gap-10 lg:gap-12 pt-14 lg:pt-14">
+
+      <section className="hero-in flex flex-col gap-10 lg:gap-12 pt-10 lg:pt-14">
         <Crumb parent="Services" parentHref="/services" current={service.title} />
         <h1 className="h-detail max-w-[1240px]">
           <TwoTone text={service.hero.heading} />
         </h1>
         <div className="flex flex-wrap items-end justify-between gap-x-16 gap-y-8">
           <p className="lead flex-[1_1_420px] max-w-[700px]">{service.hero.intro}</p>
-          <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
-            {service.hero.primaryCta?.label ? (
-              <Button href={service.hero.primaryCta.href || '/contact'}>
-                {service.hero.primaryCta.label}
-              </Button>
-            ) : null}
-            {service.hero.secondaryCta?.label ? (
-              <ULink href={service.hero.secondaryCta.href || '/work'}>
-                {service.hero.secondaryCta.label}
-              </ULink>
-            ) : null}
-          </div>
+          <HeroActions primary={service.hero.primaryCta} secondary={service.hero.secondaryCta} />
         </div>
       </section>
 
-      {service.figure?.image || service.figure?.placeholder ? (
+      {hasDiagram ? (
+        <DiagramFigure data={service.diagram} tint={tint} className="hero-fig pt-12 lg:pt-14" />
+      ) : hasFigure ? (
         <Figure
           data={service.figure}
-          tint={tints[index % tints.length]}
+          tint={tint}
           frameClassName="aspect-[16/7.2] min-h-[220px]"
-          className="pt-14"
+          className="hero-fig pt-12 lg:pt-14"
           priority
         />
       ) : null}
 
-      {service.painPoints?.items?.length ? (
-        <section className="section-gap flex flex-col gap-12 lg:gap-14">
-          <h2 className="h-section">
-            <TwoTone text={service.painPoints.heading ?? 'Sound familiar?'} />
-          </h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(270px,100%),1fr))] gap-x-8 gap-y-10">
-            {service.painPoints.items.map((p) => (
-              <div
-                key={p.id ?? p.title}
-                className="flex flex-col gap-3 pt-[22px] border-t-2 border-ink"
-              >
-                <p className="text-[21px] lg:text-[22px] leading-[1.25] tracking-[-0.025em]">
-                  {p.title}
-                </p>
-                <p className="text-[16px] text-muted">{p.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <SoundFamiliar heading={service.painPoints?.heading} items={service.painPoints?.items} />
 
-      {service.offerings?.items?.length ? (
-        <SplitSection
-          heading={<TwoTone text={service.offerings.heading ?? 'What we build'} />}
-          intro={service.offerings.intro}
-        >
-          <RuledList items={service.offerings.items} />
-        </SplitSection>
-      ) : null}
+      <OfferingsSplit
+        heading={service.offerings?.heading}
+        intro={service.offerings?.intro}
+        items={service.offerings?.items}
+      />
 
-      {approach.length ? (
-        <section className="section-gap flex flex-col gap-12 lg:gap-16">
-          <h2 className="h-section">
-            <TwoTone text={service.approach?.heading ?? 'How we approach it'} />
-          </h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-x-10 gap-y-12">
-            {approach.map((a, i) => (
-              <NumberedCard
-                key={a.id ?? i}
-                n={i + 1}
-                title={a.title}
-                body={a.body}
-                last={i === approach.length - 1}
-              />
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <ApproachSteps heading={service.approach?.heading} items={service.approach?.items} />
 
-      {plans.length ? (
-        <section className="section-gap flex flex-col gap-12 lg:gap-14">
-          <div className="flex flex-wrap items-end justify-between gap-x-16 gap-y-5">
-            <h2 className="h-section flex-[1_1_420px]">
-              <TwoTone text={service.plans?.heading} />
-            </h2>
-            {service.plans?.intro ? (
-              <p className="flex-[1_1_340px] max-w-[480px] text-[18px] text-muted">
-                {service.plans.intro}
-              </p>
-            ) : null}
-          </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-4">
-            {plans.map((p) => {
-              const inner = (
-                <>
-                  <h3 className="text-[26px] leading-[1.12]">{p.name}</h3>
-                  {p.price ? <p className="text-[16px] font-medium">{p.price}</p> : null}
-                  {p.body ? <p className="mt-auto text-[16px] text-muted">{p.body}</p> : null}
-                </>
-              )
-              const cls = cx(
-                'flex flex-col gap-2.5 min-h-[220px] p-7 rounded-xl bg-fill',
-                p.href && 'row-hover',
-              )
-              return p.href ? (
-                <SmartLink key={p.id ?? p.name} href={p.href} className={cls}>
-                  {inner}
-                </SmartLink>
-              ) : (
-                <div key={p.id ?? p.name} className={cls}>
-                  {inner}
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      ) : null}
+      <PlanCards
+        heading={service.plans?.heading}
+        intro={service.plans?.intro}
+        items={service.plans?.items}
+      />
 
-      <RelatedWork items={related} />
+      <RelatedCases heading={service.relatedHeading} items={related} />
 
-      <Faqs items={service.faqs} />
+      <Faqs heading={service.faqsHeading} items={faqs} />
 
       <ClosingCta
         heading={service.closing?.heading}

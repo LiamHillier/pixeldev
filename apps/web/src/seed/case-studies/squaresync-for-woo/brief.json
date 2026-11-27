@@ -3,7 +3,7 @@
   "title": "Square Sync for Woo",
   "kind": "product",
   "category": "Plugin, WooCommerce and Square",
-  "summary": "My WordPress plugin that keeps products, stock, orders and customers in step between WooCommerce and Square, both directions. It comes with its own webhook relay and licensing platform, and has shipped 416 releases.",
+  "summary": "Our WordPress plugin that keeps products, stock, orders and customers in step between WooCommerce and Square, both directions. It comes with its own webhook relay and licensing platform, and has shipped 416 releases.",
   "externalUrl": "https://squaresyncforwoo.com",
   "image": {
     "file": "card.png",
