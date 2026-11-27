@@ -38,21 +38,25 @@ export function LegalPage({
       />
       <PageHeader eyebrow={`Last updated ${updated}`} heading={heading} intro={intro} />
 
-      <section className="flex flex-wrap gap-x-20 gap-y-12 pb-24">
-        <aside className="flex-[1_1_240px] lg:order-2">
+      <section className="flex flex-wrap items-start gap-x-24 gap-y-14 pt-16 lg:pt-[88px] pb-24 lg:pb-[136px]">
+        <aside className="flex-[1_1_260px] min-w-0 lg:order-2 lg:sticky lg:top-8">
           <nav
             aria-label="On this page"
-            className="flex flex-col gap-3 pt-5 border-t border-ink text-[15px] lg:sticky lg:top-8"
+            className="flex flex-col pt-5 border-t border-ink text-[16px]"
           >
-            <p className="text-[13px] text-faint">On this page</p>
+            <p className="pb-2 text-[15px] text-muted">On this page</p>
             {sections.map((s) => (
-              <a key={s.heading} href={`#${slugify(s.heading)}`} className="hover:text-accent">
+              <a
+                key={s.heading}
+                href={`#${slugify(s.heading)}`}
+                className="inline-flex items-center min-h-[44px] hover:text-accent transition-colors"
+              >
                 {s.heading}
               </a>
             ))}
           </nav>
         </aside>
-        <article className="prose-pd flex-[999_1_540px] min-w-0 max-w-[720px]">
+        <article className="prose-pd flex-[999_1_560px] min-w-0 max-w-[760px]">
           {sections.map((s) => (
             <div key={s.heading} className="flex flex-col gap-6">
               <h2 id={slugify(s.heading)} className="scroll-mt-8">

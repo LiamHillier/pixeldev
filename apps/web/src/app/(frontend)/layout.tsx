@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Hanken_Grotesk, Newsreader } from 'next/font/google'
+import { Funnel_Display, Funnel_Sans } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
@@ -12,19 +12,17 @@ import './globals.css'
 // Pages are statically rendered and refreshed in the background. Edits in the admin show within a minute.
 export const revalidate = 60
 
-const newsreader = Newsreader({
+const funnelDisplay = Funnel_Display({
   subsets: ['latin'],
-  variable: '--font-newsreader',
-  axes: ['opsz'],
-  style: ['normal', 'italic'],
-  weight: 'variable',
+  variable: '--font-funnel-display',
+  weight: ['500', '600'],
   display: 'swap',
 })
 
-const hanken = Hanken_Grotesk({
+const funnelSans = Funnel_Sans({
   subsets: ['latin'],
-  variable: '--font-hanken',
-  weight: ['400', '500', '600'],
+  variable: '--font-funnel-sans',
+  weight: ['400', '500'],
   display: 'swap',
 })
 
@@ -46,14 +44,14 @@ export default async function FrontendLayout({ children }: { children: ReactNode
   const [site, services] = await Promise.all([getSite(), getServices()])
   const nav = (site.nav ?? []).map((n) => ({ label: n.label, href: n.href }))
   return (
-    <html lang="en-AU" className={`${newsreader.variable} ${hanken.variable}`}>
-      <body>
+    <html lang="en-AU" className={`${funnelDisplay.variable} ${funnelSans.variable}`}>
+      <body className="overflow-x-clip">
         <JsonLd data={businessJsonLd(site)} />
         <Container>
-          <Header name={site.name} nav={nav} ctaLabel={site.headerCtaLabel ?? 'Start a project'} />
+          <Header name={site.name} nav={nav} ctaLabel={site.headerCtaLabel ?? "Let's talk"} />
           <main>{children}</main>
-          <Footer site={site} services={services} />
         </Container>
+        <Footer site={site} services={services} />
       </body>
     </html>
   )

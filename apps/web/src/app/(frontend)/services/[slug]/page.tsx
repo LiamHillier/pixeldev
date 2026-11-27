@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Figure } from '@/components/Figure'
+import { Figure, type Tint } from '@/components/Figure'
 import { JsonLd } from '@/components/JsonLd'
 import {
   Button,
@@ -10,15 +10,19 @@ import {
   NumberedCard,
   RuledList,
   SmartLink,
+  SplitSection,
+  TwoTone,
   ULink,
 } from '@/components/ui'
 import { RelatedWork } from '@/components/WorkCard'
 import { getService, getServices, getSite } from '@/lib/data'
 import { absoluteUrl, breadcrumbJsonLd, ids, pageMetadata } from '@/lib/seo'
-import { docs } from '@/lib/utils'
+import { cx, docs } from '@/lib/utils'
 import type { Work } from '@/payload-types'
 
 type Params = { params: Promise<{ slug: string }> }
+
+const tints: Tint[] = ['teal', 'blue', 'lilac']
 
 export async function generateStaticParams() {
   const services = await getServices()
@@ -41,11 +45,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function ServicePage({ params }: Params) {
   const { slug } = await params
-  const [service, site] = await Promise.all([getService(slug), getSite()])
+  const [service, site, services] = await Promise.all([getService(slug), getSite(), getServices()])
   if (!service) notFound()
 
   const related = docs<Work>(service.relatedWork)
   const plans = service.plans?.items ?? []
+  const approach = service.approach?.items ?? []
+  const index = Math.max(0, services.findIndex((s) => s.id === service.id))
 
   const path = `/services/${service.slug}`
   const areas = site.business?.areaServed?.length
@@ -99,40 +105,52 @@ export default async function ServicePage({ params }: Params) {
             : []),
         ]}
       />
-      <section className="flex flex-col gap-7 pt-14 pb-12 lg:pt-[72px] lg:pb-16 max-w-[920px]">
+      <section className="flex flex-col gap-10 lg:gap-12 pt-14 lg:pt-14">
         <Crumb parent="Services" parentHref="/services" current={service.title} />
-        <h1 className="h-detail">{service.hero.heading}</h1>
-        <p className="text-[21px] leading-[1.5] text-body max-w-[720px]">{service.hero.intro}</p>
-        <div className="flex flex-wrap items-center gap-x-7 gap-y-4">
-          {service.hero.primaryCta?.label ? (
-            <Button href={service.hero.primaryCta.href || '/contact'}>
-              {service.hero.primaryCta.label}
-            </Button>
-          ) : null}
-          {service.hero.secondaryCta?.label ? (
-            <ULink href={service.hero.secondaryCta.href || '/work'}>
-              {service.hero.secondaryCta.label}
-            </ULink>
-          ) : null}
+        <h1 className="h-detail max-w-[1240px]">
+          <TwoTone text={service.hero.heading} />
+        </h1>
+        <div className="flex flex-wrap items-end justify-between gap-x-16 gap-y-8">
+          <p className="lead flex-[1_1_420px] max-w-[700px]">{service.hero.intro}</p>
+          <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
+            {service.hero.primaryCta?.label ? (
+              <Button href={service.hero.primaryCta.href || '/contact'}>
+                {service.hero.primaryCta.label}
+              </Button>
+            ) : null}
+            {service.hero.secondaryCta?.label ? (
+              <ULink href={service.hero.secondaryCta.href || '/work'}>
+                {service.hero.secondaryCta.label}
+              </ULink>
+            ) : null}
+          </div>
         </div>
       </section>
 
       {service.figure?.image || service.figure?.placeholder ? (
         <Figure
           data={service.figure}
-          frameClassName="min-h-[280px] lg:min-h-[440px]"
-          className="pb-16 lg:pb-20"
+          tint={tints[index % tints.length]}
+          frameClassName="aspect-[16/7.2] min-h-[220px]"
+          className="pt-14"
           priority
         />
       ) : null}
 
       {service.painPoints?.items?.length ? (
-        <section className="flex flex-col gap-8 py-16 lg:py-20 border-t border-ink">
-          <h2 className="h-section">{service.painPoints.heading ?? 'Sound familiar?'}</h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),1fr))] gap-x-16 gap-y-8">
+        <section className="section-gap flex flex-col gap-12 lg:gap-14">
+          <h2 className="h-section">
+            <TwoTone text={service.painPoints.heading ?? 'Sound familiar?'} />
+          </h2>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(270px,100%),1fr))] gap-x-8 gap-y-10">
             {service.painPoints.items.map((p) => (
-              <div key={p.id ?? p.title} className="flex flex-col gap-2 pt-4 border-t border-rule">
-                <p className="text-[19px] font-semibold">{p.title}</p>
+              <div
+                key={p.id ?? p.title}
+                className="flex flex-col gap-3 pt-[22px] border-t-2 border-ink"
+              >
+                <p className="text-[21px] lg:text-[22px] leading-[1.25] tracking-[-0.025em]">
+                  {p.title}
+                </p>
                 <p className="text-[16px] text-muted">{p.body}</p>
               </div>
             ))}
@@ -141,46 +159,58 @@ export default async function ServicePage({ params }: Params) {
       ) : null}
 
       {service.offerings?.items?.length ? (
-        <section className="grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),1fr))] gap-x-20 gap-y-8 py-16 lg:py-20 border-t border-ink items-start">
-          <div className="flex flex-col gap-4">
-            <h2 className="h-section">{service.offerings.heading ?? 'What I build'}</h2>
-            {service.offerings.intro ? (
-              <p className="text-[17px] text-body max-w-[440px]">{service.offerings.intro}</p>
-            ) : null}
-          </div>
+        <SplitSection
+          heading={<TwoTone text={service.offerings.heading ?? 'What I build'} />}
+          intro={service.offerings.intro}
+        >
           <RuledList items={service.offerings.items} />
-        </section>
+        </SplitSection>
       ) : null}
 
-      {service.approach?.items?.length ? (
-        <section className="flex flex-col gap-10 py-16 lg:py-20 border-t border-ink">
-          <h2 className="h-section">{service.approach.heading ?? 'How I approach it'}</h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-10">
-            {service.approach.items.map((a, i) => (
-              <NumberedCard key={a.id ?? i} n={i + 1} title={a.title} body={a.body} />
+      {approach.length ? (
+        <section className="section-gap flex flex-col gap-12 lg:gap-16">
+          <h2 className="h-section">
+            <TwoTone text={service.approach?.heading ?? 'How I approach it'} />
+          </h2>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-x-10 gap-y-12">
+            {approach.map((a, i) => (
+              <NumberedCard
+                key={a.id ?? i}
+                n={i + 1}
+                title={a.title}
+                body={a.body}
+                last={i === approach.length - 1}
+              />
             ))}
           </div>
         </section>
       ) : null}
 
       {plans.length ? (
-        <section className="flex flex-col gap-8 py-16 lg:py-20 border-t border-ink">
-          <div className="flex flex-col gap-3 max-w-[720px]">
-            <h2 className="h-section">{service.plans?.heading}</h2>
+        <section className="section-gap flex flex-col gap-12 lg:gap-14">
+          <div className="flex flex-wrap items-end justify-between gap-x-16 gap-y-5">
+            <h2 className="h-section flex-[1_1_420px]">
+              <TwoTone text={service.plans?.heading} />
+            </h2>
             {service.plans?.intro ? (
-              <p className="text-[17px] text-body">{service.plans.intro}</p>
+              <p className="flex-[1_1_340px] max-w-[480px] text-[18px] text-muted">
+                {service.plans.intro}
+              </p>
             ) : null}
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(240px,100%),1fr))] gap-8">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-4">
             {plans.map((p) => {
               const inner = (
                 <>
-                  <h3 className="text-[30px] leading-[1.1]">{p.name}</h3>
-                  {p.price ? <p className="text-[15px] text-faint">{p.price}</p> : null}
-                  {p.body ? <p className="text-[16px] text-muted">{p.body}</p> : null}
+                  <h3 className="text-[26px] leading-[1.12]">{p.name}</h3>
+                  {p.price ? <p className="text-[16px] font-medium">{p.price}</p> : null}
+                  {p.body ? <p className="mt-auto text-[16px] text-muted">{p.body}</p> : null}
                 </>
               )
-              const cls = 'row-hover flex flex-col gap-2.5 pt-5 border-t border-ink'
+              const cls = cx(
+                'flex flex-col gap-2.5 min-h-[220px] p-7 rounded-xl bg-fill',
+                p.href && 'row-hover',
+              )
               return p.href ? (
                 <SmartLink key={p.id ?? p.name} href={p.href} className={cls}>
                   {inner}

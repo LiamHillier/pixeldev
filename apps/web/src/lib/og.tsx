@@ -1,18 +1,21 @@
 import { ImageResponse } from 'next/og'
 
 const colors = {
-  paper: '#f6f3ee',
-  ink: '#1b1a17',
-  faint: '#7a7468',
-  rule: '#ddd6cb',
-  accent: '#2f5d50',
+  paper: '#ffffff',
+  ink: '#111318',
+  muted: '#4a4f59',
+  rule: '#e3e5e9',
+  accent: '#087a6c',
+  tint: '#e3f1ee',
 }
 
-/** Newsreader from Google Fonts as TTF. Falls back to the default font if the fetch fails. */
-async function loadSerif(text: string): Promise<ArrayBuffer | null> {
+const FONT = 'Funnel Display'
+
+/** Funnel Display from Google Fonts as TTF. Falls back to the default font if the fetch fails. */
+async function loadDisplay(text: string, weight: 500 | 600): Promise<ArrayBuffer | null> {
   try {
     const css = await fetch(
-      `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@72,500&text=${encodeURIComponent(
+      `https://fonts.googleapis.com/css2?family=Funnel+Display:wght@${weight}&text=${encodeURIComponent(
         text,
       )}`,
       { next: { revalidate: 60 * 60 * 24 * 30 } },
@@ -26,7 +29,8 @@ async function loadSerif(text: string): Promise<ArrayBuffer | null> {
 }
 
 /** Square "P" mark, used for the favicon and as the logo in structured data. */
-export function logoMark(px: number) {
+export async function logoMark(px: number) {
+  const font = await loadDisplay('P', 600)
   return new ImageResponse(
     (
       <div
@@ -38,15 +42,21 @@ export function logoMark(px: number) {
           justifyContent: 'center',
           background: colors.ink,
           color: colors.paper,
-          fontSize: px * 0.69,
-          fontFamily: 'Georgia, serif',
-          borderRadius: px * 0.19,
+          fontSize: px * 0.66,
+          fontFamily: font ? FONT : 'Helvetica, Arial, sans-serif',
+          fontWeight: 600,
+          letterSpacing: '-0.04em',
+          borderRadius: px * 0.22,
         }}
       >
         P
       </div>
     ),
-    { width: px, height: px },
+    {
+      width: px,
+      height: px,
+      fonts: font ? [{ name: FONT, data: font, weight: 600, style: 'normal' }] : undefined,
+    },
   )
 }
 
@@ -61,8 +71,15 @@ export async function shareCard({
   siteName: string
   footer: string
 }) {
-  const serif = await loadSerif(`${title}${siteName}${eyebrow ?? ''}${footer}`)
-  const size = title.length > 70 ? 56 : title.length > 40 ? 68 : 80
+  const [medium, bold] = await Promise.all([
+    loadDisplay(`${title}${eyebrow ?? ''}${footer}`, 500),
+    loadDisplay(siteName, 600),
+  ])
+  const size = title.length > 70 ? 58 : title.length > 40 ? 70 : 84
+  const fonts = [
+    ...(medium ? [{ name: FONT, data: medium, weight: 500 as const, style: 'normal' as const }] : []),
+    ...(bold ? [{ name: FONT, data: bold, weight: 600 as const, style: 'normal' as const }] : []),
+  ]
   return new ImageResponse(
     (
       <div
@@ -75,29 +92,29 @@ export async function shareCard({
           background: colors.paper,
           color: colors.ink,
           padding: '64px 72px',
+          fontFamily: fonts.length ? FONT : undefined,
         }}
       >
         <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'baseline',
-            borderBottom: `2px solid ${colors.ink}`,
-            paddingBottom: 24,
+            alignItems: 'center',
           }}
         >
-          <div style={{ fontFamily: serif ? 'Newsreader' : undefined, fontSize: 40 }}>
-            {siteName}
-          </div>
-          {eyebrow ? <div style={{ fontSize: 26, color: colors.faint }}>{eyebrow}</div> : null}
+          <div style={{ fontSize: 40, fontWeight: 600, letterSpacing: '-0.04em' }}>{siteName}</div>
+          {eyebrow ? (
+            <div style={{ fontSize: 26, fontWeight: 500, color: colors.muted }}>{eyebrow}</div>
+          ) : null}
         </div>
         <div
           style={{
             display: 'flex',
-            fontFamily: serif ? 'Newsreader' : undefined,
             fontSize: size,
-            lineHeight: 1.08,
-            letterSpacing: '-0.015em',
+            fontWeight: 500,
+            lineHeight: 1.04,
+            letterSpacing: '-0.045em',
+            maxWidth: 1000,
           }}
         >
           {title}
@@ -108,10 +125,21 @@ export async function shareCard({
             alignItems: 'center',
             gap: 16,
             fontSize: 26,
-            color: colors.faint,
+            fontWeight: 500,
+            color: colors.muted,
           }}
         >
-          <div style={{ width: 14, height: 14, borderRadius: 7, background: colors.accent }} />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 34,
+              height: 34,
+              borderRadius: 17,
+              background: colors.accent,
+            }}
+          />
           {footer}
         </div>
       </div>
@@ -119,9 +147,7 @@ export async function shareCard({
     {
       width: 1200,
       height: 630,
-      fonts: serif
-        ? [{ name: 'Newsreader', data: serif, weight: 500, style: 'normal' }]
-        : undefined,
+      fonts: fonts.length ? fonts : undefined,
       headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800' },
     },
   )

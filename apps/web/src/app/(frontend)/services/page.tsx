@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ClosingCta, PageHeader, ULink } from '@/components/ui'
+import { ClosingCta, GoLink, PageHeader, TwoTone } from '@/components/ui'
 import { JsonLd } from '@/components/JsonLd'
 import { getServices, getServicesPage } from '@/lib/data'
 import { breadcrumbJsonLd, pageMetadata, absoluteUrl } from '@/lib/seo'
@@ -16,6 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description: page.intro,
   })
 }
+
+const tints = ['bg-tint-teal', 'bg-tint-blue', 'bg-tint-lilac']
 
 export default async function ServicesIndex() {
   const [page, services] = await Promise.all([getServicesPage(), getServices()])
@@ -41,31 +43,33 @@ export default async function ServicesIndex() {
       />
       <PageHeader eyebrow={page.eyebrow} heading={page.heading} intro={page.intro} />
 
-      <section className="flex flex-col border-t border-ink">
+      <section className="flex flex-col pt-20 lg:pt-28">
         {services.map((s, i) => (
           <div
             key={s.id}
             className={cx(
-              'grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),1fr))] gap-x-20 gap-y-8 py-14 border-b items-start',
-              i === services.length - 1 ? 'border-ink' : 'border-rule',
+              'flex flex-wrap items-start gap-x-24 gap-y-8 py-12 lg:py-16 border-t',
+              i === 0 ? 'border-t-2 border-ink' : 'border-rule',
+              i === services.length - 1 && 'border-b border-b-rule',
             )}
           >
-            <div className="flex flex-col gap-[18px]">
-              <h2
-                className="font-serif leading-[1.05] tracking-[-0.015em]"
-                style={{ fontSize: 'clamp(30px, 3.4vw, 44px)' }}
-              >
-                {s.title}
-              </h2>
-              <p className="text-[17px] text-body">{s.indexIntro ?? s.summary}</p>
-              <ULink href={`/services/${s.slug}`} className="self-start">
+            <div className="flex-[1_1_380px] min-w-0 flex flex-col gap-5">
+              <p className="font-display font-medium text-[18px] text-grey tracking-[-0.02em]">
+                {String(i + 1).padStart(2, '0')}
+              </p>
+              <h2 className="h-row">{s.title}</h2>
+              <p className="text-[17px] text-body max-w-[520px]">{s.indexIntro ?? s.summary}</p>
+              <GoLink href={`/services/${s.slug}`} className="self-start">
                 {s.indexLinkLabel ?? `About ${s.title.toLowerCase()}`}
-              </ULink>
+              </GoLink>
             </div>
             {s.indexItems?.length ? (
-              <ul className="flex flex-col text-[16px] text-body m-0 p-0 list-none">
-                {s.indexItems.map((it) => (
-                  <li key={it.id ?? it.text} className="py-3 border-t border-rule">
+              <ul className="flex-[1.4_1_480px] min-w-0 flex flex-col text-[16px] text-body m-0 p-0 list-none lg:pt-12">
+                {s.indexItems.map((it, j) => (
+                  <li
+                    key={it.id ?? it.text}
+                    className={cx('py-3.5 border-t', j === 0 ? 'border-ink' : 'border-rule')}
+                  >
                     {it.text}
                   </li>
                 ))}
@@ -76,19 +80,29 @@ export default async function ServicesIndex() {
       </section>
 
       {options.length ? (
-        <section className="flex flex-col gap-10 py-16 lg:py-24">
-          <div className="flex flex-col gap-3 max-w-[720px]">
-            <h2 className="h-section">{page.engagement?.heading}</h2>
+        <section className="section-gap flex flex-col gap-12 lg:gap-14">
+          <div className="flex flex-wrap items-end justify-between gap-x-16 gap-y-5">
+            <h2 className="h-section flex-[1_1_420px]">
+              <TwoTone text={page.engagement?.heading} />
+            </h2>
             {page.engagement?.intro ? (
-              <p className="text-[18px] text-body">{page.engagement.intro}</p>
+              <p className="flex-[1_1_340px] max-w-[480px] text-[18px] text-muted">
+                {page.engagement.intro}
+              </p>
             ) : null}
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-10">
-            {options.map((o) => (
-              <div key={o.id ?? o.title} className="flex flex-col gap-3 pt-5 border-t border-ink">
-                <h3 className="text-[28px] leading-[1.15]">{o.title}</h3>
-                {o.price ? <p className="text-[15px] text-faint">{o.price}</p> : null}
-                <p className="text-[16px] text-body">{o.body}</p>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-4">
+            {options.map((o, i) => (
+              <div
+                key={o.id ?? o.title}
+                className={cx(
+                  'flex flex-col gap-3 min-h-[240px] p-7 rounded-xl',
+                  tints[i % tints.length],
+                )}
+              >
+                <h3 className="text-[26px] leading-[1.12]">{o.title}</h3>
+                {o.price ? <p className="text-[16px] font-medium">{o.price}</p> : null}
+                <p className="mt-auto text-[16px] text-body">{o.body}</p>
               </div>
             ))}
           </div>

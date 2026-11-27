@@ -52,16 +52,16 @@ export const notifyEnquiry: CollectionAfterChangeHook<Enquiry> = async ({
         '',
         `Open in admin: ${adminUrl}`,
       ].join('\n'),
-      html: `<table cellpadding="4" style="font:15px/1.5 -apple-system,Segoe UI,sans-serif;color:#1b1a17">${filled
+      html: `<table cellpadding="4" style="font:15px/1.5 -apple-system,Segoe UI,sans-serif;color:#111318">${filled
         .map(
           ([k, v]) =>
-            `<tr><td style="color:#7a7468;padding-right:16px">${k}</td><td>${escape(v)}</td></tr>`,
+            `<tr><td style="color:#5f646e;padding-right:16px">${k}</td><td>${escape(v)}</td></tr>`,
         )
         .join('')}</table>
-<p style="font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1b1a17;white-space:pre-wrap;border-left:3px solid #2f5d50;padding-left:12px">${escape(
+<p style="font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#111318;white-space:pre-wrap;border-left:3px solid #087a6c;padding-left:12px">${escape(
         doc.problem,
       )}</p>
-<p style="font:14px -apple-system,Segoe UI,sans-serif"><a href="${adminUrl}" style="color:#2f5d50">Open in admin</a></p>`,
+<p style="font:14px -apple-system,Segoe UI,sans-serif"><a href="${adminUrl}" style="color:#087a6c">Open in admin</a></p>`,
     })
   } catch (err) {
     payload.logger.error({ err, msg: `Enquiry ${doc.id} saved but the notification email failed` })

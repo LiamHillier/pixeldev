@@ -3,11 +3,11 @@ import { notFound } from 'next/navigation'
 import { Figure } from '@/components/Figure'
 import { JsonLd } from '@/components/JsonLd'
 import { RichText } from '@/components/RichText'
-import { Button, Crumb, Stat } from '@/components/ui'
+import { Button, Crumb, Stat, TwoTone } from '@/components/ui'
 import { RelatedWork } from '@/components/WorkCard'
 import { getWork, getWorkItem } from '@/lib/data'
 import { absoluteUrl, breadcrumbJsonLd, ids, pageMetadata } from '@/lib/seo'
-import { docs } from '@/lib/utils'
+import { cx, docs } from '@/lib/utils'
 import type { Work } from '@/payload-types'
 
 type Params = { params: Promise<{ slug: string }> }
@@ -65,22 +65,18 @@ export default async function CaseStudyPage({ params }: Params) {
           },
         ]}
       />
-      <section className="flex flex-col gap-8 pt-12 pb-10 lg:pt-16 lg:pb-12">
+      <section className="flex flex-col gap-10 lg:gap-12 pt-14">
         <Crumb parent="Work" parentHref="/work" current={item.title} />
-        <div className="flex flex-col gap-6 max-w-[920px]">
-          <h1 className="h-detail" style={{ fontSize: 'clamp(36px, 4.7vw, 64px)' }}>
-            {cs.heading ?? item.title}
-          </h1>
-          {cs.intro ? (
-            <p className="text-[21px] leading-[1.5] text-body max-w-[760px]">{cs.intro}</p>
-          ) : null}
-        </div>
+        <h1 className="h-detail max-w-[1240px]">
+          <TwoTone text={cs.heading ?? item.title} />
+        </h1>
+        {cs.intro ? <p className="lead max-w-[760px]">{cs.intro}</p> : null}
         {cs.meta?.length ? (
-          <dl className="m-0 grid grid-cols-[repeat(auto-fit,minmax(min(180px,100%),1fr))] gap-x-8 gap-y-4 py-6 border-t border-b border-ink text-[15px]">
+          <dl className="m-0 grid grid-cols-[repeat(auto-fit,minmax(min(200px,100%),1fr))] gap-x-8 gap-y-6 pt-6 border-t border-rule text-[16px]">
             {cs.meta.map((m) => (
               <div key={m.id ?? m.label} className="flex flex-col gap-1">
-                <dt className="text-faint">{m.label}</dt>
-                <dd className="m-0">{m.value}</dd>
+                <dt className="text-muted">{m.label}</dt>
+                <dd className="m-0 font-medium">{m.value}</dd>
               </div>
             ))}
           </dl>
@@ -90,43 +86,51 @@ export default async function CaseStudyPage({ params }: Params) {
       {cs.hero?.image || cs.hero?.placeholder ? (
         <Figure
           data={cs.hero}
-          frameClassName="min-h-[300px] lg:min-h-[560px]"
-          className="pt-4 pb-14"
+          tint="blue"
+          frameClassName="aspect-[16/8] min-h-[220px]"
+          className="pt-12 lg:pt-14"
           priority
         />
       ) : null}
 
       {cs.bigStats?.length ? (
-        <section className="grid grid-cols-[repeat(auto-fit,minmax(min(240px,100%),1fr))] gap-x-10 gap-y-8 pb-20">
-          {cs.bigStats.map((s) => (
-            <div key={s.id ?? s.label} className="flex flex-col gap-2 pt-5 border-t border-ink">
-              <Stat value={s.value} label={s.label} size="lg" />
-            </div>
-          ))}
+        <section className="pt-20 lg:pt-28">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(240px,100%),1fr))] gap-x-8 gap-y-10 py-12 lg:py-14 border-t border-b border-rule">
+            {cs.bigStats.map((s, i) => (
+              <div
+                key={s.id ?? s.label}
+                className={cx(i === cs.bigStats!.length - 1 && '[&>div>span:first-child]:text-accent')}
+              >
+                <Stat value={s.value} label={s.label} size="lg" />
+              </div>
+            ))}
+          </div>
         </section>
       ) : null}
 
-      <section className="flex flex-wrap gap-x-20 gap-y-12 pb-24">
-        <div className="flex-[999_1_540px] min-w-0 flex flex-col gap-14 max-w-[720px]">
+      <section className="flex flex-wrap items-start gap-x-24 gap-y-14 pt-20 lg:pt-28">
+        <div className="flex-[999_1_560px] min-w-0 max-w-[760px] flex flex-col gap-16 lg:gap-20">
           {cs.sections?.map((sec) => (
-            <div key={sec.id ?? sec.heading} className="flex flex-col gap-4">
+            <div key={sec.id ?? sec.heading} className="flex flex-col gap-6">
               <h2
-                className="font-serif leading-[1.1] tracking-[-0.01em]"
-                style={{ fontSize: 'clamp(28px, 3vw, 38px)' }}
+                className="font-display font-medium leading-[1.06] tracking-[-0.04em]"
+                style={{ fontSize: 'clamp(28px, 3vw, 40px)' }}
               >
                 {sec.heading}
               </h2>
-              <RichText data={sec.body} className="text-[18px] leading-[1.65] text-body" />
+              <RichText data={sec.body} />
               {sec.steps?.length ? (
-                <ol className="flex flex-col text-[17px] text-body pt-2 m-0 p-0 list-none">
+                <ol className="flex flex-col text-[18px] text-body m-0 p-0 list-none">
                   {sec.steps.map((st, i) => (
                     <li
                       key={st.id ?? i}
-                      className={`grid grid-cols-[48px_1fr] gap-4 py-4 border-t border-rule ${
-                        i === sec.steps!.length - 1 ? 'border-b' : ''
-                      }`}
+                      className={cx(
+                        'grid grid-cols-[44px_1fr] gap-4 py-4 border-t',
+                        i === 0 ? 'border-ink' : 'border-rule',
+                        i === sec.steps!.length - 1 && 'border-b border-b-rule',
+                      )}
                     >
-                      <span className="font-serif text-[26px] leading-none text-faint">
+                      <span className="font-display font-medium text-[24px] leading-[1.25] text-grey">
                         {i + 1}
                       </span>
                       <span>{st.text}</span>
@@ -137,47 +141,48 @@ export default async function CaseStudyPage({ params }: Params) {
               {sec.figure?.image || sec.figure?.placeholder ? (
                 <Figure
                   data={sec.figure}
-                  frameClassName="min-h-[260px] lg:min-h-[400px]"
-                  className="pt-4"
+                  frameClassName="min-h-[240px] lg:min-h-[380px]"
+                  className="pt-2"
+                  sizes="(min-width: 1024px) 760px, 100vw"
                 />
               ) : null}
             </div>
           ))}
 
           {cs.quote?.text ? (
-            <div className="flex flex-col gap-5 py-8 border-t border-b border-ink">
-              <p
-                className="font-serif italic leading-[1.3]"
-                style={{ fontSize: 'clamp(22px, 2.6vw, 30px)' }}
+            <figure className="m-0 flex flex-col gap-6 pl-6 border-l-2 border-accent">
+              <blockquote
+                className="m-0 font-display font-medium leading-[1.2] tracking-[-0.035em]"
+                style={{ fontSize: 'clamp(24px, 2.6vw, 34px)' }}
               >
                 “{cs.quote.text}”
-              </p>
+              </blockquote>
               {cs.quote.attribution ? (
-                <p className="text-[15px] text-faint">{cs.quote.attribution}</p>
+                <figcaption className="text-[16px] text-muted">{cs.quote.attribution}</figcaption>
               ) : null}
-            </div>
+            </figure>
           ) : null}
         </div>
 
-        <aside className="flex-[1_1_260px] flex flex-col gap-10">
+        <aside className="flex-[1_1_300px] min-w-0 flex flex-col gap-4 lg:sticky lg:top-8">
           {cs.atAGlance?.length ? (
-            <dl className="m-0 flex flex-col gap-4 text-[15px] pt-5 border-t border-ink">
-              <p className="text-[13px] text-faint">At a glance</p>
+            <dl className="m-0 flex flex-col gap-4 text-[16px] p-7 rounded-xl bg-fill">
+              <p className="text-[15px] text-muted">At a glance</p>
               {cs.atAGlance.map((g) => (
-                <div key={g.id ?? g.label} className="flex flex-col gap-1">
-                  <dt className="text-faint">{g.label}</dt>
+                <div key={g.id ?? g.label} className="flex flex-col gap-1 pt-4 border-t border-line">
+                  <dt className="text-[15px] text-muted">{g.label}</dt>
                   <dd className="m-0">{g.value}</dd>
                 </div>
               ))}
             </dl>
           ) : null}
           {cs.asideCta?.heading ? (
-            <div className="flex flex-col gap-3 pt-5 border-t border-ink">
-              <h3 className="text-[26px] leading-[1.15]">{cs.asideCta.heading}</h3>
+            <div className="flex flex-col gap-3.5 p-7 rounded-xl bg-tint-teal">
+              <h3 className="text-[26px] leading-[1.12]">{cs.asideCta.heading}</h3>
               {cs.asideCta.body ? (
-                <p className="text-[15px] text-muted">{cs.asideCta.body}</p>
+                <p className="text-[16px] text-body">{cs.asideCta.body}</p>
               ) : null}
-              <Button href="/contact" className="self-start min-h-[48px] px-6 text-[15px]">
+              <Button href="/contact" className="self-start mt-2">
                 {cs.asideCta.ctaLabel ?? 'Start a project'}
               </Button>
             </div>
@@ -186,6 +191,7 @@ export default async function CaseStudyPage({ params }: Params) {
       </section>
 
       <RelatedWork heading="More work" items={more} />
+      <div className="pb-24 lg:pb-[136px]" />
     </>
   )
 }

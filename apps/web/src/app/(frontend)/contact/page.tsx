@@ -3,6 +3,7 @@ import { PageHeader, ULink } from '@/components/ui'
 import { JsonLd } from '@/components/JsonLd'
 import { getContactPage, getSite } from '@/lib/data'
 import { breadcrumbJsonLd, pageMetadata, absoluteUrl, ids } from '@/lib/seo'
+import { cx } from '@/lib/utils'
 import { ContactForm } from './ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -35,15 +36,10 @@ export default async function ContactPage() {
           },
         ]}
       />
-      <PageHeader
-        eyebrow={page.eyebrow}
-        heading={page.heading}
-        intro={page.intro}
-        className="max-w-[820px] lg:pt-[88px] lg:pb-14"
-      />
+      <PageHeader eyebrow={page.eyebrow} heading={page.heading} intro={page.intro} />
 
-      <section className="flex flex-wrap gap-x-20 gap-y-14 pb-24 border-t border-ink">
-        <div className="flex-[999_1_520px] min-w-0">
+      <section className="flex flex-wrap items-start gap-x-24 gap-y-16 pt-16 lg:pt-24 pb-24 lg:pb-[136px]">
+        <div className="flex-[999_1_540px] min-w-0 max-w-[780px]">
           <ContactForm
             needOptions={(page.form?.needOptions ?? []).map((o) => o.label)}
             budgetOptions={(page.form?.budgetOptions ?? []).map((o) => o.label)}
@@ -54,42 +50,55 @@ export default async function ContactPage() {
           />
         </div>
 
-        <aside className="flex-[1_1_260px] flex flex-col gap-10 pt-12">
+        <aside className="flex-[1_1_300px] min-w-0 flex flex-col gap-12">
           {steps.length ? (
-            <div className="flex flex-col gap-5">
-              <p className="text-[13px] text-faint">{page.nextSteps?.heading}</p>
+            <div className="flex flex-col">
+              <p className="pb-4 text-[15px] text-muted">{page.nextSteps?.heading}</p>
               {steps.map((s, i) => (
                 <div
                   key={s.id ?? i}
-                  className="grid grid-cols-[40px_1fr] gap-3 pt-3.5 border-t border-rule"
+                  className={cx(
+                    'flex gap-5 py-[18px] border-t',
+                    i === 0 ? 'border-ink' : 'border-rule',
+                    i === steps.length - 1 && 'border-b border-b-rule',
+                  )}
                 >
-                  <span className="font-serif text-[26px] leading-none text-faint">{i + 1}</span>
-                  <p className="text-[15px] text-body">{s.text}</p>
+                  <span
+                    className={cx(
+                      'shrink-0 w-6 font-display font-medium text-[24px] leading-[1.1]',
+                      i === steps.length - 1 ? 'text-ink' : 'text-grey',
+                    )}
+                  >
+                    {i + 1}
+                  </span>
+                  <p className="text-[16px] text-body">{s.text}</p>
                 </div>
               ))}
             </div>
           ) : null}
-          <div className="flex flex-col gap-2.5 text-[15px] pt-5 border-t border-ink">
-            <p className="text-[13px] text-faint">{page.aside?.directHeading ?? 'Or directly'}</p>
+          <div className="flex flex-col gap-1 text-[16px]">
+            <p className="pb-2 text-[15px] text-muted">{page.aside?.directHeading ?? 'Or directly'}</p>
             {site.email ? (
-              <ULink href={`mailto:${site.email}`} className="text-[15px] self-start">
+              <ULink href={`mailto:${site.email}`} className="self-start text-[16px]">
                 {site.email}
               </ULink>
             ) : null}
             {site.linkedin ? (
-              <ULink href={site.linkedin} className="text-[15px] self-start">
+              <ULink href={site.linkedin} className="self-start text-[16px]">
                 LinkedIn
               </ULink>
             ) : null}
-            {page.aside?.directNote ? <p className="text-muted">{page.aside.directNote}</p> : null}
+            {page.aside?.directNote ? (
+              <p className="pt-2 text-muted">{page.aside.directNote}</p>
+            ) : null}
           </div>
           {page.aside?.supportHeading ? (
-            <div className="flex flex-col gap-1.5 text-[15px] pt-5 border-t border-ink">
-              <p className="font-semibold">{page.aside.supportHeading}</p>
+            <div className="flex flex-col gap-2 p-6 rounded-xl bg-fill text-[16px]">
+              <p className="font-medium">{page.aside.supportHeading}</p>
               <p className="text-muted">
                 {page.aside.supportNote}{' '}
                 {site.supportEmail ? (
-                  <a href={`mailto:${site.supportEmail}`} className="link-u">
+                  <a href={`mailto:${site.supportEmail}`} className="link-u text-ink">
                     {site.supportEmail}
                   </a>
                 ) : null}

@@ -30,7 +30,7 @@ export default async function JournalIndex({
   const filtered = topic
     ? posts.filter((p) => typeof p.topic === 'object' && p.topic?.slug === topic)
     : posts
-  const featured = topic ? null : filtered.find((p) => p.featured) ?? null
+  const featured = topic ? null : (filtered.find((p) => p.featured) ?? null)
   const rest = featured ? filtered.filter((p) => p.id !== featured.id) : filtered
 
   return (
@@ -50,87 +50,92 @@ export default async function JournalIndex({
           },
         ]}
       />
-      <PageHeader
-        eyebrow={page.eyebrow}
-        heading={page.heading}
-        intro={page.intro}
-        className="lg:pt-[88px] lg:pb-14"
-      >
+      <PageHeader eyebrow={page.eyebrow} heading={page.heading} intro={page.intro}>
         {topics.length ? (
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-[15px] text-faint">
-            <span>Topics</span>
+          <nav
+            aria-label="Topics"
+            className="flex flex-wrap items-center gap-x-6 gap-y-1 text-[16px]"
+          >
+            <span className="text-muted">Topics</span>
             {topics.map((t) => (
               <Link
                 key={t.id}
                 href={topic === t.slug ? '/journal' : `/journal?topic=${t.slug}`}
-                className={cx('link-u', topic === t.slug && 'text-accent')}
+                aria-current={topic === t.slug ? 'page' : undefined}
+                className={cx(
+                  'link-u inline-flex items-center min-h-[44px]',
+                  topic === t.slug && 'text-accent',
+                )}
               >
                 {t.name}
               </Link>
             ))}
-          </div>
+          </nav>
         ) : null}
       </PageHeader>
 
       {featured ? (
-        <Link
-          href={`/journal/${featured.slug}`}
-          className="row-hover grid grid-cols-[repeat(auto-fit,minmax(min(420px,100%),1fr))] gap-x-16 gap-y-8 py-12 border-t border-ink items-start"
-        >
-          <Figure
-            data={featured.cover}
-            frameClassName="aspect-[4/3]"
-            showCaption={false}
-            sizes="(min-width: 1024px) 560px, 100vw"
-          />
-          <div className="flex flex-col gap-4">
-            <p className="text-[14px] text-faint">
-              {[
-                'Featured',
-                topicName(featured),
-                formatDate(featured.publishedAt),
-                featured.readingMinutes ? `${featured.readingMinutes} minute read` : null,
-              ]
-                .filter(Boolean)
-                .join('. ')}
-              .
-            </p>
-            <h2
-              className="font-serif leading-[1.08] tracking-[-0.015em]"
-              style={{ fontSize: 'clamp(30px, 3.4vw, 44px)' }}
-            >
-              {featured.title}
-            </h2>
-            <p className="text-[17px] text-body">{featured.excerpt}</p>
-            <span className="link-u text-[16px] self-start">Read the article</span>
-          </div>
-        </Link>
+        <section className="pt-20 lg:pt-24">
+          <Link
+            href={`/journal/${featured.slug}`}
+            className="row-hover flex flex-wrap items-center gap-x-[72px] gap-y-8"
+          >
+            <Figure
+              data={featured.cover}
+              frameClassName="aspect-[16/10] bg-tint-teal"
+              showCaption={false}
+              className="flex-[3_1_480px] min-w-0"
+              sizes="(min-width: 1024px) 800px, 100vw"
+            />
+            <div className="flex-[2_1_400px] min-w-0 flex flex-col gap-[18px]">
+              <p className="text-[15px] text-muted">
+                {[
+                  'Featured',
+                  topicName(featured),
+                  formatDate(featured.publishedAt),
+                  featured.readingMinutes ? `${featured.readingMinutes} minute read` : null,
+                ]
+                  .filter(Boolean)
+                  .join('. ')}
+                .
+              </p>
+              <h2
+                className="font-display font-medium leading-[1.05] tracking-[-0.04em]"
+                style={{ fontSize: 'clamp(30px, 3.2vw, 44px)' }}
+              >
+                {featured.title}
+              </h2>
+              <p className="text-[18px] text-body">{featured.excerpt}</p>
+              <span className="link-u self-start pt-1 text-accent">Read the article</span>
+            </div>
+          </Link>
+        </section>
       ) : null}
 
-      <section className="flex flex-col pb-24">
+      <section className="flex flex-col pt-20 lg:pt-28 pb-24 lg:pb-[136px]">
         {rest.map((p, i) => (
           <Link
             key={p.id}
             href={`/journal/${p.slug}`}
             className={cx(
-              'row-hover grid grid-cols-[repeat(auto-fit,minmax(min(200px,100%),1fr))] gap-x-12 gap-y-3 py-8 border-t items-start',
+              'row-hover flex flex-wrap items-baseline gap-x-16 gap-y-3 py-8 lg:py-[34px] border-t',
               i === 0 ? 'border-ink' : 'border-rule',
               i === rest.length - 1 && 'border-b border-b-ink',
             )}
           >
-            <p className="text-[14px] text-faint">
+            <p className="flex-[1_1_200px] text-[15px] text-muted">
               {formatDate(p.publishedAt)}
               <br />
               {topicName(p)}
             </p>
-            <div className="flex flex-col gap-2 md:col-span-2">
+            <div className="flex-[3_1_520px] min-w-0 max-w-[900px] flex flex-col gap-2.5">
               <h3 className="h-card">{p.title}</h3>
               <p className="text-[16px] text-muted">{p.excerpt}</p>
             </div>
           </Link>
         ))}
         {!rest.length && !featured ? (
-          <p className="py-12 text-[16px] text-faint border-t border-ink">Nothing here yet.</p>
+          <p className="py-12 text-[16px] text-muted border-t border-ink">Nothing here yet.</p>
         ) : null}
       </section>
     </>

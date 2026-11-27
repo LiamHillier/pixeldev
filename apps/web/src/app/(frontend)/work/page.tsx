@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { PageHeader, StatRow, ULink } from '@/components/ui'
+import type { ReactNode } from 'react'
+import { PageHeader, StatRow, TwoTone, ULink } from '@/components/ui'
 import { WorkCard, WorkRow } from '@/components/WorkCard'
 import { JsonLd } from '@/components/JsonLd'
 import { getWork, getWorkPage } from '@/lib/data'
@@ -17,6 +18,38 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
+function GroupHeader({
+  heading,
+  intro,
+  note,
+}: {
+  heading?: string | null
+  intro?: string | null
+  note?: string | null
+}) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-x-16 gap-y-5">
+      <h2 className="h-section flex-[1_1_420px]">
+        <TwoTone text={heading} />
+      </h2>
+      {intro || note ? (
+        <div className="flex-[1_1_340px] max-w-[520px] flex flex-col gap-2">
+          {intro ? <p className="text-[18px] text-muted">{intro}</p> : null}
+          {note ? <p className="text-[15px] text-muted">{note}</p> : null}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+function Group({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <section id={id} className="section-gap flex flex-col gap-12 lg:gap-14 scroll-mt-8">
+      {children}
+    </section>
+  )
+}
+
 export default async function WorkIndex() {
   const [page, all] = await Promise.all([getWorkPage(), getWork()])
   const products = all.filter((w) => w.kind === 'product')
@@ -26,85 +59,59 @@ export default async function WorkIndex() {
   return (
     <>
       <JsonLd data={[breadcrumbJsonLd([{ name: 'Work', path: '/work' }])]} />
-      <PageHeader
-        eyebrow={page.eyebrow}
-        heading={page.heading}
-        intro={page.intro}
-        className="lg:pb-16"
-      >
-        <div className="flex flex-wrap gap-x-7 gap-y-2 text-[16px]">
+      <PageHeader eyebrow={page.eyebrow} heading={page.heading} intro={page.intro}>
+        <nav aria-label="Jump to" className="flex flex-wrap gap-x-7 gap-y-1">
           {products.length ? <ULink href="#products">{page.products?.heading}</ULink> : null}
           {clients.length ? <ULink href="#clients">{page.clients?.heading}</ULink> : null}
-          {anonymised.length ? <ULink href="#anonymised">{page.anonymised?.heading}</ULink> : null}
-        </div>
+          {anonymised.length ? (
+            <ULink href="#anonymised">{page.anonymised?.heading}</ULink>
+          ) : null}
+        </nav>
       </PageHeader>
 
       {products.length ? (
-        <section
-          id="products"
-          className="flex flex-col gap-10 pt-16 pb-24 border-t border-ink scroll-mt-8"
-        >
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(360px,100%),1fr))] gap-x-16 gap-y-4 items-start">
-            <h2 className="h-section">{page.products?.heading}</h2>
-            {page.products?.intro ? (
-              <p className="text-[17px] text-body max-w-[520px]">{page.products.intro}</p>
-            ) : null}
-          </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] gap-x-10 gap-y-12">
+        <Group id="products">
+          <GroupHeader heading={page.products?.heading} intro={page.products?.intro} />
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] gap-x-8 gap-y-14">
             {products.map((w) => (
               <WorkCard key={w.id} item={w} showStats showCategory />
             ))}
           </div>
-        </section>
+        </Group>
       ) : null}
 
       {clients.length ? (
-        <section
-          id="clients"
-          className="flex flex-col gap-10 pt-16 pb-24 border-t border-ink scroll-mt-8"
-        >
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(360px,100%),1fr))] gap-x-16 gap-y-4 items-start">
-            <h2 className="h-section">{page.clients?.heading}</h2>
-            <div className="flex flex-col gap-2 max-w-[520px]">
-              {page.clients?.intro ? (
-                <p className="text-[17px] text-body">{page.clients.intro}</p>
-              ) : null}
-              {page.clients?.note ? (
-                <p className="text-[14px] text-faint">{page.clients.note}</p>
-              ) : null}
-            </div>
-          </div>
+        <Group id="clients">
+          <GroupHeader
+            heading={page.clients?.heading}
+            intro={page.clients?.intro}
+            note={page.clients?.note}
+          />
           <div className="flex flex-col">
             {clients.map((w, i) => (
-              <WorkRow key={w.id} item={w} last={i === clients.length - 1} />
+              <WorkRow key={w.id} item={w} first={i === 0} last={i === clients.length - 1} />
             ))}
           </div>
-        </section>
+        </Group>
       ) : null}
 
       {anonymised.length ? (
-        <section
-          id="anonymised"
-          className="flex flex-col gap-10 pt-16 pb-24 border-t border-ink scroll-mt-8"
-        >
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(360px,100%),1fr))] gap-x-16 gap-y-4 items-start">
-            <h2 className="h-section">{page.anonymised?.heading}</h2>
-            {page.anonymised?.intro ? (
-              <p className="text-[17px] text-body max-w-[520px]">{page.anonymised.intro}</p>
-            ) : null}
-          </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] gap-10">
+        <Group id="anonymised">
+          <GroupHeader heading={page.anonymised?.heading} intro={page.anonymised?.intro} />
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-4">
             {anonymised.map((w) => (
-              <div key={w.id} className="flex flex-col gap-3.5 pt-5 border-t border-ink">
-                {w.category ? <p className="text-[14px] text-faint">{w.category}</p> : null}
-                <h3 className="text-[28px] leading-[1.15] tracking-[-0.01em]">{w.title}</h3>
+              <div key={w.id} className="flex flex-col gap-3.5 p-7 rounded-xl bg-fill">
+                {w.category ? <p className="text-[15px] text-muted">{w.category}</p> : null}
+                <h3 className="text-[26px] leading-[1.12]">{w.title}</h3>
                 <p className="text-[16px] text-body">{w.summary}</p>
-                <StatRow stats={w.stats} className="mt-auto" />
+                <StatRow stats={w.stats} className="mt-auto border-line" />
               </div>
             ))}
           </div>
-        </section>
+        </Group>
       ) : null}
+
+      <div className="pb-24 lg:pb-[136px]" />
     </>
   )
 }

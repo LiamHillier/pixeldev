@@ -6,33 +6,54 @@ import { cx } from '@/lib/utils'
 
 type NavItem = { label: string; href: string }
 
+/** Nav on the left, wordmark in the middle, the contact link with its arrow dot on the right. */
 export function Header({ name, nav, ctaLabel }: { name: string; nav: NavItem[]; ctaLabel: string }) {
   const pathname = usePathname()
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href))
+  const contactActive = isActive('/contact')
   return (
-    <header className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 pt-8 pb-6 border-b border-ink">
-      <Link href="/" className="font-serif text-[26px] font-medium tracking-[-0.01em]">
-        {name}
-      </Link>
-      <nav aria-label="Primary" className="flex flex-wrap gap-x-7 gap-y-2 text-[16px]">
+    <header className="grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-x-6 gap-y-1 py-4 lg:py-[22px] text-[16px] lg:text-[17px]">
+      <nav
+        aria-label="Primary"
+        className="order-3 md:order-none col-span-2 md:col-span-1 flex flex-wrap items-center gap-x-6 lg:gap-x-7 -ml-px"
+      >
         {nav.map((item) => (
           <Link
             key={item.href}
             href={item.href}
             aria-current={isActive(item.href) ? 'page' : undefined}
-            className={cx('hover:text-accent transition-colors', isActive(item.href) && 'text-accent')}
+            className={cx(
+              'inline-flex items-center min-h-[44px] hover:text-accent transition-colors',
+              isActive(item.href) && 'underline underline-offset-[5px] decoration-1',
+            )}
           >
             {item.label}
           </Link>
         ))}
+      </nav>
+      <Link
+        href="/"
+        className="inline-flex items-center min-h-[44px] font-display text-[24px] font-semibold tracking-[-0.04em]"
+      >
+        {name}
+      </Link>
+      <div className="flex justify-end">
         <Link
           href="/contact"
-          aria-current={isActive('/contact') ? 'page' : undefined}
-          className={cx('link-u', isActive('/contact') && 'text-accent')}
+          aria-current={contactActive ? 'page' : undefined}
+          className="group inline-flex items-center gap-3.5 min-h-[44px]"
         >
-          {ctaLabel}
+          <span className="underline underline-offset-[5px] decoration-1">{ctaLabel}</span>
+          <span
+            aria-hidden="true"
+            className="inline-flex items-center justify-center w-[34px] h-[34px] rounded-full bg-accent text-white transition-colors group-hover:bg-ink"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+          </span>
         </Link>
-      </nav>
+      </div>
     </header>
   )
 }
