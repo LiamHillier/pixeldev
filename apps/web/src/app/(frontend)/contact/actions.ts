@@ -1,6 +1,7 @@
 'use server'
 
 import { getPayloadClient } from '@/lib/payload'
+import { fieldError, formPaths, otherName, type FormField } from './form-config'
 
 export type EnquiryState = { status: 'idle' } | { status: 'sent' } | { status: 'error'; message: string }
 
@@ -11,19 +12,33 @@ function text(form: FormData, key: string, max = MAX.short): string {
   return typeof v === 'string' ? v.trim().slice(0, max) : ''
 }
 
+/** What was entered for a field, as one string. Choice values outside the field's options are dropped. */
+function answer(form: FormData, field: FormField): string {
+  if (field.kind === 'textarea') return text(form, field.name, MAX.long)
+  if (field.kind === 'text') return text(form, field.name)
+  const picked = form.getAll(field.name).filter((v): v is string => typeof v === 'string')
+  const valid = field.options.filter((o) => picked.includes(o))
+  const chosen = field.multiple ? valid : valid.slice(0, 1)
+  const other = field.other ? text(form, otherName(field)) : ''
+  return [...chosen, ...(other ? [other] : [])].join(', ')
+}
+
 export async function submitEnquiry(_prev: EnquiryState, form: FormData): Promise<EnquiryState> {
   // Honeypot: real users never fill this.
   if (text(form, 'website')) return { status: 'sent' }
 
-  const name = text(form, 'name')
-  const email = text(form, 'email')
-  const problem = text(form, 'problem', MAX.long)
+  const path = formPaths.find((p) => p.id === text(form, 'intent'))
+  if (!path) return { status: 'error', message: 'Pick what you’re after first.' }
 
-  if (!name || !email || !problem) {
-    return { status: 'error', message: 'Name, email and a few words about the problem are needed.' }
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { status: 'error', message: 'That email address does not look right.' }
+  const stored: Record<string, string> = {}
+  const answers: { question: string; answer: string }[] = []
+  for (const field of path.steps.flatMap((s) => s.fields)) {
+    const value = answer(form, field)
+    const error = fieldError(field, value)
+    if (error) return { status: 'error', message: error }
+    if (!value) continue
+    if (field.store) stored[field.store] = value
+    else answers.push({ question: field.label.replace(/ \(optional\)$/, ''), answer: value })
   }
 
   try {
@@ -31,13 +46,14 @@ export async function submitEnquiry(_prev: EnquiryState, form: FormData): Promis
     await payload.create({
       collection: 'enquiries',
       data: {
-        name,
-        email,
-        business: text(form, 'business') || undefined,
-        need: text(form, 'need') || undefined,
-        systems: text(form, 'systems') || undefined,
-        problem,
-        budget: text(form, 'budget') || undefined,
+        name: stored.name,
+        email: stored.email,
+        business: stored.business || undefined,
+        phone: stored.phone || undefined,
+        need: path.label,
+        systems: stored.systems || undefined,
+        problem: stored.problem,
+        answers,
       },
     })
     return { status: 'sent' }

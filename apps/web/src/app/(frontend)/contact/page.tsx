@@ -5,6 +5,7 @@ import { Eyebrow, Marquee, TwoTone, plainHeading } from '@/components/ui'
 import { JsonLd } from '@/components/JsonLd'
 import { getClientNames, getContactPage, getSite } from '@/lib/data'
 import { breadcrumbJsonLd, pageMetadata, absoluteUrl, ids } from '@/lib/seo'
+import { cx } from '@/lib/utils'
 import { ContactForm } from './ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -43,12 +44,16 @@ export default async function ContactPage() {
       tint: 'blue',
     })
   }
-  cards.push({
-    title: opts?.message?.title || 'Send a message below',
-    body: opts?.message?.body,
-    href: '#form',
-    tint: 'lilac',
-  })
+  // The message card only earns its place next to another way to get in touch. On its own it is a
+  // big box pointing at the form directly under it, so the form simply follows the intro.
+  if (cards.length) {
+    cards.push({
+      title: opts?.message?.title || 'Send a message below',
+      body: opts?.message?.body,
+      href: '#form',
+      tint: 'lilac',
+    })
+  }
 
   return (
     <>
@@ -77,12 +82,13 @@ export default async function ContactPage() {
 
       <section
         id="form"
-        className="flex flex-wrap items-start gap-x-24 gap-y-16 pt-24 lg:pt-28 pb-[60px]"
+        className={cx(
+          'flex flex-wrap items-start gap-x-24 gap-y-16 pb-[60px]',
+          cards.length ? 'pt-24 lg:pt-28' : 'pt-16 lg:pt-24',
+        )}
       >
         <div className="rv flex-[999_1_540px] min-w-0 max-w-[780px]">
           <ContactForm
-            needOptions={(page.form?.needOptions ?? []).map((o) => o.label)}
-            budgetOptions={(page.form?.budgetOptions ?? []).map((o) => o.label)}
             submitLabel={page.form?.submitLabel ?? 'Send it'}
             submitNote={page.form?.submitNote}
             successHeading={page.form?.successHeading ?? 'Got it.'}

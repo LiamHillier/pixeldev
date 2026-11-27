@@ -15,7 +15,7 @@ export const ContactPage: GlobalConfig = {
       label: 'Option cards',
       admin: {
         description:
-          'The tinted cards under the heading. The booking card shows only when a booking link is set, and the call card only when Site settings has a phone number.',
+          'The tinted cards under the heading. The booking card shows only when a booking link is set, the call card only when Site settings has a phone number, and the message card only next to one of those.',
       },
       fields: [
         {
@@ -58,17 +58,11 @@ export const ContactPage: GlobalConfig = {
     {
       name: 'form',
       type: 'group',
+      admin: {
+        description:
+          'The questions themselves live in the code (src/app/(frontend)/contact/form-config.ts).',
+      },
       fields: [
-        {
-          name: 'needOptions',
-          type: 'array',
-          fields: [{ name: 'label', type: 'text', required: true }],
-        },
-        {
-          name: 'budgetOptions',
-          type: 'array',
-          fields: [{ name: 'label', type: 'text', required: true }],
-        },
         { name: 'submitLabel', type: 'text', defaultValue: 'Send it' },
         { name: 'submitNote', type: 'text' },
         { name: 'successHeading', type: 'text', defaultValue: 'Got it.' },

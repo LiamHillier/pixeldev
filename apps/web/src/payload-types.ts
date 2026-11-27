@@ -630,9 +630,23 @@ export interface Enquiry {
   name: string;
   email: string;
   business?: string | null;
+  phone?: string | null;
   need?: string | null;
   systems?: string | null;
+  /**
+   * The process, project or question they described.
+   */
   problem: string;
+  /**
+   * The rest of what they answered in the form, one row per question.
+   */
+  answers?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
   budget?: string | null;
   status?: ('new' | 'replied' | 'won' | 'closed') | null;
   updatedAt: string;
@@ -1066,9 +1080,17 @@ export interface EnquiriesSelect<T extends boolean = true> {
   name?: T;
   email?: T;
   business?: T;
+  phone?: T;
   need?: T;
   systems?: T;
   problem?: T;
+  answers?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   budget?: T;
   status?: T;
   updatedAt?: T;
@@ -1748,7 +1770,7 @@ export interface ContactPage {
   heading: string;
   intro?: string | null;
   /**
-   * The tinted cards under the heading. The booking card shows only when a booking link is set, and the call card only when Site settings has a phone number.
+   * The tinted cards under the heading. The booking card shows only when a booking link is set, the call card only when Site settings has a phone number, and the message card only next to one of those.
    */
   options?: {
     booking?: {
@@ -1771,19 +1793,10 @@ export interface ContactPage {
       body?: string | null;
     };
   };
+  /**
+   * The questions themselves live in the code (src/app/(frontend)/contact/form-config.ts).
+   */
   form?: {
-    needOptions?:
-      | {
-          label: string;
-          id?: string | null;
-        }[]
-      | null;
-    budgetOptions?:
-      | {
-          label: string;
-          id?: string | null;
-        }[]
-      | null;
     submitLabel?: string | null;
     submitNote?: string | null;
     successHeading?: string | null;
@@ -2337,18 +2350,6 @@ export interface ContactPageSelect<T extends boolean = true> {
   form?:
     | T
     | {
-        needOptions?:
-          | T
-          | {
-              label?: T;
-              id?: T;
-            };
-        budgetOptions?:
-          | T
-          | {
-              label?: T;
-              id?: T;
-            };
         submitLabel?: T;
         submitNote?: T;
         successHeading?: T;

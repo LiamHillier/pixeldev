@@ -35,8 +35,8 @@ export default async function PrivacyPage() {
           <p>
             If you use the <Link href="/contact">contact form</Link>, we collect what you type into
             it: your name, email address, and anything else you choose to tell us, such as your
-            business name, the systems you use, the problem you’re trying to solve and a rough
-            budget. If you email us directly, we get your email address and whatever is in the
+            business name, phone number, the systems you use and the process or project you
+            describe. If you email us directly, we get your email address and whatever is in the
             message.
           </p>
           <p>

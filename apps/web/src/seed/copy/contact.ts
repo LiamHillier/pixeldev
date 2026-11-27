@@ -3,10 +3,10 @@
  *
  *   contactPageCopy  ->  payload.updateGlobal({ slug: 'contact-page', data: contactPageCopy })
  *
- * The `form` group is left out on purpose: the start-a-project form keeps its current labels,
- * options and messages. The seo group is left out too.
- * The booking card stays hidden until `options.booking.bookingUrl` is set, and the call card
- * until Site settings has `business.phone`.
+ * The `form` group is left out on purpose: the form keeps its current button label and messages
+ * (its questions are in src/app/(frontend)/contact/form-config.ts). The seo group is left out too.
+ * The booking card stays hidden until `options.booking.bookingUrl` is set, the call card until
+ * Site settings has `business.phone`, and the message card until one of those two shows.
  */
 import type { ContactPage } from '@/payload-types'
 

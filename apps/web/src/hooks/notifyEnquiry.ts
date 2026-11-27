@@ -31,9 +31,10 @@ export const notifyEnquiry: CollectionAfterChangeHook<Enquiry> = async ({
       ['Name', doc.name],
       ['Email', doc.email],
       ['Business', doc.business],
-      ['Needs help with', doc.need],
-      ['Current systems', doc.systems],
-      ['Budget', doc.budget],
+      ['Phone', doc.phone],
+      ['After', doc.need],
+      ['Systems', doc.systems],
+      ...(doc.answers ?? []).map((a): [string, string] => [a.question, a.answer]),
     ]
     const filled = rows.filter((r): r is [string, string] => Boolean(r[1]))
     const adminUrl = `${
@@ -55,7 +56,7 @@ export const notifyEnquiry: CollectionAfterChangeHook<Enquiry> = async ({
       html: `<table cellpadding="4" style="font:15px/1.5 -apple-system,Segoe UI,sans-serif;color:#111318">${filled
         .map(
           ([k, v]) =>
-            `<tr><td style="color:#5f646e;padding-right:16px">${k}</td><td>${escape(v)}</td></tr>`,
+            `<tr><td style="color:#5f646e;padding-right:16px;vertical-align:top">${escape(k)}</td><td>${escape(v)}</td></tr>`,
         )
         .join('')}</table>
 <p style="font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#111318;white-space:pre-wrap;border-left:3px solid #087a6c;padding-left:12px">${escape(

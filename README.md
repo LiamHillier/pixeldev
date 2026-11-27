@@ -34,7 +34,7 @@ packages/                    shared packages go here as the monorepo grows
 - **Services** (`/services/[slug]`): listing copy for the home page and index, plus a full page (hero, figure, pain points, offerings, approach, optional plans, related work, FAQs, closing CTA).
 - **Work** (`/work`, `/work/[slug]`): products, client projects and anonymised projects. Toggle "Publish a case study page" to get a full case study with narrative sections, stats, quote and sidebar.
 - **Posts** (`/journal`, `/journal/[slug]`): drafts and publishing, topics, cover, Lexical body. The article sidebar table of contents is built from the H2/H3 headings.
-- **Enquiries**: contact form submissions. The form is a server action; a honeypot field drops bots. Each new enquiry is emailed to `ENQUIRY_NOTIFY_TO` (or the Site settings email) with Reply-To set to the sender.
+- **Enquiries**: contact form submissions. The form is multi-step: the first screen asks what the visitor is after and picks the questions that follow, all defined in `src/app/(frontend)/contact/form-config.ts`. It submits through a server action; a honeypot field drops bots. Each new enquiry is emailed to `ENQUIRY_NOTIFY_TO` (or the Site settings email) with Reply-To set to the sender.
 - **Media**: uploads with `card` and `wide` sizes. Every image field has a placeholder note that renders in a grey box until an image is uploaded.
 
 Square-bracket placeholders in the seeded copy (`[YEAR]`, `[N]`, `[YOUR ABN]`) are meant to be filled in through the admin.
