@@ -12,7 +12,7 @@ export const workPageCopy = {
   eyebrow: 'Work',
   heading: 'Things we’ve shipped, {live} *and the ones we still look after.*',
   intro:
-    'Every one of these started with someone describing something slow, manual or fragile in their business. Two kinds below: products we own and support ourselves, and client projects we can name.',
+    'Every one of these started with someone describing something slow, manual or fragile in their business. Two kinds below: client projects we can name, and products we own and support ourselves.',
   products: {
     heading: 'Products we *own and run*',
     intro:
@@ -48,6 +48,6 @@ export const workPageCopy = {
   },
   marquee: {
     label: 'Businesses and brands we’ve built for',
-    items: [{ name: 'TakeShape Adventures' }, { name: 'Bowery' }, { name: 'KIR' }],
+    items: [{ name: 'TakeShape Adventures' }, { name: 'Bowery' }, { name: 'Test Drive' }],
   },
 } satisfies Partial<WorkPage>

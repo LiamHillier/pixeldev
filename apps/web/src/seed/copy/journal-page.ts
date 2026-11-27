@@ -29,6 +29,6 @@ export const journalPageCopy = {
   },
   marquee: {
     label: 'Businesses and brands we’ve built for',
-    items: [{ name: 'TakeShape Adventures' }, { name: 'Bowery' }, { name: 'KIR' }],
+    items: [{ name: 'TakeShape Adventures' }, { name: 'Bowery' }, { name: 'Test Drive' }],
   },
 } satisfies Partial<JournalPage>

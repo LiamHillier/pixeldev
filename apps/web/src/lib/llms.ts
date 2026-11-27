@@ -75,7 +75,7 @@ export async function buildLlmsTxt(): Promise<string> {
       `- [About ${site.ownerName || site.name}](${absoluteUrl(
         '/about',
       )}): background, how projects run and who does the work`,
-      `- [All work](${absoluteUrl('/work')}): products, client projects and anonymised projects`,
+      `- [All work](${absoluteUrl('/work')}): client projects, products and anonymised projects`,
       `- [Contact](${absoluteUrl('/contact')}): start a project or ask a question`,
     ].join('\n'),
     posts.length

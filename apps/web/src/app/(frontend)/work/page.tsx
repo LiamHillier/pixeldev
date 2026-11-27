@@ -72,8 +72,8 @@ export default async function WorkIndex() {
   const marquee = (page.marquee?.items ?? []).map((m) => m.name).filter(Boolean)
 
   const jump = [
-    products.length ? { href: '#products', label: page.products?.navLabel } : null,
     clients.length ? { href: '#clients', label: page.clients?.navLabel } : null,
+    products.length ? { href: '#products', label: page.products?.navLabel } : null,
     anonymised.length ? { href: '#anonymised', label: page.anonymised?.navLabel } : null,
   ].filter((j): j is { href: string; label: string } => Boolean(j?.label))
 
@@ -102,19 +102,8 @@ export default async function WorkIndex() {
         ) : null}
       </section>
 
-      {products.length ? (
-        <Group id="products" className="pt-24 lg:pt-[136px]">
-          <GroupHeader heading={page.products?.heading} intro={page.products?.intro} />
-          <div className={grid}>
-            {products.map((w, i) => (
-              <WorkCard key={w.id} item={w} tint={tintAt(i)} showStats showCategory />
-            ))}
-          </div>
-        </Group>
-      ) : null}
-
       {clients.length ? (
-        <Group id="clients" className="pt-20 lg:pt-[110px]">
+        <Group id="clients" className="pt-24 lg:pt-[136px]">
           <GroupHeader
             heading={page.clients?.heading}
             intro={page.clients?.intro}
@@ -129,6 +118,17 @@ export default async function WorkIndex() {
                 readLabel={page.labels?.readCaseStudy}
                 soonLabel={page.labels?.comingSoon}
               />
+            ))}
+          </div>
+        </Group>
+      ) : null}
+
+      {products.length ? (
+        <Group id="products" className="pt-20 lg:pt-[110px]">
+          <GroupHeader heading={page.products?.heading} intro={page.products?.intro} />
+          <div className={grid}>
+            {products.map((w, i) => (
+              <WorkCard key={w.id} item={w} tint={tintAt(i)} showStats showCategory />
             ))}
           </div>
         </Group>
