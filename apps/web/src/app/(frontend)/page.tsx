@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Fragment, type CSSProperties } from 'react'
 import { BrowserFigure } from '@/components/home/BrowserFigure'
-import { CaseRow } from '@/components/home/CaseRow'
+import { CaseStack } from '@/components/home/CaseStack'
 import { Shot } from '@/components/home/Shot'
 import {
   Button,
@@ -203,17 +203,7 @@ export default async function HomePage() {
             </h2>
             <GoLink href="/work">{workSection?.linkLabel || 'All case studies'}</GoLink>
           </div>
-          {cases.map((c, i) => (
-            <CaseRow
-              key={c.id ?? i}
-              index={i}
-              work={c.work}
-              title={c.title}
-              struggle={c.struggle}
-              built={c.built}
-              changed={c.changed}
-            />
-          ))}
+          <CaseStack cases={cases} />
         </section>
       ) : null}
 

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Fragment, type ReactNode } from 'react'
+import { Fragment, type CSSProperties, type ReactNode } from 'react'
 import { cx, isExternal } from '@/lib/utils'
 
 export function Container({ children, className }: { children: ReactNode; className?: string }) {
@@ -16,6 +16,7 @@ export function SmartLink({
   children: ReactNode
   className?: string
   'aria-current'?: 'page'
+  style?: CSSProperties
 }) {
   if (isExternal(href)) {
     return (

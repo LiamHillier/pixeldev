@@ -199,6 +199,7 @@
  * Hover details:   .u (underline lifts) · .btn-ink (teal fills from the bottom) · .go/.dot (arrow loops)
  *                  .case + .case-frame/.case-lift (card lifts, title nudges) · .rule2 (2px ink rule turns teal)
  *                  .ruled > li (numbered rows that tint) · .case-arrow (chevron slides in)
+ * Deck:            .stack > .stack-card (home case studies pin and pile up) · .stack-gap (drives the card before it)
  * Pills:           .pill.pill-toggle · .pill.pill-sync · .pill.pill-live · .pill-img (inline heading glyphs)
  * Bits:            .mq/.mq-track (marquee) · .band (full-bleed grey band) · .ph (placeholder sheen)
  *                  .step-in (a contact form screen rises in when it changes)
@@ -324,6 +325,41 @@
   color: var(--color-accent);
   transform: translateX(6px);
 }
+/* Case study deck. Cards sit in one flow; from `lg` each pins under the header and the next slides over it.
+   The deck is the sticky containing block, so a pinned card stays put until the whole deck scrolls off. */
+.stack {
+  --stack-top: 104px; /* header (88px) plus a breath */
+  --stack-gap: 24px;
+  --stack-step: 14px; /* each card pins this much lower, so the ones beneath peek out at the top */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.stack-gap {
+  height: var(--stack-gap);
+}
+.stack-card {
+  display: block;
+  border-radius: 20px;
+  overflow: hidden;
+}
+@media (min-width: 1024px) {
+  .stack {
+    --card-h: clamp(540px, 100svh - var(--stack-top) - 64px, 720px);
+  }
+  .stack-card {
+    position: sticky;
+    top: calc(var(--stack-top) + var(--i, 0) * var(--stack-step));
+    height: var(--card-h);
+    transform-origin: 50% 0;
+  }
+  /* The gap before card n carries card n's view timeline. The top inset is card n's pinned offset, so
+     `cover 100%` is the moment it lands; the start offset is when its top first touches the card before. */
+  .stack-gap {
+    view-timeline-inset: calc(var(--stack-top) + var(--i, 0) * var(--stack-step)) 0;
+  }
+}
+
 .case-arrow {
   position: relative;
 }
@@ -745,6 +781,12 @@
     filter: blur(0);
   }
 }
+@keyframes px-stack {
+  to {
+    transform: scale(0.94);
+    opacity: 0.55;
+  }
+}
 @keyframes px-drop {
   from {
     opacity: 0;
@@ -1039,6 +1081,18 @@
       animation: px-panel var(--e) both;
       animation-timeline: view();
       animation-range: entry 0px entry 460px;
+    }
+    @media (min-width: 1024px) {
+      /* Each card but the last shrinks and fades as the next one slides over it. The timeline comes
+         from an inline `animation-timeline` naming the next card's gap (see CaseStack.tsx). */
+      .stack-card:not(:last-child) {
+        animation: px-stack linear both;
+        animation-range: cover
+          calc(
+            100svh - var(--stack-top) - var(--i, 0) * var(--stack-step) - var(--card-h) + var(--stack-gap)
+          )
+          cover 100%;
+      }
     }
     .reads::after {
       animation: px-bar linear both;
