@@ -17,7 +17,8 @@ const DIR = join(fileURLToPath(new URL('.', import.meta.url)), 'case-studies')
 
 /** Listing order, home-page featuring and "more work" links. Slugs not in a brief.json are left alone. */
 const LAYOUT: Record<string, { order: number; featured: boolean; moreWork: string[] }> = {
-  'squaresync-for-woo': { order: 10, featured: true, moreWork: ['vinoshipper-wordpress-plugin', 'oncloudwine'] },
+  yawn: { order: 5, featured: true, moreWork: ['takeshape-adventures-crm', 'squaresync-for-woo'] },
+  'squaresync-for-woo': { order: 10, featured: true, moreWork: ['yawn', 'vinoshipper-wordpress-plugin'] },
   oncloudwine: { order: 20, featured: false, moreWork: ['squaresync-for-woo', 'vinoshipper-wordpress-plugin'] },
   'takeshape-adventures-crm': { order: 40, featured: true, moreWork: ['bowery-investor-onboarding', 'kir'] },
   'bowery-investor-onboarding': { order: 50, featured: true, moreWork: ['kir', 'takeshape-adventures-crm'] },

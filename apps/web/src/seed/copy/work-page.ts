@@ -16,7 +16,7 @@ export const workPageCopy = {
   products: {
     heading: 'Products we *own and run*',
     intro:
-      'Real software with paying customers. We build it, host it, and answer the support emails. It’s the best proof we have that we ship things that keep working.',
+      'Real software with paying customers, and the tool we run our own business on. We build it, host it, and answer the support emails. It’s the best proof we have that we ship things that keep working.',
     navLabel: 'Products we run',
   },
   clients: {

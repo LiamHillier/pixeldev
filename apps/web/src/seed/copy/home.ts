@@ -16,6 +16,17 @@ import type { Payload } from 'payload'
 
 const caseRows = [
   {
+    workSlug: 'yawn',
+    title: 'Yawn, our own product',
+    struggle:
+      'Client requests from email, chat and ClickUp, each needing the same loop: read, plan, build, check, ship, reply.',
+    built:
+      'A dashboard where AI agents plan, build and review each job in its own worktree, and nothing reaches a client without a person saying yes.',
+    // brief.json: stats "3 decisions per job"; bigStats "52 of its 813 commits were made by Yawn".
+    changed:
+      'Three decisions per job from a phone, and a product that has shipped 52 changes to itself.',
+  },
+  {
     workSlug: 'takeshape-adventures-crm',
     title: 'TakeShape Adventures',
     struggle:

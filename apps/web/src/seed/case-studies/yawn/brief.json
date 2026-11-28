@@ -1,0 +1,150 @@
+{
+  "slug": "yawn",
+  "title": "Yawn",
+  "kind": "product",
+  "category": "AI agent operations, our own product",
+  "summary": "The operations dashboard we run Pixeldev on. Client requests arrive from email, chat, ClickUp and job boards, an AI agent plans and builds each one in its own git worktree, a second agent reviews it, and we make three decisions per job from a phone: approve the plan, approve the work, approve the reply.",
+  "externalUrl": null,
+  "image": {
+    "file": "card.png",
+    "alt": "The Yawn board: one lane per client with columns for Intake, Queued, Running, Needs input, Review and Shipped. Four fictional clients have a task each: one ready for review, one with a plan ready, one paused on a production approval and one in progress on step 2 of 3."
+  },
+  "stats": [
+    {
+      "value": "3",
+      "label": "decisions per job: plan, work, reply"
+    },
+    {
+      "value": "52",
+      "label": "changes Yawn has shipped to itself"
+    }
+  ],
+  "seo": {
+    "title": "Yawn: AI Agent Operations Dashboard Case Study",
+    "description": "How we built Yawn, the dashboard that turns client emails into planned, built and reviewed work by AI agents, with a human approving three things per job. Built in four days, now improving itself."
+  },
+  "caseStudy": {
+    "heading": "A dashboard where AI agents do the client work, and we approve three things per job.",
+    "intro": "Pixeldev is a small studio with a lot of clients. Requests arrive by email, Messenger, ClickUp and job boards, and every one needs the same loop: read it, find the repo, plan, build, check, ship, reply. Yawn is the product we built to run that loop with AI agents, so that work keeps moving when nobody is at a desk, and nothing reaches a client without a person saying yes.",
+    "meta": [
+      {
+        "label": "Product",
+        "value": "Yawn"
+      },
+      {
+        "label": "Who it's for",
+        "value": "Us, first. A single-owner studio running many clients"
+      },
+      {
+        "label": "Services",
+        "value": "Product design, custom software, AI agents, integrations"
+      },
+      {
+        "label": "Stack",
+        "value": "React, Fastify, PostgreSQL, Claude Agent SDK, Playwright, Docker"
+      },
+      {
+        "label": "Timeline",
+        "value": "Spec to production in four days, 14 to 17 November 2026"
+      }
+    ],
+    "hero": {
+      "file": "hero.png",
+      "alt": "Yawn's home screen: the Assistant's greeting reads 'Two running. Three waiting on you.' Below it the Owner has asked 'What needs me this morning?' and the Assistant lists three things, each linked to its task and client. Widgets on the right show Needs you with Decide buttons, two tasks in flight, one ready for review, four clients and two of three slots in use.",
+      "caption": "Home is a conversation with the Assistant, with everything that needs a decision floating beside it. Ask what needs you and every claim in the answer links to the task it is about."
+    },
+    "bigStats": [
+      {
+        "value": "4 days",
+        "label": "from the written spec to running our client work in production"
+      },
+      {
+        "value": "1,418",
+        "label": "automated tests, including 82 browser suites that drive the real app"
+      },
+      {
+        "value": "52",
+        "label": "of its 813 commits were made by Yawn to its own codebase"
+      }
+    ],
+    "sections": [
+      {
+        "heading": "The problem",
+        "paragraphs": [
+          "We had already tried twice. Both earlier attempts proved that an agent could do a lot of a job, and both left real scars: agents sharing one live working tree and shipping each other's half-finished edits, a single-writer database that stalled, no push notifications, and agents so locked down that one small job needed five plan approvals. Neither could tell us, in one place, what was running, what was waiting on us and what it was costing.",
+          "The bigger cost was context. When a client replied to a job finished three weeks ago, the history of what was asked and what shipped lived in an inbox, a terminal scrollback and someone's memory. Work stalled whenever we were away from a desk, which for a studio that visits clients is most of the day."
+        ]
+      },
+      {
+        "heading": "What we built",
+        "paragraphs": [
+          "Yawn is a single-owner operations dashboard, installed on a phone as an app and running on one server. Each client has its own context and Connections: git repos, websites with their environments, servers, mailboxes, chat channels, ClickUp, job boards and the logins for their support desks. Inbound messages on those Connections become Tasks, or attach to the Task they belong to.",
+          "Every Task is worked by real Claude Code sessions with the full toolset and the repo's own skills and rules. The Assistant drafts a Plan. A Builder does the work in its own git worktree and branch, so concurrent jobs never see each other's changes. A separate Reviewer reads the diff against the approved Plan and flags what it finds. Then it comes to us."
+        ],
+        "steps": [
+          "Three decisions per Task: approve the Plan, review the work, approve the reply. Each is a card we can answer in one tap from Home, the board or a push notification.",
+          "Approvals for anything production-class. A deploy, a migration on a live server or a message to a real person pauses the agent and shows us the exact command and its effect, with Approve once, Always allow and Deny.",
+          "A Review page with what the Builder did, the checks that ran, the Reviewer's findings and the diff file by file. Click a line to comment and send it back.",
+          "A master chat that sees every Task and every agent, live and past, and can run any dashboard operation. We can type to it, talk to it, and have it answer aloud.",
+          "Intake from Gmail, IMAP mailboxes, Messenger, ClickUp and job boards, routed to the right client by sender and thread, with an Unassigned inbox for anything it can't place.",
+          "Self-improvement. Asking Yawn to change itself goes through the same Plan, build, review and merge flow, then it builds its own release, deploys it, health-checks it and rolls back on failure."
+        ],
+        "figure": {
+          "file": "fig-1.png",
+          "alt": "A Task in Review: 'Add subscription toggle to product page' for a fictional coffee roaster. The page shows what the Builder did, the client, branch and who built and checked it, and the diff of a new JavaScript file, with Send back, Re-plan and Approve and merge buttons at the top.",
+          "caption": "Review leads with what the Builder did and what the Reviewer found, then the diff. Approve and merge merges the branch, runs the repo's ship steps and sends the reply."
+        }
+      },
+      {
+        "heading": "The hard part",
+        "paragraphs": [
+          "Giving agents real power without giving them the keys. An agent working for one client must never be able to touch another client's systems, so each client's sessions run as their own OS user on the server, reach only that client's Connections, and never see a password: website logins are typed by Yawn's own browser, and a Keap or Google token is used by the API on the agent's behalf. Production-class actions are caught by a policy hook before they run, not described in a prompt and hoped for.",
+          "The other hard part was keeping work alive. Sessions are owned by a separate long-lived host process, so the API can be redeployed, including by Yawn itself, without ending a Run. If that host crashes, it reconciles what it finds on boot rather than blindly re-running: a turn that ended inside a non-read-only call becomes a failed Run that names the call, and waits for us.",
+          "It is also the first thing we have built that improves itself in production. Of its 813 commits, 52 were made by Yawn: a Builder working in a worktree of its own repo, its own test suite run before Review, a release built and deployed by its own deployer with automatic rollback. The memory limits in the deployment notes exist because two of those early self-changes swapped the server to a halt, and the fix was shipped the same way."
+        ],
+        "figure": {
+          "file": "fig-2.png",
+          "alt": "The Needs you panel on Home. One card shows a plan ready for approval with three numbered steps and Approve plan, Edit and Decline buttons. Another shows an agent paused before an SSH command that would run a database migration on a production server, explained in plain language, with Approve once, Always allow and Deny.",
+          "caption": "An Approval card shows the exact command and what it does. This one is a migration on a server Yawn does not know, so it counts as production and waits."
+        }
+      },
+      {
+        "heading": "How it went",
+        "paragraphs": [
+          "The spec, 123 user stories and a 37-screen design canvas, was written on 14 November 2026. Four days and 113 tickets later it was running our client work in production on Dokploy, with passkey sign-in, push notifications and voice. It has been taking in client email, ClickUp tasks and Messenger chats since, and we now spend our mornings approving plans and reading diffs instead of reading inboxes.",
+          "What it changed for us is the shape of a working day. A client's request arrives at 6am, a Plan is waiting by the time we look at a phone, and the work is in Review by the time we are at a desk. The history of every job lives on its Task, so when a client writes back a month later the agent starts with everything that was decided the first time. We're still adding to it, and increasingly it adds to itself."
+        ],
+        "figure": {
+          "file": "fig-3.png",
+          "alt": "The Agents page: two of three slots in use. The Builder section lists two live sessions, one on step 2 of 3 for a fictional gym and one starting a run for a freight company, each with Open, Pause and Stop. The Reviewer shows no live session and its last run. The Assistant drafts plans and does not take a slot.",
+          "caption": "Agents by role: Builder, Reviewer and Assistant, with the model per role, the live sessions and the Slots they hold."
+        }
+      }
+    ],
+    "quote": null,
+    "atAGlance": [
+      {
+        "label": "What we had",
+        "value": "Separate Claude Code terminals to babysit, and client history scattered across inboxes and scrollback"
+      },
+      {
+        "label": "What we have now",
+        "value": "One dashboard where agents plan, build and review client work, and we approve three things per job from a phone"
+      },
+      {
+        "label": "Still involved?",
+        "value": "Yes. We run our business on it, and it ships changes to itself."
+      },
+      {
+        "label": "Built with",
+        "value": "React, TanStack Router, Fastify, PostgreSQL and Drizzle, the Claude Agent SDK, Playwright, WebAuthn, Web Push, ElevenLabs, Docker and Dokploy"
+      }
+    ],
+    "asideCta": {
+      "heading": "Want AI agents doing real work in your business, with you in control?",
+      "body": "Yawn is what that looks like for us. Tell us what repeats in your week, and we'll tell you where an agent could take it on and where a person should stay in the loop.",
+      "ctaLabel": "Start a project"
+    }
+  },
+  "notes": "Written from the code in ~/Projects/Yawn (spec in .scratch/yawn-ops-dashboard/spec.md, GLOSSARY.md, docs/deployment.md). Code-derived numbers: 813 commits between 2026-11-14 13:01 and 2026-11-17 17:44 (302, 312, 92 and 107 per day), 52 authored by 'Yawn' (its self-changes), 1,418 it()/test() cases in 224 test files, 82 Playwright e2e specs, 84 Drizzle migrations, 113 tickets, 123 numbered user stories, 37 artboards in the design canvas. All client names, tasks, commands, hostnames and code in the screenshots are fictional (Marlow Freight, Quay Fitness, Fernhill Coffee, Harbourside Dental), captured from the e2e harness with the scripted fake driver; no real client data. Check: (1) 'in production' and 'taking in client email, ClickUp tasks and Messenger chats since' are inferred from the deployment runbook and the 2026-11-15 memory-limit note; confirm it is still the live daily tool. (2) The server swap incident is from docs/deployment.md (YAWN_SESSION_MEMORY_MB). (3) 'Two earlier attempts' are beings-ops and pixeldev-operations, named in the spec but not here. (4) kind is 'product'; the work page's products intro was widened to cover a product we run our own business on."
+}
