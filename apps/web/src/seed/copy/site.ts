@@ -12,7 +12,6 @@ export const siteCopy = {
   headerCtaLabel: 'Let’s talk',
   products: [
     { label: 'SquareSync for Woo', href: 'https://squaresyncforwoo.com' },
-    { label: 'CloudPerch', href: 'https://cloudperch.io' },
     { label: 'OnCloudWine', href: '/work/oncloudwine' },
   ],
 }

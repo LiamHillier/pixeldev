@@ -286,7 +286,7 @@ export interface Service {
       | null;
   };
   /**
-   * Grey plan cards, e.g. the CloudPerch plans on Hosting.
+   * Grey plan cards for a service sold in tiers. Leave empty to hide the section.
    */
   plans?: {
     /**

@@ -24,7 +24,7 @@ export const journalPageCopy = {
     previousLabel: 'Previous',
     nextLabel: 'Next',
     authorBio:
-      'Founder of Pixeldev. Helps growing Australian businesses make AI, automation and software work together, and runs SquareSync for Woo, OnCloudWine and CloudPerch.',
+      'Founder of Pixeldev. Helps growing Australian businesses make AI, automation and software work together, and runs SquareSync for Woo and OnCloudWine.',
     authorLinkLabel: 'More about Liam',
   },
   marquee: {

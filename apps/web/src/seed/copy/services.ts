@@ -582,7 +582,7 @@ export const servicesCopy: { slug: string; data: Partial<Service> }[] = [
         'Managed hosting on infrastructure we run, plus updates, backups, monitoring and a person to call when something breaks.',
       examples: 'Sydney servers for WordPress, dedicated servers for everything else.',
       indexIntro:
-        'We run our own hosting business, CloudPerch, on infrastructure we manage. Your site or app can live there, with updates, backups, monitoring and someone who knows the code when something goes wrong.',
+        'We host what we build on infrastructure we manage. Your site or app can live there, with updates, backups, monitoring and someone who knows the code when something goes wrong.',
       indexItems: [
         { text: 'Managed WordPress hosting in Sydney' },
         { text: 'App hosting on dedicated servers with Docker' },
@@ -595,9 +595,9 @@ export const servicesCopy: { slug: string; data: Partial<Service> }[] = [
       hero: {
         heading: 'Hosting from someone {live} *who knows the code.*',
         intro:
-          'Managed WordPress hosting through CloudPerch, app hosting on dedicated servers, and monthly care plans so your site stays fast, patched and online. When something breaks, you talk to the person who can fix it.',
+          'Managed WordPress hosting on Sydney servers, app hosting on dedicated servers, and monthly care plans so your site stays fast, patched and online. When something breaks, you talk to the person who can fix it.',
         primaryCta: { label: 'Talk about hosting', href: '/contact' },
-        secondaryCta: { label: 'Visit CloudPerch', href: 'https://cloudperch.io' },
+        secondaryCta: relatedWork,
       },
       diagram: { inputs: [], outputs: [], hubTitle: null, hubNote: null, caption: null },
       painPoints: {
@@ -624,11 +624,11 @@ export const servicesCopy: { slug: string; data: Partial<Service> }[] = [
       offerings: {
         heading: 'What’s *included*',
         intro:
-          'Boring, well-run infrastructure. Sydney servers for WordPress through CloudPerch, dedicated servers running Docker for custom apps, Cloudflare in front of everything.',
+          'Boring, well-run infrastructure. Sydney servers for WordPress, dedicated servers running Docker for custom apps, Cloudflare in front of everything.',
         items: [
           {
             title: 'Managed WordPress hosting',
-            body: 'Through CloudPerch: Sydney-based servers, OpenLiteSpeed, Cloudflare, Stripe billing and a customer portal we built ourselves. Four plans from a single site to an agency fleet.',
+            body: 'Sydney-based servers, OpenLiteSpeed and Cloudflare in front, with weekly updates through staging. One site or a whole fleet of them.',
           },
           {
             title: 'App hosting on dedicated servers',
@@ -654,17 +654,8 @@ export const servicesCopy: { slug: string; data: Partial<Service> }[] = [
       },
       // The design has no approach steps on this page.
       approach: { heading: sections.approach, items: [] },
-      plans: {
-        heading: 'CloudPerch *plans*',
-        intro:
-          'WordPress hosting runs under its own brand with its own portal. Full details and sign-up are on cloudperch.io.',
-        items: [
-          { name: 'Roost', href: 'https://cloudperch.io' },
-          { name: 'Perch Pro', href: 'https://cloudperch.io' },
-          { name: 'Flock', href: 'https://cloudperch.io' },
-          { name: 'Aerie', href: 'https://cloudperch.io' },
-        ],
-      },
+      // Hosting is sold as part of a care plan, so there are no plan cards.
+      plans: { heading: null, intro: null, items: [] },
       relatedHeading: sections.related,
       faqsHeading: sections.faqs,
       faqs: [

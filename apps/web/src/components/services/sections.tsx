@@ -180,7 +180,7 @@ type Plan = {
   id?: string | null
 }
 
-/** Grey plan cards (the CloudPerch plans). Prices and descriptions only show when they are set. */
+/** Grey plan cards for a service sold in tiers. Prices and descriptions only show when they are set. */
 export function PlanCards({
   heading,
   intro,

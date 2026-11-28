@@ -165,7 +165,7 @@ export const Services: CollectionConfig = {
               name: 'plans',
               type: 'group',
               label: 'Plans (optional)',
-              admin: { description: 'Grey plan cards, e.g. the CloudPerch plans on Hosting.' },
+              admin: { description: 'Grey plan cards for a service sold in tiers. Leave empty to hide the section.' },
               fields: [
                 { name: 'heading', type: 'text', admin: { description: markup } },
                 { name: 'intro', type: 'textarea' },
